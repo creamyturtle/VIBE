@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2023 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.example.vibe.data
+
+import android.util.Log
+import com.example.vibe.model.Event
+import com.example.vibe.network.EventsApiService
+
+/**
+ * Repository retrieves event data from underlying data source.
+ */
+interface EventsRepository {
+    /** Retrieves list of events from underlying data source */
+    suspend fun getEvents(): List<Event>
+    suspend fun getEventsByType(type: String): List<Event>
+}
+
+
+
+/**
+ * Network Implementation of repository that retrieves event data from underlying data source.
+ */
+class DefaultEventsRepository(
+    private val eventsApiService: EventsApiService
+) : EventsRepository {
+    /** Retrieves list of events from underlying data source */
+    override suspend fun getEvents(): List<Event> {
+        return try {
+            val data = eventsApiService.getAll(apiToken = secretToken, table = "parties")
+            Log.d("Repository", "Fetched data: $data") // Log data
+            data
+        } catch (e: Exception) {
+            Log.e("Repository", "Error fetching data: ${e.message}", e)
+            emptyList() // Return an empty list in case of error
+        }
+    }
+
+    override suspend fun getEventsByType(type: String): List<Event> {
+        return try {
+            when (type) {
+                "House" -> eventsApiService.getHouses(apiToken = secretToken, table = "parties")
+                "Pool" -> eventsApiService.getPools(apiToken = secretToken, table = "parties")
+                "Finca" -> eventsApiService.getFincas(apiToken = secretToken, table = "parties")
+                "Activity" -> eventsApiService.getActivities(apiToken = secretToken, table = "parties")
+                else -> getEvents() // Default to all events
+            }
+        } catch (e: Exception) {
+            Log.e("Repository", "Error fetching $type data: ${e.message}", e)
+            emptyList()
+        }
+    }
+
+
+
+}
