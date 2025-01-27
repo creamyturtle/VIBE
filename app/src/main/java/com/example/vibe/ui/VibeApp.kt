@@ -45,7 +45,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -70,6 +74,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -134,9 +139,14 @@ fun VibeApp() {
 
             if (currentDestination != "event_details/{eventId}") {
                 VibeBottomAppBar(navController = navController, animatedOffset)
-            } else {
+            }
+
+            /*
+            else {
                 ReservationsBottomBar(navController = navController)
             }
+            */
+
         }
 
     ) { innerPadding ->
@@ -205,22 +215,22 @@ fun VibeApp() {
 fun VibeTopAppBar(navController: NavController) {
     TopAppBar(
         title = {
-            Column(
+            Row(
                 modifier = Modifier
-                    .background(Color.Red)
+                    //.background(Color.Red)
                     .fillMaxWidth()
-                    .padding(8.dp, 4.dp, 0.dp, 8.dp)
-                    .offset(x = (-16).dp)
+                    .padding(0.dp, 4.dp, 0.dp, 8.dp),
+                    //.offset(x = (-16).dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
             ) {
 
 
-                Row(
-                    modifier = Modifier
-                        .background(Color.Green)
-                        .fillMaxWidth()
-                        .height(70.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.Start
+                    //modifier = Modifier
+                        //.background(Color.Green)
                 ) {
 
                     FancyAnimatedButton(
@@ -228,53 +238,128 @@ fun VibeTopAppBar(navController: NavController) {
                             navController.navigate("home_screen/all")
                         }
                     ) {
-
-
                         Image(
                             painter = painterResource(R.drawable.logo_white),
                             contentDescription = "VIBE Logo",
                             modifier = Modifier
-                                .offset(x = 8.dp)
-                                .align(Alignment.Top)
+                                .padding(0.dp, 12.dp, 0.dp, 0.dp)
+                                //.offset(x = 8.dp)
+                                //.align(Alignment.Top)
                                 .width(143.dp) // Use the image's exact width
                                 .height(57.dp) // Use the image's exact height
                         )
                     }
 
-                    Spacer(Modifier.weight(1f))
+                    Spacer(modifier = Modifier.size(4.dp))
+
+                    Text(
+                        text = "Your official party connection",
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(8.dp, 0.dp)
+                    )
+
+
+
+                }
+
+
+                Spacer(
+                    Modifier
+                    .size(24.dp)
+                )
+
+
+                Column(
+                    //modifier = Modifier
+                        //.background(Color.Blue),
+                        //.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.End
+                ) {
 
                     HamburgerMenuButton()
 
+                    Spacer(Modifier.weight(1f))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp, 0.dp, 24.dp, 0.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Icon(
+                                imageVector = Icons.Filled.Person,
+                                contentDescription = "Log In",
+                                modifier = Modifier.size(24.dp)
+                            )
+
+                            Text(
+                                text = "Log In",
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+
+                        }
+
+                        Spacer(Modifier.width(16.dp))
+
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Icon(
+                                imageVector = Icons.Filled.Groups,
+                                contentDescription = "Host an Event",
+                                modifier = Modifier.size(24.dp)
+                            )
+
+                            Text(
+                                text = "Host Event",
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+
+                        }
+
+                        Spacer(Modifier.width(12.dp))
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Icon(
+                                imageVector = Icons.Filled.Event,
+                                contentDescription = "Calendar",
+                                modifier = Modifier.size(24.dp)
+                            )
+
+                            Text(
+                                text = "Calendar",
+                                fontSize = 12.sp,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+
+                        }
+
+
+                    }
+
+
                 }
 
-                Spacer(Modifier.weight(1f))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-
-                    Text(
-                        text = "Login/Sign Up",
-                        fontSize = 12.sp
-                    )
-
-                    Text(
-                        text = "Host an Event",
-                        fontSize = 12.sp
-                    )
-
-                    Text(
-                        text = "Calendar",
-                        fontSize = 12.sp
-                    )
-
-                }
 
             }
         },
         modifier = Modifier
-            .fillMaxHeight(.20f),
+            .fillMaxHeight(.18f),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xFF333F57),
             titleContentColor = Color.White
@@ -605,7 +690,7 @@ fun HamburgerMenuButton() {
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { menuExpanded = true } // Make the entire Row clickable
-                .padding(8.dp, 0.dp, 0.dp, 8.dp), // Optional padding
+                .padding(8.dp, 8.dp, 16.dp, 8.dp), // Optional padding
             verticalAlignment = Alignment.CenterVertically // Align text and icon vertically
         ) {
             Text(
