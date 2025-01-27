@@ -70,6 +70,7 @@ import com.example.vibe.model.Event
 import com.example.vibe.ui.theme.Route159Bold
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
@@ -639,10 +640,15 @@ fun EventDetailsScreen(
                 ) {
                     if (coordinates != null) {
                         GoogleMap(cameraPositionState = cameraPositionState) {
-                            Marker(
-                                state = MarkerState(position = coordinates!!), // Use MarkerState for position
-                                title = event.partyname
-                            )
+                            coordinates?.let { position ->
+                                Circle(
+                                    center = position,
+                                    radius = 1000.0, // Radius in meters (adjust as needed)
+                                    strokeColor = Color(0xFF1E88E5),
+                                    fillColor = Color(0x331E88E5),
+                                    strokeWidth = 4f // Outline width
+                                )
+                            }
                         }
                     } else {
                         Text(text = "Loading map...")
