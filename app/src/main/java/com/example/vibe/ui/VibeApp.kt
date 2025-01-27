@@ -23,6 +23,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
@@ -42,6 +43,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
@@ -205,14 +207,16 @@ fun VibeTopAppBar(navController: NavController) {
         title = {
             Column(
                 modifier = Modifier
+                    .background(Color.Red)
                     .fillMaxWidth()
-                    .padding(8.dp, 16.dp, 0.dp, 8.dp)
+                    .padding(8.dp, 4.dp, 0.dp, 8.dp)
                     .offset(x = (-16).dp)
             ) {
 
 
                 Row(
                     modifier = Modifier
+                        .background(Color.Green)
                         .fillMaxWidth()
                         .height(70.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -591,8 +595,6 @@ fun ReservationsBottomBar(navController: NavController) {
 
 
 
-
-
 @Composable
 fun HamburgerMenuButton() {
     var menuExpanded by remember { mutableStateOf(false) } // Tracks if the menu is open
@@ -601,8 +603,9 @@ fun HamburgerMenuButton() {
         // Combine Text and Icon into a Row
         Row(
             modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
                 .clickable { menuExpanded = true } // Make the entire Row clickable
-                .padding(8.dp), // Optional padding
+                .padding(8.dp, 0.dp, 0.dp, 8.dp), // Optional padding
             verticalAlignment = Alignment.CenterVertically // Align text and icon vertically
         ) {
             Text(
