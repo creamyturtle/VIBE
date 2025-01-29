@@ -197,7 +197,7 @@ fun MapScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp, 0.dp, 60.dp, 160.dp)
+                            .padding(16.dp, 0.dp, 60.dp, 12.dp)
                             .align(Alignment.BottomCenter)
                             .graphicsLayer(
                                 scaleX = scale,
