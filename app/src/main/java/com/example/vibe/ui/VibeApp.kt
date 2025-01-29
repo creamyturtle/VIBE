@@ -216,7 +216,8 @@ fun VibeApp() {
 
                     MapScreen(
                         eventsUiState = eventsViewModel.eventsUiState,
-                        geocodeAddress = { context, address -> geocodeAddress(context, address) }
+                        geocodeAddress = { context, address -> geocodeAddress(context, address) },
+                        navController = navController
                     )
                 }
 
