@@ -91,6 +91,9 @@ import com.example.vibe.R
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
+import com.example.vibe.ui.screens.MapScreen
+import com.example.vibe.ui.screens.geocodeAddress
+import com.google.android.gms.maps.model.LatLng
 import kotlin.math.max
 import kotlin.math.min
 
@@ -137,8 +140,17 @@ fun VibeApp() {
 
             val currentDestination = currentBackStackEntry?.destination?.route
 
-            if (currentDestination != "event_details/{eventId}") {
-                VibeBottomAppBar(navController = navController, animatedOffset)
+            when {
+                currentDestination?.startsWith("home_screen") == true -> {
+                    VibeBottomAppBar(navController, animatedOffset)
+                }
+                currentDestination?.startsWith("map_screen") == true -> {
+                    MapBottomAppBar(navController) { filterType ->
+                        navController.navigate("map_screen/$filterType") {
+                            popUpTo("map_screen/all") { inclusive = true }
+                        }
+                    }
+                }
             }
 
             /*
@@ -163,8 +175,7 @@ fun VibeApp() {
 
                     val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
-                    val eventsViewModel: EventsViewModel =
-                        viewModel(factory = EventsViewModel.Factory)
+                    val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
 
                     // Fetch events based on the filter type
                     LaunchedEffect(filterType) {
@@ -182,9 +193,36 @@ fun VibeApp() {
                         retryAction = eventsViewModel::getEvents,
                         onEventClick = { eventId ->
                             navController.navigate("event_details/$eventId")
-                        }
+                        },
+                        navController = navController,
+                        offsetY = animatedOffset
                     )
                 }
+
+
+                composable(
+                    route = "map_screen/{filterType}",
+                    arguments = listOf(navArgument("filterType") { type = NavType.StringType })
+                ) { backStackEntry ->
+
+                    val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+
+                    val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
+
+                    LaunchedEffect(filterType) {
+                        if (filterType == "all") {
+                            eventsViewModel.getEvents() // Fetch all events
+                        } else {
+                            eventsViewModel.getEventsByType(filterType) // Fetch filtered events
+                        }
+                    }
+
+                    MapScreen(
+                        eventsUiState = eventsViewModel.eventsUiState,
+                        geocodeAddress = { context, address -> geocodeAddress(context, address) }
+                    )
+                }
+
 
                 composable(
                     route = "event_details/{eventId}",
@@ -521,6 +559,88 @@ fun VibeBottomAppBar(navController: NavController, offsetY: Dp) {
 
     }
 }
+
+
+
+@Composable
+fun MapBottomAppBar(
+    navController: NavController,
+    onFilterSelected: (String) -> Unit
+) {
+    BottomAppBar(
+        containerColor = Color(0xFF333F57),
+        contentColor = Color.White,
+        modifier = Modifier
+            .height(148.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp, bottom = 4.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+
+            FancyAnimatedButton(
+                onClick = { onFilterSelected("House") }
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        painter = painterResource(R.drawable.house),
+                        contentDescription = "House Parties",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(50.dp).clip(CircleShape)
+                    )
+                    Text(text = "House Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                }
+            }
+
+            FancyAnimatedButton(
+                onClick = { onFilterSelected("Finca") }
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        painter = painterResource(R.drawable.finca),
+                        contentDescription = "Finca Parties",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(50.dp).clip(CircleShape)
+                    )
+                    Text(text = "Finca Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                }
+            }
+
+            FancyAnimatedButton(
+                onClick = { onFilterSelected("Pool") }
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        painter = painterResource(R.drawable.pool),
+                        contentDescription = "Pool Parties",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(50.dp).clip(CircleShape)
+                    )
+                    Text(text = "Pool Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                }
+            }
+
+            FancyAnimatedButton(
+                onClick = { onFilterSelected("Activity") }
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        painter = painterResource(R.drawable.activities),
+                        contentDescription = "Activities",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(50.dp).clip(CircleShape)
+                    )
+                    Text(text = "Activities", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                }
+            }
+        }
+    }
+}
+
+
+
 
 
 

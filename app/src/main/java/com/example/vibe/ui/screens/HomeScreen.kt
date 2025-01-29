@@ -17,6 +17,7 @@
 package com.example.vibe.ui.screens
 
 import android.os.Build
+import android.webkit.WebSettings.TextSize
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,9 +29,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,8 +45,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,8 +66,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
@@ -72,7 +83,9 @@ fun HomeScreen(
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    onEventClick: (String) -> Unit
+    onEventClick: (String) -> Unit,
+    navController: NavController,
+    offsetY: Dp
 ) {
     when (eventsUiState) {
 
@@ -94,6 +107,66 @@ fun HomeScreen(
 
         else -> ErrorScreen(retryAction, modifier)
     }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .then(
+                when {
+                    offsetY == 148.dp -> Modifier.offset(y = offsetY - 188.dp)
+                    else -> Modifier.offset(y = offsetY - 148.dp)
+                }
+            )
+
+            //.padding(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
+    ) {
+        // Content goes here...
+
+        FloatingActionButton(
+            onClick = { navController.navigate("map_screen/all") },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(20.dp)
+                .height(40.dp),
+            containerColor = Color.DarkGray,
+            shape = RoundedCornerShape(24.dp)
+        ) {
+
+            Row(modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 20.dp)
+            ) {
+
+
+                Text(
+                    text = "Map",
+                    color = Color.White,
+                    fontSize = 14.sp
+                )
+
+                Spacer(Modifier.size(4.dp))
+
+                Icon(
+                    imageVector = Icons.Default.Map,
+                    contentDescription = "Open Map",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(16.dp) // Adjust size if needed
+                        .align(Alignment.CenterVertically)
+                )
+
+
+            }
+
+
+        }
+    }
+
+
+
+
+
 }
 
 /**
