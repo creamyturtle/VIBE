@@ -47,7 +47,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -58,8 +57,10 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
@@ -104,7 +105,7 @@ fun MapScreen(
             val initialPosition = geocodedLocations.values.firstOrNull() ?: LatLng(6.2442, -75.5812)
 
             val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(initialPosition, 12f)
+                position = CameraPosition.fromLatLngZoom(initialPosition, 13f)
             }
 
             // Perform geocoding for all event locations
@@ -120,7 +121,7 @@ fun MapScreen(
             Box(
                 modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 158.dp, bottom = 148.dp)
+                .padding(top = 168.dp, bottom = 148.dp)
             ) {
 
 
@@ -136,11 +137,20 @@ fun MapScreen(
 
                             //val icon = bitmapDescriptorFromComposable { MarkerBubble(event.partyname) }
                             val coordinates = geocodedLocations[event.location]
+
                             coordinates?.let { location ->
+
+                                val markerColor = when (event.partyMod) {
+                                    "House Party" -> BitmapDescriptorFactory.HUE_BLUE
+                                    "Pool Party" -> BitmapDescriptorFactory.HUE_AZURE
+                                    "Finca Party" -> BitmapDescriptorFactory.HUE_VIOLET
+                                    else -> BitmapDescriptorFactory.HUE_RED // Default
+                                }
+
                                 Marker(
                                     state = MarkerState(position = location),
                                     title = event.partyname,
-                                    //icon = icon ?: BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                                    icon = BitmapDescriptorFactory.defaultMarker(markerColor), // Set color dynamically
                                     onClick = {
                                         selectedEvent = event
                                         true
@@ -184,8 +194,6 @@ fun MapScreen(
                 // ✅ Show event details when a marker is clicked
                 selectedEvent?.let { event ->
 
-                    val interactionSource =
-                        remember { MutableInteractionSource() } // ✅ Track interactions
                     var isPressed by remember { mutableStateOf(false) }
 
                     // ✅ Animate scale effect
@@ -326,54 +334,3 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
 }
 
 
-@Composable
-fun MarkerBubble(title: String) {
-    Box(
-        modifier = Modifier
-            .background(Color.White, shape = RoundedCornerShape(12.dp))
-            .border(2.dp, Color.Black, shape = RoundedCornerShape(12.dp))
-            .padding(8.dp)
-    ) {
-        Text(
-            text = title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            color = Color.Black
-        )
-    }
-}
-
-/*
-
-@Composable
-fun bitmapDescriptorFromComposable(content: @Composable () -> Unit): BitmapDescriptor? {
-    val context = LocalContext.current
-    val bitmap = safeComposeToBitmap(context, 100, 50, content)
-    return bitmap?.let { BitmapDescriptorFactory.fromBitmap(it) }
-}
-
-
-
-
-fun safeComposeToBitmap(context: Context, width: Int, height: Int, content: @Composable () -> Unit): Bitmap? {
-    return try {
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        val density = Resources.getSystem().displayMetrics.density
-        val view = ComposeView(context)
-
-        view.setContent { content() } // ✅ Compose content into the view
-        view.measure(
-            View.MeasureSpec.makeMeasureSpec((width * density).toInt(), View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec((height * density).toInt(), View.MeasureSpec.EXACTLY)
-        )
-        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-        view.draw(canvas)
-
-        bitmap
-    } catch (e: Exception) {
-        Log.e("MapScreen", "Error creating bitmap descriptor: ${e.message}")
-        null
-    }
-}
-*/

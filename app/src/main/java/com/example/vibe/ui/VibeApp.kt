@@ -395,7 +395,7 @@ fun VibeTopAppBar(navController: NavController) {
             }
         },
         modifier = Modifier
-            .fillMaxHeight(.18f),
+            .height(168.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xFF333F57),
             titleContentColor = Color.White
