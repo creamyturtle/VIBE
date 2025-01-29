@@ -23,7 +23,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
@@ -45,7 +44,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Menu
@@ -93,7 +91,6 @@ import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.MapScreen
 import com.example.vibe.ui.screens.geocodeAddress
-import com.google.android.gms.maps.model.LatLng
 import kotlin.math.max
 import kotlin.math.min
 
@@ -576,7 +573,8 @@ fun MapBottomAppBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 4.dp),
+                .padding(top = 4.dp, bottom = 4.dp)
+                .offset(x = (-4).dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
@@ -593,6 +591,7 @@ fun MapBottomAppBar(
                     Text(text = "House Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
                 }
             }
+            Spacer(Modifier.width(0.dp))
 
             FancyAnimatedButton(
                 onClick = { onFilterSelected("Finca") }
@@ -608,6 +607,8 @@ fun MapBottomAppBar(
                 }
             }
 
+            Spacer(Modifier.width(0.dp))
+
             FancyAnimatedButton(
                 onClick = { onFilterSelected("Pool") }
             ) {
@@ -621,6 +622,8 @@ fun MapBottomAppBar(
                     Text(text = "Pool Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
                 }
             }
+
+            Spacer(Modifier.width(8.dp))
 
             FancyAnimatedButton(
                 onClick = { onFilterSelected("Activity") }
