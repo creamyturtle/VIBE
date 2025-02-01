@@ -53,6 +53,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -220,7 +221,8 @@ private fun EventsListScreen(
             EventCard(
                 event = event,
                 onClick = { onEventClick(event.id) },
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize(),
             )
         }
 
@@ -248,8 +250,10 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
     val pagerState = rememberPagerState(pageCount = { 4 })
 
     Card(
-        modifier = modifier.clickable { onClick() },
-        shape = RoundedCornerShape(12.dp)
+        modifier = modifier
+            .shadow(10.dp, shape = RoundedCornerShape(16.dp))
+            .clickable { onClick() }
+            .clip(RoundedCornerShape(16.dp))
     ) {
         Column {
             Text(
@@ -257,10 +261,10 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 //fontFamily = Route159Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(24.dp, 12.dp, 12.dp, 12.dp),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
+                fontSize = 18.sp
             )
 
             Box(
@@ -273,6 +277,8 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                     state = pagerState,
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(16.dp, 0.dp, 16.dp, 8.dp)
+                        .clip(RoundedCornerShape(12.dp))
                         .pointerInput(Unit) {
                             detectTapGestures(
                                 onTap = {
@@ -286,8 +292,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                         model = images[page],
                         contentDescription = null,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp)),
+                            .fillMaxSize(),
                         contentScale = ContentScale.Crop,
                         placeholder = painterResource(id = R.drawable.loading_img),
                         error = painterResource(id = R.drawable.defaultimg)
@@ -298,10 +303,10 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .padding(16.dp)
+                        .padding(28.dp, 16.dp, 16.dp, 16.dp)
                         .background(
                             color = Color.White,
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(16.dp)
                         )
                         .padding(horizontal = 12.dp, vertical = 6.dp) // Padding inside the bubble
                 ) {
@@ -366,6 +371,9 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
 
         }
     }
+
+    Spacer(Modifier.height(8.dp))
+
 }
 
 

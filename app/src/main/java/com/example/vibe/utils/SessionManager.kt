@@ -20,16 +20,56 @@ class SessionManager(context: Context) {
 
     fun getUserData(): UserData? {
         val token = getToken() ?: return null
-        val payload = token.split(".")[1] // JWT format: header.payload.signature
-        val decodedPayload = String(Base64.decode(payload, Base64.URL_SAFE), Charsets.UTF_8)
-        val json = JSONObject(decodedPayload)
 
-        return UserData(
-            id = json.getInt("user_id"),
-            name = json.getString("name"),
-            email = json.getString("email")
-        )
+        return try {
+            val payload = token.split(".")[1] // JWT format: header.payload.signature
+            val decodedPayload = decodeBase64(payload)
+            val json = JSONObject(decodedPayload)
+
+            UserData(
+                id = json.optInt("user_id", -1), // Default to -1 if missing
+                name = json.optString("name", "Unknown"),
+                email = json.optString("email", "Unknown")
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null // Return null on failure
+        }
     }
+
+    /**
+     * ✅ Helper function to decode JWT Base64 safely
+     * - Handles missing padding
+     * - Uses correct Base64 mode
+     */
+
+    fun decodeBase64(base64String: String): String {
+        var modifiedString = base64String.replace("-", "+").replace("_", "/") // Fix URL-safe encoding
+        while (modifiedString.length % 4 != 0) {
+            modifiedString += "=" // Ensure proper padding
+        }
+        return String(Base64.decode(modifiedString, Base64.DEFAULT), Charsets.UTF_8)
+    }
+
+
+
+    fun isTokenExpired(): Boolean {
+        val token = getToken() ?: return true
+        return try {
+            val payload = token.split(".")[1]
+            val decodedPayload = decodeBase64(payload)
+            val json = JSONObject(decodedPayload)
+
+            val exp = json.optLong("exp", 0) // Expiration time in seconds
+            val currentTime = System.currentTimeMillis() / 1000 // Convert to seconds
+
+            exp < currentTime // ✅ True if expired
+        } catch (e: Exception) {
+            true // Assume expired if there's an error
+        }
+    }
+
+
 
     fun clearToken() {
         prefs.edit().remove("jwt_token").apply()

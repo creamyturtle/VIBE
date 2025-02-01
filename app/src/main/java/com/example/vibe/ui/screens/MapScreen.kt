@@ -208,7 +208,8 @@ fun MapScreen(
                                 scaleY = scale
                             ) // ✅ Apply scale effect to the Box too!
                             .background(Color.White, shape = RoundedCornerShape(16.dp))
-                            .shadow(8.dp)
+                            .shadow(10.dp, shape = RoundedCornerShape(16.dp))
+                            .clip(RoundedCornerShape(16.dp))
                             .pointerInput(Unit) {
                                 detectTapGestures(
                                     onPress = {

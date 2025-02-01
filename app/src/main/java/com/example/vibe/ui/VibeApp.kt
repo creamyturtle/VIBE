@@ -23,6 +23,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.indication
@@ -353,8 +354,9 @@ fun VibeTopAppBar(navController: NavController) {
 
                     Row(
                         modifier = Modifier
+                            //.background(Color.Red)
                             .fillMaxWidth()
-                            .padding(16.dp, 0.dp, 24.dp, 0.dp),
+                            .padding(16.dp, 0.dp, 16.dp, 0.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
 
@@ -365,7 +367,9 @@ fun VibeTopAppBar(navController: NavController) {
                         ) {
 
                             Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                //modifier = Modifier
+                                    //.background(Color.Green)
                             ) {
 
 
@@ -393,7 +397,9 @@ fun VibeTopAppBar(navController: NavController) {
 
 
                             Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                //modifier = Modifier
+                                    //.background(Color.Green)
                             ) {
 
                                 Icon(
@@ -419,7 +425,9 @@ fun VibeTopAppBar(navController: NavController) {
                         ) {
 
                             Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                //modifier = Modifier
+                                    //.background(Color.Green)
                             ) {
 
                                 Icon(
