@@ -16,19 +16,25 @@
 
 package com.example.vibe.data
 
+import com.example.vibe.network.AuthApi
 import com.example.vibe.network.EventsApiService
+import com.example.vibe.utils.SessionManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import android.content.Context
+import com.example.vibe.network.AuthInterceptor
+
 
 /**
  * Dependency Injection container at the application level.
  */
 interface AppContainer {
     val eventsRepository: EventsRepository
+    val authApi: AuthApi
 }
 
 
@@ -42,8 +48,10 @@ private val json = Json {
  *
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(context: Context) : AppContainer {
     private val BASE_URL = "https://www.vibesocial.org/"
+
+    private val sessionManager = SessionManager(context)
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
@@ -51,6 +59,7 @@ class DefaultAppContainer : AppContainer {
 
 
     private val client = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor(sessionManager))
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
@@ -65,6 +74,13 @@ class DefaultAppContainer : AppContainer {
     /**
      * Retrofit service object for creating api calls
      */
+
+    // ✅ Add AuthApi service
+    override val authApi: AuthApi by lazy {
+        retrofit.create(AuthApi::class.java)
+    }
+
+
     private val retrofitService: EventsApiService by lazy {
         retrofit.create(EventsApiService::class.java)
     }

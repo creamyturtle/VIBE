@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,9 +43,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Minimize
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
@@ -71,6 +72,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.Dp
@@ -86,11 +88,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.vibe.R
+import com.example.vibe.data.AuthRepository
+import com.example.vibe.data.DefaultAppContainer
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
+import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen
 import com.example.vibe.ui.screens.geocodeAddress
+import com.example.vibe.utils.SessionManager
 import kotlin.math.max
 import kotlin.math.min
 
@@ -127,6 +133,13 @@ fun VibeApp() {
 
     val navController = rememberNavController()
 
+    val context = LocalContext.current
+
+    val appContainer = remember { DefaultAppContainer(context) } // ✅ Initialize AppContainer
+    val authRepository = remember { AuthRepository(appContainer.authApi, SessionManager(context)) }
+
+
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -160,11 +173,14 @@ fun VibeApp() {
 
     ) { innerPadding ->
 
+
+
             NavHost(
                 navController = navController,
                 startDestination = "home_screen/{filterType}",
                 modifier = Modifier.fillMaxSize()
             ) {
+
                 composable(
                     route = "home_screen/{filterType}",
                     arguments = listOf(navArgument("filterType") { type = NavType.StringType })
@@ -238,6 +254,22 @@ fun VibeApp() {
                     )
                     eventsViewModel.selectEvent(eventId)
                 }
+
+
+
+                composable(route = "login") {
+
+
+                    LoginScreen(
+                        navController = navController,
+                        authRepository = authRepository,
+                        onLoginSuccess = { navController.popBackStack() } // Navigates back after login
+                    )
+                }
+
+
+
+
             }
 
 
@@ -316,7 +348,7 @@ fun VibeTopAppBar(navController: NavController) {
 
                     HamburgerMenuButton()
 
-                    Spacer(Modifier.weight(1f))
+                    Spacer(Modifier.size(6.dp))
 
                     Row(
                         modifier = Modifier
@@ -325,63 +357,82 @@ fun VibeTopAppBar(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
 
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        FancyAnimatedButton(
+                            onClick = {
+                                navController.navigate("login")
+                            }
                         ) {
 
-                            Icon(
-                                imageVector = Icons.Filled.Person,
-                                contentDescription = "Log In",
-                                modifier = Modifier.size(24.dp)
-                            )
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
 
-                            Text(
-                                text = "Log In",
-                                fontSize = 12.sp,
-                                modifier = Modifier.padding(top = 4.dp)
-                            )
 
+                                Icon(
+                                    imageVector = Icons.Filled.Person,
+                                    contentDescription = "Log In",
+                                    modifier = Modifier.size(24.dp)
+                                )
+
+                                Text(
+                                    text = "Log In",
+                                    fontSize = 12.sp
+                                )
+
+                            }
                         }
 
                         Spacer(Modifier.width(16.dp))
 
-
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        FancyAnimatedButton(
+                            onClick = {
+                                navController.navigate("home_screen/all")
+                            }
                         ) {
 
-                            Icon(
-                                imageVector = Icons.Filled.Groups,
-                                contentDescription = "Host an Event",
-                                modifier = Modifier.size(24.dp)
-                            )
 
-                            Text(
-                                text = "Host Event",
-                                fontSize = 12.sp,
-                                modifier = Modifier.padding(top = 4.dp)
-                            )
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
 
+                                Icon(
+                                    imageVector = Icons.Filled.Groups,
+                                    contentDescription = "Host an Event",
+                                    modifier = Modifier.size(24.dp)
+                                )
+
+                                Text(
+                                    text = "Host Event",
+                                    fontSize = 12.sp
+                                )
+
+                            }
                         }
 
                         Spacer(Modifier.width(12.dp))
 
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        FancyAnimatedButton(
+                            onClick = {
+                                navController.navigate("home_screen/all")
+                            }
                         ) {
 
-                            Icon(
-                                imageVector = Icons.Filled.Event,
-                                contentDescription = "Calendar",
-                                modifier = Modifier.size(24.dp)
-                            )
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
 
-                            Text(
-                                text = "Calendar",
-                                fontSize = 12.sp,
-                                modifier = Modifier.padding(top = 4.dp)
-                            )
+                                Icon(
+                                    imageVector = Icons.Filled.Event,
+                                    contentDescription = "Calendar",
+                                    modifier = Modifier.size(24.dp)
+                                )
 
+                                Text(
+                                    text = "Calendar",
+                                    fontSize = 12.sp
+                                )
+
+                            }
                         }
 
 
@@ -803,25 +854,25 @@ fun ReservationsBottomBar(navController: NavController) {
 }
 
 
-
 @Composable
 fun HamburgerMenuButton() {
-    var menuExpanded by remember { mutableStateOf(false) } // Tracks if the menu is open
+    var menuExpanded by remember { mutableStateOf(false) } // Main menu state
+    var submenuExpanded by remember { mutableStateOf(false) } // Submenu state
 
     Box {
-        // Combine Text and Icon into a Row
+        // Menu Button (Row with Text and Icon)
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .clickable { menuExpanded = true } // Make the entire Row clickable
-                .padding(8.dp, 8.dp, 16.dp, 8.dp), // Optional padding
-            verticalAlignment = Alignment.CenterVertically // Align text and icon vertically
+                .clickable { menuExpanded = true } // Open main menu
+                .padding(8.dp, 8.dp, 16.dp, 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Menu",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color(0xFFFE1943),
-                modifier = Modifier.padding(end = 4.dp) // Space between text and icon
+                modifier = Modifier.padding(end = 4.dp)
             )
 
             Spacer(Modifier.size(8.dp))
@@ -834,47 +885,61 @@ fun HamburgerMenuButton() {
             )
         }
 
-        // Dropdown menu
+        // Main Dropdown Menu
         DropdownMenu(
             expanded = menuExpanded,
-            onDismissRequest = { menuExpanded = false }, // Close the menu when dismissed
+            onDismissRequest = { menuExpanded = false },
             properties = PopupProperties(focusable = true)
         ) {
-            // Menu options
             DropdownMenuItem(
                 text = { Text("Option 1") },
-                onClick = {
-                    menuExpanded = false
-                    // Handle Option 1 click
-                }
+                onClick = { menuExpanded = false } // Handle Option 1
             )
             DropdownMenuItem(
                 text = { Text("Option 2") },
-                onClick = {
-                    menuExpanded = false
-                    // Handle Option 2 click
-                }
+                onClick = { menuExpanded = false } // Handle Option 2
             )
+
+            // Submenu Toggle Item
             DropdownMenuItem(
-                text = { Text("Option 3") },
-                onClick = {
-                    menuExpanded = false
-                    // Handle Option 3 click
-                }
+                text = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = if (submenuExpanded) Icons.Default.Add else Icons.Default.Minimize,
+                            contentDescription = "Expand Submenu"
+                        )
+                        Spacer(Modifier.weight(1f))
+                        Text("More Options")
+
+
+                    }
+                },
+                onClick = { submenuExpanded = !submenuExpanded } // Toggle submenu
             )
+
+            // Submenu items (conditionally displayed)
+            if (submenuExpanded) {
+                DropdownMenuItem(
+                    text = { Text("Sub Option 1") },
+                    onClick = { submenuExpanded = false; menuExpanded = false }
+                )
+                DropdownMenuItem(
+                    text = { Text("Sub Option 2") },
+                    onClick = { submenuExpanded = false; menuExpanded = false }
+                )
+                DropdownMenuItem(
+                    text = { Text("Sub Option 3") },
+                    onClick = { submenuExpanded = false; menuExpanded = false }
+                )
+            }
+
             DropdownMenuItem(
                 text = { Text("Option 4") },
-                onClick = {
-                    menuExpanded = false
-                    // Handle Option 4 click
-                }
+                onClick = { menuExpanded = false } // Handle Option 4
             )
             DropdownMenuItem(
                 text = { Text("Option 5") },
-                onClick = {
-                    menuExpanded = false
-                    // Handle Option 5 click
-                }
+                onClick = { menuExpanded = false } // Handle Option 5
             )
         }
     }

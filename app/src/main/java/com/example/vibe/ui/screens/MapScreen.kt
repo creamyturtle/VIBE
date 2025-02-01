@@ -277,7 +277,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
                     contentDescription = event.partyname,
                     modifier = Modifier
                         //.height(200.dp)
-                        .width(120.dp)
+                        .size(120.dp)
                         .clip(RoundedCornerShape(12.dp)),
                     contentScale = ContentScale.Crop,
                     placeholder = painterResource(R.drawable.loading_img),

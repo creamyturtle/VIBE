@@ -98,6 +98,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.5.1")
     implementation("androidx.compose.ui:ui-tooling:1.5.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("com.google.firebase:firebase-perf-ktx:21.0.4")
 
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")

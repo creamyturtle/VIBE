@@ -16,18 +16,29 @@
 
 package com.example.vibe.network
 
+import com.example.vibe.data.LoginRequest
+import com.example.vibe.data.LoginResponse
 import com.example.vibe.model.Event
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface EventsApiService {
 
+
+interface AuthApi {
+    @POST("loginApp.php") // ✅ Use the new API file
+    suspend fun login(@Body request: LoginRequest): LoginResponse
+}
+
+
+
+interface EventsApiService {
 
     // Fetch all rows
     @GET("api/{table}/get")
@@ -93,3 +104,6 @@ interface EventsApiService {
         @Query("id") id: Int
     ): Call<Map<String, Any>>
 }
+
+
+
