@@ -90,6 +90,7 @@ import androidx.navigation.navArgument
 import com.example.vibe.R
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
+import com.example.vibe.ui.components.FancyAnimatedButton
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
@@ -946,41 +947,5 @@ fun HamburgerMenuButton() {
 }
 
 
-
-@Composable
-fun FancyAnimatedButton(onClick: () -> Unit, content: @Composable () -> Unit) {
-    var isPressed by remember { mutableStateOf(false) }
-
-    // Scale Animation
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.9f else 1f, // Shrink slightly when pressed
-        animationSpec = tween(durationMillis = 150) // Fast animation
-    )
-
-    // Ripple Effect
-    val interactionSource = remember { MutableInteractionSource() }
-
-    Box(
-        modifier = Modifier
-            .scale(scale)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        isPressed = true // Start press animations
-                        try {
-                            awaitRelease() // Wait for user to release
-                        } finally {
-                            isPressed = false // Reset press state
-                        }
-                        onClick() // Trigger onClick action
-                    }
-                )
-            }
-            .indication(interactionSource, LocalIndication.current), // Default ripple effect
-        contentAlignment = Alignment.Center
-    ) {
-        content()
-    }
-}
 
 
