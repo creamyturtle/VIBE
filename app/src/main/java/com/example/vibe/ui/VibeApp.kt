@@ -145,7 +145,19 @@ fun VibeApp() {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { VibeTopAppBar(navController) },
+        topBar = {
+
+            val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+            val currentDestination = currentBackStackEntry?.destination?.route
+
+            if (currentDestination == "login") {
+                // No top app bar for the login screen
+            } else {
+                VibeTopAppBar(navController)
+            }
+
+        },
         bottomBar = {
 
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -265,7 +277,8 @@ fun VibeApp() {
                     LoginScreen(
                         navController = navController,
                         authRepository = authRepository,
-                        onLoginSuccess = { navController.popBackStack() } // Navigates back after login
+                        onLoginSuccess = { navController.popBackStack() }, // Navigates back after login
+                        onBack = { navController.navigateUp() }
                     )
                 }
 

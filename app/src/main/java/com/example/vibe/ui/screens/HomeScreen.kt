@@ -322,7 +322,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 Row(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(16.dp),
+                        .padding(24.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp) // Add space between dots
                 ) {
                     repeat(images.size) { index ->
