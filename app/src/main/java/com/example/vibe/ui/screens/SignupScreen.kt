@@ -16,7 +16,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,19 +28,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vibe.data.AuthRepository
+import com.example.vibe.ui.components.GenderDropdown
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
 
 
 @Composable
-fun LoginScreen(
+fun SignupScreen(
     navController: NavController,
     authRepository: AuthRepository, // ✅ Inject Repository Instead of AppContainer
-    onLoginSuccess: () -> Unit, // ✅ No Need to Pass UserData, Extract from JWT Instead
+    onSignupSuccess: () -> Unit, // ✅ No Need to Pass UserData, Extract from JWT Instead
     onBack: () -> Unit
 ) {
-    val viewModel = remember { LoginViewModel(authRepository) } // ✅ Use AuthRepository
+    val viewModel = remember { SignupViewModel(authRepository) } // ✅ Use AuthRepository
+
+    var gender by remember { mutableStateOf("Male") }
 
     Column(
         modifier = Modifier
@@ -48,10 +54,6 @@ fun LoginScreen(
     ) {
 
         Spacer(modifier = Modifier.height(48.dp))
-
-
-
-
 
 
 
@@ -83,20 +85,27 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Log in to your VIBE account",
+            text = "Create your VIBE account",
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal
         )
 
-
-
         Spacer(modifier = Modifier.height(20.dp))
+
+        StyledTextField(
+            value = viewModel.name,
+            onValueChange = { viewModel.name = it },
+            label = "Name"
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         StyledTextField(
             value = viewModel.email,
             onValueChange = { viewModel.email = it },
             label = "Email"
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         StyledTextField(
@@ -105,7 +114,44 @@ fun LoginScreen(
             label = "Password",
             isPassword  = true
         )
-        Spacer(modifier = Modifier.height(24.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Your password must be at least 8 characters long and must contain letters, numbers and special characters.",
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        StyledTextField(
+            value = viewModel.age,
+            onValueChange = { viewModel.age = it },
+            label = "Age"
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        GenderDropdown(
+            selectedOption = viewModel.gender,
+            onOptionSelected = { viewModel.gender = it },
+            label = "Gender"
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        StyledTextField(
+            value = viewModel.instagram,
+            onValueChange = { viewModel.instagram = it },
+            label = "Instagram"
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+
+
 
         if (viewModel.errorMessage != null) {
             Text(viewModel.errorMessage!!, color = Color.Red)
@@ -116,72 +162,24 @@ fun LoginScreen(
             text = "Login",
             isLoading = viewModel.isLoading,
             onClick = {
-                viewModel.login {
-                    onLoginSuccess()
-                    navController.navigate("home_screen/all") {
-                        popUpTo("login") { inclusive = true }
-                    }
-                }
-            }
-        )
-
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        OrDivider()
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Text(
-            text = "New to VIBE?",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Normal
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        StyledButton(
-            text = "Sign up",
-            onClick = {
-                navController.navigate("signup") {
-                    popUpTo("login") { inclusive = true }
-                }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        /*
-
-            //OLD LOGOUT CODE.  CAN REUSE
-
-        OrDivider()
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        StyledButton(
-            text = "Logout",
-            onClick = {
-                viewModel.logout {
+                viewModel.signup {
+                    onSignupSuccess()
                     navController.navigate("login") {
-                        popUpTo("login") { inclusive = true } // Clears back stack
+                        popUpTo("signup") { inclusive = true }
                     }
                 }
             }
         )
 
-         */
+
+
+
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+
 
 
     }
 }
-
-
-
-
-
-
-
-
-
 

@@ -18,6 +18,8 @@ package com.example.vibe.network
 
 import com.example.vibe.data.LoginRequest
 import com.example.vibe.data.LoginResponse
+import com.example.vibe.data.SignupRequest
+import com.example.vibe.data.SignupResponse
 import com.example.vibe.model.Event
 import retrofit2.Call
 import retrofit2.http.Body
@@ -32,10 +34,15 @@ import retrofit2.http.Query
 
 
 interface AuthApi {
-    @POST("loginApp.php") // ✅ Use the new API file
+    @POST("loginApp.php")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 }
 
+
+interface SignupApi {
+    @POST("registerApp.php")
+    suspend fun signup(@Body request: SignupRequest): SignupResponse
+}
 
 
 interface EventsApiService {

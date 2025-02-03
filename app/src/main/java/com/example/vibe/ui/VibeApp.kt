@@ -19,15 +19,9 @@ package com.example.vibe.ui
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,10 +39,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Minimize
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
@@ -69,9 +63,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -97,6 +89,7 @@ import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen
+import com.example.vibe.ui.screens.SignupScreen
 import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.utils.SessionManager
 import kotlin.math.max
@@ -147,13 +140,11 @@ fun VibeApp() {
         modifier = Modifier.fillMaxSize(),
         topBar = {
 
-            val currentBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
-            val currentDestination = currentBackStackEntry?.destination?.route
+            val noTopBarScreens = setOf("login", "signup") // Screens that don't show a top bar
 
-            if (currentDestination == "login") {
-                // No top app bar for the login screen
-            } else {
+            if (currentDestination !in noTopBarScreens && currentDestination?.startsWith("event_details") == false) {
                 VibeTopAppBar(navController)
             }
 
@@ -273,11 +264,21 @@ fun VibeApp() {
 
                 composable(route = "login") {
 
-
                     LoginScreen(
                         navController = navController,
                         authRepository = authRepository,
                         onLoginSuccess = { navController.popBackStack() }, // Navigates back after login
+                        onBack = { navController.navigateUp() }
+                    )
+                }
+
+
+                composable(route = "signup") {
+
+                    SignupScreen(
+                        navController = navController,
+                        authRepository = authRepository,
+                        onSignupSuccess = { navController.popBackStack() }, // Navigates back after login
                         onBack = { navController.navigateUp() }
                     )
                 }
@@ -361,7 +362,30 @@ fun VibeTopAppBar(navController: NavController) {
                     horizontalAlignment = Alignment.End
                 ) {
 
-                    HamburgerMenuButton()
+                    Row() {
+
+
+                        Text(
+                            text = "\uD83C\uDDE8\uD83C\uDDF4",
+                            Modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            text = "\uD83C\uDDFA\uD83C\uDDF8",
+                            Modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)
+                        )
+
+                        Spacer(Modifier.weight(1f))
+
+
+                        HamburgerMenuButton()
+
+
+
+                    }
+
+
+
 
                     Spacer(Modifier.size(6.dp))
 
@@ -718,9 +742,6 @@ fun MapBottomAppBar(
 
 
 
-
-
-
 @Composable
 fun ReservationsBottomBar(navController: NavController) {
 
@@ -914,11 +935,11 @@ fun HamburgerMenuButton() {
             properties = PopupProperties(focusable = true)
         ) {
             DropdownMenuItem(
-                text = { Text("Option 1") },
+                text = { Text("Dashboard") },
                 onClick = { menuExpanded = false } // Handle Option 1
             )
             DropdownMenuItem(
-                text = { Text("Option 2") },
+                text = { Text("Host an Event") },
                 onClick = { menuExpanded = false } // Handle Option 2
             )
 
@@ -926,12 +947,15 @@ fun HamburgerMenuButton() {
             DropdownMenuItem(
                 text = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = if (submenuExpanded) Icons.Default.Add else Icons.Default.Minimize,
-                            contentDescription = "Expand Submenu"
-                        )
+
+                        Text("Information ")
                         Spacer(Modifier.weight(1f))
-                        Text("More Options")
+                        Icon(
+                            imageVector = if (submenuExpanded) Icons.Default.Close else Icons.Default.Add,
+                            contentDescription = "Expand Submenu",
+                            Modifier.size(18.dp)
+                        )
+
 
 
                     }
@@ -942,25 +966,29 @@ fun HamburgerMenuButton() {
             // Submenu items (conditionally displayed)
             if (submenuExpanded) {
                 DropdownMenuItem(
-                    text = { Text("Sub Option 1") },
+                    text = { Text("  About") },
                     onClick = { submenuExpanded = false; menuExpanded = false }
                 )
                 DropdownMenuItem(
-                    text = { Text("Sub Option 2") },
+                    text = { Text("  FAQ") },
                     onClick = { submenuExpanded = false; menuExpanded = false }
                 )
                 DropdownMenuItem(
-                    text = { Text("Sub Option 3") },
+                    text = { Text("  Terms & Conditions") },
+                    onClick = { submenuExpanded = false; menuExpanded = false }
+                )
+                DropdownMenuItem(
+                    text = { Text("  Privacy Policy") },
                     onClick = { submenuExpanded = false; menuExpanded = false }
                 )
             }
 
             DropdownMenuItem(
-                text = { Text("Option 4") },
+                text = { Text("User Profile") },
                 onClick = { menuExpanded = false } // Handle Option 4
             )
             DropdownMenuItem(
-                text = { Text("Option 5") },
+                text = { Text("Logout") },
                 onClick = { menuExpanded = false } // Handle Option 5
             )
         }
