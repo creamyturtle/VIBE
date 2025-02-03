@@ -5,12 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.vibe.data.SignupRequest
-import com.example.vibe.data.SignupResponse
 import com.example.vibe.network.SignupApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
+
 
 class SignupViewModel(private val signupApi: SignupApi) : ViewModel() {
 
@@ -18,61 +17,58 @@ class SignupViewModel(private val signupApi: SignupApi) : ViewModel() {
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var age by mutableStateOf("")
-    var gender by mutableStateOf("Male") // Default to Male
+    var gender by mutableStateOf("Male")
     var instagram by mutableStateOf("")
-
     var isLoading by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
 
-    suspend fun signup(onSuccess: () -> Unit) {
-        if (name.isBlank() || email.isBlank() || password.isBlank() || age.isBlank() || instagram.isBlank()) {
-            errorMessage = "All fields are required."
-            return
-        }
+    fun signup(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
 
-        val ageInt = age.toIntOrNull()
-        if (ageInt == null || ageInt < 18 || ageInt > 120) {
-            errorMessage = "Invalid age."
-            return
-        }
-
-        if (password.length < 8) {
-            errorMessage = "Password must be at least 8 characters long."
-            return
-        }
-
-        isLoading = true
-        errorMessage = null
-
-        val request = SignupRequest(
-            name = name,
-            email = email,
-            password = password,
-            age = ageInt,
-            sexismale = gender == "Male", // Convert gender to Boolean
-            instagram = instagram
-        )
-
-        signupApi.signup(request).enqueue(object : Callback<SignupResponse> {
-            override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
+            val ageInt = age.toIntOrNull()
+            if (ageInt == null || ageInt < 18 || ageInt > 120) {
+                errorMessage = "Invalid age."
                 isLoading = false
+                return@launch
+            }
+
+            if (password.length < 8) {
+                errorMessage = "Password must be at least 8 characters long."
+                isLoading = false
+                return@launch
+            }
+
+            val request = SignupRequest(
+                name = name,
+                email = email,
+                password = password,
+                age = ageInt,
+                sexismale = gender == "Male",
+                instagram = instagram
+            )
+
+            try {
+                val response = signupApi.signup(request) // ✅ Call API directly
+                isLoading = false
+
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        if (it.success) {
-                            onSuccess()
-                        } else {
-                            errorMessage = it.message
-                        }
+                    val body = response.body()
+                    if (body?.success == true) {
+                        onSuccess()
+                    } else {
+                        errorMessage = body?.message ?: "Signup failed. Try again."
                     }
                 } else {
-                    errorMessage = "Signup failed. Try again."
+                    errorMessage = "Signup failed. Server error: ${response.code()}"
                 }
-            }
 
-            override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
+            } catch (e: Exception) {
                 isLoading = false
-                errorMessage = "Network error: ${t.message}"
+                errorMessage = "Network error: ${e.message}"
             }
-        })
+        }
     }
+
 }

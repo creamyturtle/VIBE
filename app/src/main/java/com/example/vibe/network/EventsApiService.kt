@@ -22,10 +22,10 @@ import com.example.vibe.data.SignupRequest
 import com.example.vibe.data.SignupResponse
 import com.example.vibe.model.Event
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -40,8 +40,8 @@ interface AuthApi {
 
 
 interface SignupApi {
-    @POST("registerApp.php")
-    suspend fun signup(@Body request: SignupRequest): Call<SignupResponse>
+    @POST("registerApp.php") // ✅ Must match your backend API endpoint
+    suspend fun signup(@Body request: SignupRequest): Response<SignupResponse> // ✅ Ensure it returns Response<T>
 }
 
 
