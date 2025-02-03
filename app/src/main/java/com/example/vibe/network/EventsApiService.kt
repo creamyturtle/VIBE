@@ -41,7 +41,7 @@ interface AuthApi {
 
 interface SignupApi {
     @POST("registerApp.php")
-    suspend fun signup(@Body request: SignupRequest): SignupResponse
+    suspend fun signup(@Body request: SignupRequest): Call<SignupResponse>
 }
 
 

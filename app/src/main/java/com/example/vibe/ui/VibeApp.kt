@@ -277,7 +277,7 @@ fun VibeApp() {
 
                     SignupScreen(
                         navController = navController,
-                        authRepository = authRepository,
+                        signupApi = appContainer.signupApi,
                         onSignupSuccess = { navController.popBackStack() }, // Navigates back after login
                         onBack = { navController.navigateUp() }
                     )

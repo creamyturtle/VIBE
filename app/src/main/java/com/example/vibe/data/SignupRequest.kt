@@ -8,6 +8,6 @@ data class SignupRequest(
     val email: String,
     val password: String,
     val age: Int,
-    val gender: String,
+    val sexismale: Boolean,
     val instagram: String
 )

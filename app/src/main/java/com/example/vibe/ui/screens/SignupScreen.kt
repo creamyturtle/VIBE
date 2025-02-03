@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vibe.data.AuthRepository
+import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.components.GenderDropdown
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
@@ -37,11 +38,11 @@ import com.example.vibe.ui.components.StyledTextField
 @Composable
 fun SignupScreen(
     navController: NavController,
-    authRepository: AuthRepository, // ✅ Inject Repository Instead of AppContainer
+    signupApi: SignupApi, // ✅ Inject Repository Instead of AppContainer
     onSignupSuccess: () -> Unit, // ✅ No Need to Pass UserData, Extract from JWT Instead
     onBack: () -> Unit
 ) {
-    val viewModel = remember { SignupViewModel(authRepository) } // ✅ Use AuthRepository
+    val viewModel = remember { SignupViewModel(signupApi) }
 
     var gender by remember { mutableStateOf("Male") }
 
@@ -159,7 +160,7 @@ fun SignupScreen(
         }
 
         StyledButton(
-            text = "Login",
+            text = "Sign Up",
             isLoading = viewModel.isLoading,
             onClick = {
                 viewModel.signup {

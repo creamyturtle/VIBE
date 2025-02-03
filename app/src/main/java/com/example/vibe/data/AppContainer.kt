@@ -27,6 +27,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import android.content.Context
 import com.example.vibe.network.AuthInterceptor
+import com.example.vibe.network.SignupApi
 
 
 /**
@@ -35,6 +36,7 @@ import com.example.vibe.network.AuthInterceptor
 interface AppContainer {
     val eventsRepository: EventsRepository
     val authApi: AuthApi
+    val signupApi: SignupApi
 }
 
 
@@ -78,6 +80,11 @@ class DefaultAppContainer(context: Context) : AppContainer {
     // ✅ Add AuthApi service
     override val authApi: AuthApi by lazy {
         retrofit.create(AuthApi::class.java)
+    }
+
+    // ✅ Signup Api service
+    override val signupApi: SignupApi by lazy {
+        retrofit.create(SignupApi::class.java)
     }
 
 
