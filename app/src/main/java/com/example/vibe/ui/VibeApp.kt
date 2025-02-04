@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,9 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -66,8 +70,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -166,13 +172,15 @@ fun VibeApp() {
                         }
                     }
                 }
+                currentDestination?.startsWith("event_details") == true -> {
+                    ReservationsBottomBar(navController = navController)
+                }
+
+
             }
 
-            /*
-            else {
-                ReservationsBottomBar(navController = navController)
-            }
-            */
+
+
 
         }
 
@@ -745,154 +753,88 @@ fun MapBottomAppBar(
 @Composable
 fun ReservationsBottomBar(navController: NavController) {
 
-    BottomAppBar (
-        modifier = Modifier
-            //.offset(y = offsetY)
-            .height(148.dp),
-        containerColor = Color(0xFF333F57), // Background color for the BottomAppBar
-        contentColor = Color.White         // Default content (icon/text) color
-    ) {
+    val density = LocalDensity.current.density
+    val onePixel = 1f / density
 
-        Row(
+    Column {
+        // Separator bar (1px light grey)
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 4.dp)
-                .offset(x = (-4).dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .height(onePixel.dp)
+                .background(Color.LightGray) // Light grey separator
+        )
+
+        BottomAppBar(
+            modifier = Modifier
+                //.offset(y = offsetY)
+                .height(128.dp),
+            containerColor = Color.White,
+            contentColor = Color.Black
         ) {
 
-            FancyAnimatedButton(
-                onClick = {
-
-                    navController.navigate("home_screen/House") {
-                        popUpTo("home_screen/all") { inclusive = true } // Reset navigation stack
-                    }
-
-                }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.house),
-                        contentDescription = "House Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                    )
-                    Text(
-                        text = "House Parties",
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-            }
-
-            Spacer(Modifier.width(0.dp))
-
-            FancyAnimatedButton(
-                onClick = {
-                    navController.navigate("home_screen/Finca") {
-                        popUpTo("home_screen/all") { inclusive = true } // Reset navigation stack
-                    }
-                }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, bottom = 4.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Text(text = "Request entry to event")
+
+
+                Spacer(Modifier.weight(1f))
+
+
+                FancyAnimatedButton(
+                    onClick = {
+                        navController.navigate("home_screen/Finca") {
+                            popUpTo("home_screen/all") {
+                                inclusive = true
+                            } // Reset navigation stack
+                        }
+                    }
                 ) {
 
-                    Image(
-                        painter = painterResource(R.drawable.finca),
-                        contentDescription = "Finca Parties",
-                        contentScale = ContentScale.Crop,
+
+                    Button(
+                        onClick = {
+                            navController.navigate("home_screen/Finca") {
+                                popUpTo("home_screen/all") {
+                                    inclusive = true
+                                } // Reset navigation stack
+                            }
+                        },
+                        enabled = true,
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFFE1943),
+                            contentColor = Color.White,
+                            disabledContainerColor = Color(0xFFBDBDBD),
+                            disabledContentColor = Color.White
+                        ),
                         modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                    )
+                            .width(168.dp)
+                            .height(50.dp)
+                            .padding(end = 16.dp)
+                    ) {
 
-                    Text(
-                        text = "Finca Parties",
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
+                        Text(
+                            text = "Reserve",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
 
-                }
-
-            }
-
-            Spacer(Modifier.width(0.dp))
-
-            FancyAnimatedButton(
-                onClick = {
-
-                    navController.navigate("home_screen/Pool") {
-                        popUpTo("home_screen/all") { inclusive = true } // Reset navigation stack
                     }
 
-                }
-            ) {
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Image(
-                        painter = painterResource(R.drawable.pool),
-                        contentDescription = "Pool Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                    )
-
-                    Text(
-                        text = "Pool Parties",
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
 
                 }
 
-            }
 
-            Spacer(Modifier.width(8.dp))
-
-            FancyAnimatedButton(
-                onClick = {
-
-                    navController.navigate("home_screen/Activity") {
-                        popUpTo("home_screen/all") { inclusive = true } // Reset navigation stack
-                    }
-
-                }
-            ) {
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Image(
-                        painter = painterResource(R.drawable.activities),
-                        contentDescription = "Activities",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                    )
-
-                    Text(
-                        text = "Activities",
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-
-                }
             }
 
 
         }
-
-
     }
 }
 
