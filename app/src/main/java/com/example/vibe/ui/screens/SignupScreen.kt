@@ -1,5 +1,6 @@
 package com.example.vibe.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,61 +38,43 @@ import com.example.vibe.ui.components.StyledTextField
 import kotlinx.coroutines.launch
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SignupScreen(
     navController: NavController,
-    signupApi: SignupApi, // ✅ Inject Repository Instead of AppContainer
-    onSignupSuccess: () -> Unit, // ✅ No Need to Pass UserData, Extract from JWT Instead
+    signupApi: SignupApi,
+    onSignupSuccess: () -> Unit,
     onBack: () -> Unit
 ) {
     val viewModel = remember { SignupViewModel(signupApi) }
-
-    val snackbarHostState = remember { SnackbarHostState() } // ✅ Manages Snackbar messages
-    val coroutineScope = rememberCoroutineScope() // ✅ Needed for showing Snackbar
-
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }, // ✅ Attach Snackbar
-        topBar = { /* Your top bar UI */ }
-    ) { paddingValues ->
-
-
+        snackbarHost = { SnackbarHost(snackbarHostState) } // ✅ Only for Snackbar
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
+                .padding(16.dp), // ✅ Removed `paddingValues`
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(modifier = Modifier.height(48.dp))
-
-
 
             IconButton(
                 onClick = onBack,
                 modifier = Modifier
-                    //.padding(16.dp)
                     .align(Alignment.Start)
                     .background(color = Color.White, shape = CircleShape)
                     .size(40.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize() // Fill the `IconButton` area
-                        .padding(0.dp) // Adjust the internal padding here
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.Black,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(28.dp)
-                    )
-                }
-
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.Black,
+                    modifier = Modifier.size(28.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -162,9 +145,6 @@ fun SignupScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-
-
-
             if (viewModel.errorMessage != null) {
                 Text(viewModel.errorMessage!!, color = Color.Red)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -178,12 +158,11 @@ fun SignupScreen(
                         coroutineScope.launch {
                             val snackbarResult = snackbarHostState.showSnackbar(
                                 message = "Signup successful! Please check your email for confirmation.",
-                                actionLabel = "OK", // ✅ User must tap "OK" to dismiss
-                                duration = SnackbarDuration.Indefinite // ✅ Snackbar stays until dismissed
+                                actionLabel = "OK",
+                                duration = SnackbarDuration.Indefinite
                             )
 
                             if (snackbarResult == SnackbarResult.ActionPerformed) {
-                                // ✅ Only navigate when user taps "OK"
                                 onSignupSuccess()
                                 navController.navigate("login") {
                                     popUpTo("signup") { inclusive = true }
@@ -194,14 +173,7 @@ fun SignupScreen(
                 }
             )
 
-
-
-
-
-
             Spacer(modifier = Modifier.height(24.dp))
-
-
         }
     }
 }

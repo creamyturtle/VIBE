@@ -94,7 +94,7 @@ fun VibeApp() {
     val appContainer = remember { DefaultAppContainer(context) } // ✅ Initialize AppContainer
     val authRepository = remember { AuthRepository(appContainer.authApi, SessionManager(context)) }
 
-
+    val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
 
 
     Scaffold(
@@ -156,7 +156,7 @@ fun VibeApp() {
 
                     val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
-                    val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
+
 
                     // Fetch events based on the filter type
                     LaunchedEffect(filterType) {
@@ -188,7 +188,6 @@ fun VibeApp() {
 
                     val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
-                    val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
 
                     LaunchedEffect(filterType) {
                         if (filterType == "all") {
@@ -212,8 +211,6 @@ fun VibeApp() {
                 ) { backStackEntry ->
 
                     val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
-                    val eventsViewModel: EventsViewModel =
-                        viewModel(factory = EventsViewModel.Factory)
 
                     EventDetailsScreen(
                         contentPadding = innerPadding,
