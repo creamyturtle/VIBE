@@ -52,7 +52,9 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         private set
 
     init {
-        getEvents()
+        if (eventsUiState !is EventsUiState.Success) {
+            getEvents() // ✅ Ensure events load on ViewModel creation
+        }
     }
 
     fun getEvents() {
