@@ -16,11 +16,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.network.SignupApi
+import com.example.vibe.ui.components.ReservationsBottomBar
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen
+import com.example.vibe.ui.screens.ReservationScreen
 import com.example.vibe.ui.screens.SignupScreen
 import com.example.vibe.ui.screens.geocodeAddress
 
@@ -98,16 +100,36 @@ fun VibeNavHost(
             route = "event_details/{eventId}",
             arguments = listOf(navArgument("eventId") { type = NavType.StringType })
         ) { backStackEntry ->
-
             val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
+
+            val event = eventsViewModel.selectedEvent // ✅ Get event from ViewModel
+            LaunchedEffect(eventId) {
+                eventsViewModel.selectEvent(eventId) // ✅ Fetch the selected event
+            }
 
             EventDetailsScreen(
                 contentPadding = innerPadding,
-                event = eventsViewModel.selectedEvent,
+                event = event,
                 onBack = { navController.navigateUp() }
             )
-            eventsViewModel.selectEvent(eventId)
+
         }
+
+
+        composable(
+            route = "reservation_screen/{eventId}",
+            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
+
+            val event = eventsViewModel.selectedEvent // ✅ Retrieve the event from ViewModel
+            LaunchedEffect(eventId) {
+                eventsViewModel.selectEvent(eventId) // ✅ Load the correct event
+            }
+
+            ReservationScreen(event = event)
+        }
+
 
 
         composable(route = "login") {

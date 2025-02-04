@@ -23,10 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vibe.model.Event
 
 
 @Composable
-fun ReservationsBottomBar(navController: NavController) {
+fun ReservationsBottomBar(
+    navController: NavController,
+    event: Event
+) {
 
     val density = LocalDensity.current.density
     val onePixel = 1f / density
@@ -76,22 +80,14 @@ fun ReservationsBottomBar(navController: NavController) {
 
                 FancyAnimatedButton(
                     onClick = {
-                        navController.navigate("home_screen/Finca") {
-                            popUpTo("home_screen/all") {
-                                inclusive = true
-                            } // Reset navigation stack
-                        }
+                        navController.navigate("reservation_screen/${event.id}")
                     }
                 ) {
 
 
                     Button(
                         onClick = {
-                            navController.navigate("home_screen/Finca") {
-                                popUpTo("home_screen/all") {
-                                    inclusive = true
-                                } // Reset navigation stack
-                            }
+                            navController.navigate("reservation_screen/${event.id}")
                         },
                         enabled = true,
                         shape = RoundedCornerShape(8.dp),

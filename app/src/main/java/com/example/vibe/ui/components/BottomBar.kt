@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.vibe.ui.screens.EventsViewModel
 
 @Composable
-fun BottomBar(navController: NavController, animatedOffset: Dp) {
+fun BottomBar(navController: NavController, animatedOffset: Dp, eventsViewModel: EventsViewModel) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
     when {
@@ -21,7 +22,12 @@ fun BottomBar(navController: NavController, animatedOffset: Dp) {
             }
         }
         currentDestination?.startsWith("event_details") == true -> {
-            ReservationsBottomBar(navController)
+            val selectedEvent = eventsViewModel.selectedEvent
+            selectedEvent?.let {
+                ReservationsBottomBar(navController, it) // ✅ Pass event when in `event_details`
+            }
         }
+
     }
 }
+

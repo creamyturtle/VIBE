@@ -89,7 +89,7 @@ fun VibeApp() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBar(navController) },
-        bottomBar = { BottomBar(navController, animatedOffset) }
+        bottomBar = { BottomBar(navController, animatedOffset, eventsViewModel) }
 
     ) { innerPadding ->
 
