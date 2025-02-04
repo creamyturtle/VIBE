@@ -1,0 +1,27 @@
+package com.example.vibe.ui.components
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+
+@Composable
+fun BottomBar(navController: NavController, animatedOffset: Dp) {
+    val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
+
+    when {
+        currentDestination?.startsWith("home_screen") == true -> {
+            VibeBottomAppBar(navController, animatedOffset)
+        }
+        currentDestination?.startsWith("map_screen") == true -> {
+            MapBottomAppBar(navController) { filterType ->
+                navController.navigate("map_screen/$filterType") {
+                    popUpTo("map_screen/all") { inclusive = true }
+                }
+            }
+        }
+        currentDestination?.startsWith("event_details") == true -> {
+            ReservationsBottomBar(navController)
+        }
+    }
+}

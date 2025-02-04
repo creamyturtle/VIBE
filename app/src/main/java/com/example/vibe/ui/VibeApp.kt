@@ -36,15 +36,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
-import com.example.vibe.ui.components.MapBottomAppBar
-import com.example.vibe.ui.components.ReservationsBottomBar
-import com.example.vibe.ui.components.VibeBottomAppBar
-import com.example.vibe.ui.components.VibeTopAppBar
+import com.example.vibe.ui.components.BottomBar
+import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
@@ -99,48 +96,10 @@ fun VibeApp() {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-
-            val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
-
-            val noTopBarScreens = setOf("login", "signup") // Screens that don't show a top bar
-
-            if (currentDestination !in noTopBarScreens && currentDestination?.startsWith("event_details") == false) {
-                VibeTopAppBar(navController)
-            }
-
-        },
-        bottomBar = {
-
-            val currentBackStackEntry by navController.currentBackStackEntryAsState()
-
-            val currentDestination = currentBackStackEntry?.destination?.route
-
-            when {
-                currentDestination?.startsWith("home_screen") == true -> {
-                    VibeBottomAppBar(navController, animatedOffset)
-                }
-                currentDestination?.startsWith("map_screen") == true -> {
-                    MapBottomAppBar(navController) { filterType ->
-                        navController.navigate("map_screen/$filterType") {
-                            popUpTo("map_screen/all") { inclusive = true }
-                        }
-                    }
-                }
-                currentDestination?.startsWith("event_details") == true -> {
-                    ReservationsBottomBar(navController = navController)
-                }
-
-
-            }
-
-
-
-
-        }
+        topBar = { TopBar(navController) },
+        bottomBar = { BottomBar(navController, animatedOffset) }
 
     ) { innerPadding ->
-
 
 
             NavHost(
@@ -244,10 +203,7 @@ fun VibeApp() {
                 }
 
 
-
-
             }
-
 
 
     }
