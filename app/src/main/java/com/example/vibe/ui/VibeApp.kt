@@ -90,6 +90,8 @@ import com.example.vibe.R
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
 import com.example.vibe.ui.components.FancyAnimatedButton
+import com.example.vibe.ui.components.MapBottomAppBar
+import com.example.vibe.ui.components.ReservationsBottomBar
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
@@ -492,9 +494,7 @@ fun VibeTopAppBar(navController: NavController) {
 
                     }
 
-
                 }
-
 
 
             }
@@ -665,178 +665,6 @@ fun VibeBottomAppBar(navController: NavController, offsetY: Dp) {
 
 
 
-@Composable
-fun MapBottomAppBar(
-    navController: NavController,
-    onFilterSelected: (String) -> Unit
-) {
-    BottomAppBar(
-        containerColor = Color(0xFF333F57),
-        contentColor = Color.White,
-        modifier = Modifier
-            .height(148.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 4.dp)
-                .offset(x = (-4).dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("House") }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.house),
-                        contentDescription = "House Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "House Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-                }
-            }
-            Spacer(Modifier.width(0.dp))
-
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("Finca") }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.finca),
-                        contentDescription = "Finca Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "Finca Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-                }
-            }
-
-            Spacer(Modifier.width(0.dp))
-
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("Pool") }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.pool),
-                        contentDescription = "Pool Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "Pool Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-                }
-            }
-
-            Spacer(Modifier.width(8.dp))
-
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("Activity") }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.activities),
-                        contentDescription = "Activities",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "Activities", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-                }
-            }
-        }
-    }
-}
-
-
-
-@Composable
-fun ReservationsBottomBar(navController: NavController) {
-
-    val density = LocalDensity.current.density
-    val onePixel = 1f / density
-
-    Column {
-        // Separator bar (1px light grey)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(onePixel.dp)
-                .background(Color.LightGray) // Light grey separator
-        )
-
-        BottomAppBar(
-            modifier = Modifier
-                //.offset(y = offsetY)
-                .height(128.dp),
-            containerColor = Color.White,
-            contentColor = Color.Black
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp, bottom = 4.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-
-                Text(text = "Request entry to event")
-
-
-                Spacer(Modifier.weight(1f))
-
-
-                FancyAnimatedButton(
-                    onClick = {
-                        navController.navigate("home_screen/Finca") {
-                            popUpTo("home_screen/all") {
-                                inclusive = true
-                            } // Reset navigation stack
-                        }
-                    }
-                ) {
-
-
-                    Button(
-                        onClick = {
-                            navController.navigate("home_screen/Finca") {
-                                popUpTo("home_screen/all") {
-                                    inclusive = true
-                                } // Reset navigation stack
-                            }
-                        },
-                        enabled = true,
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFFE1943),
-                            contentColor = Color.White,
-                            disabledContainerColor = Color(0xFFBDBDBD),
-                            disabledContentColor = Color.White
-                        ),
-                        modifier = Modifier
-                            .width(168.dp)
-                            .height(50.dp)
-                            .padding(end = 16.dp)
-                    ) {
-
-                        Text(
-                            text = "Reserve",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-
-                    }
-
-
-                }
-
-
-            }
-
-
-        }
-    }
-}
 
 
 @Composable
