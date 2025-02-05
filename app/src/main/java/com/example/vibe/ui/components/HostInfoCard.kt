@@ -115,10 +115,10 @@ fun HostInfoCard(
                     SocialLinkRowCustom(iconResId = R.drawable.instagram, label = "Instagram", url = "https://instagram.com/$it")
                 }
                 facebook?.let {
-                    SocialLinkRow(icon = Icons.Filled.Facebook, label = "Facebook", url = it)
+                    SocialLinkRowCustom(iconResId = R.drawable.facebook, label = "Facebook", url = it)
                 }
                 whatsapp?.let {
-                    SocialLinkRow(icon = Icons.Filled.Phone, label = "WhatsApp", url = "https://wa.me/$it")
+                    SocialLinkRowCustom(iconResId = R.drawable.whatsapp, label = "WhatsApp", url = "https://wa.me/$it")
                 }
 
 
