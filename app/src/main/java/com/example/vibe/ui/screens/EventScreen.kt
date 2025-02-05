@@ -67,6 +67,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.ui.components.HostInfoCard
 import com.example.vibe.ui.theme.Route159Bold
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -578,7 +579,7 @@ fun EventDetailsScreen(
                     color = Color.LightGray
                 )
 
-                //Spacer(modifier = Modifier.height(48.dp))
+
 
 
 
@@ -663,6 +664,40 @@ fun EventDetailsScreen(
                         .padding(24.dp, 0.dp, 24.dp, 8.dp)
                 )
 
+                Spacer(modifier = Modifier.height(48.dp))
+
+
+                Text(
+                    text = "Hosted By",
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp)
+                )
+
+                HostInfoCard(
+                    profileImageUrl = "https://www.vibesocial.org/uploads/profile_photos/profile_674fac45498a53.34172521.jpg",
+                    hostName = "John Doe",
+                    age = 28,
+                    gender = "Male",
+                    instagram = "johndoe",
+                    facebook = "https://facebook.com/johndoe",
+                    whatsapp = "1234567890"
+                )
+
+
+
+
+
+
+
+
+
+
+
+
+
+                //spacer to protect bottom bar from blocking at scroll bottom
 
                 Spacer(modifier = Modifier.height(148.dp))
 
