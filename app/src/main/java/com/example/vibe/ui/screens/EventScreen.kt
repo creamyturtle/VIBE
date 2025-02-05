@@ -264,7 +264,7 @@ fun EventDetailsScreen(
                     fontFamily = Route159Bold,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp, 16.dp, 16.dp, 16.dp),
+                        .padding(32.dp, 16.dp, 16.dp, 16.dp),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 24.sp
@@ -275,7 +275,7 @@ fun EventDetailsScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth() // Makes the Box take the full width of the parent
-                        .padding(16.dp, 16.dp, 60.dp, 16.dp)
+                        .padding(24.dp, 16.dp, 60.dp, 16.dp)
                         .background(
                             color = Color(0xFFebebeb), // Light grey background
                             shape = RoundedCornerShape(12.dp) // Rounded corners
@@ -324,7 +324,7 @@ fun EventDetailsScreen(
                     text = event.description,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp, 0.dp, 16.dp, 0.dp)
+                        .padding(24.dp, 0.dp, 24.dp, 0.dp)
                 )
 
 
@@ -337,13 +337,13 @@ fun EventDetailsScreen(
                     fontSize = 20.sp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp, 0.dp, 16.dp, 8.dp)
+                        .padding(32.dp, 0.dp, 16.dp, 8.dp)
                 )
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp, 0.dp, 60.dp, 0.dp)
+                        .padding(24.dp, 0.dp, 60.dp, 0.dp)
                         .background(Color.Transparent)
                         .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                         .padding(16.dp)
@@ -418,12 +418,12 @@ fun EventDetailsScreen(
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp, 0.dp, 16.dp, 8.dp)
+                        .padding(32.dp, 0.dp, 16.dp, 8.dp)
                 )
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Policy,
@@ -442,7 +442,7 @@ fun EventDetailsScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.LocalParking,
@@ -460,7 +460,7 @@ fun EventDetailsScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Wifi,
@@ -478,7 +478,7 @@ fun EventDetailsScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Liquor,
@@ -496,7 +496,7 @@ fun EventDetailsScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Pets,
@@ -514,7 +514,7 @@ fun EventDetailsScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
                 ) {
 
 
@@ -625,7 +625,7 @@ fun EventDetailsScreen(
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp, 0.dp, 16.dp, 0.dp)
+                        .padding(32.dp, 0.dp, 16.dp, 0.dp)
                 )
 
 
@@ -633,10 +633,9 @@ fun EventDetailsScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(24.dp, 16.dp, 24.dp, 16.dp)
                         .height(300.dp)
-                        .clip(RoundedCornerShape(16.dp)) // Adds rounded corners
-                        .border(2.dp, Color.Gray, RoundedCornerShape(16.dp)),
+                        .clip(RoundedCornerShape(16.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     if (coordinates != null) {
@@ -661,7 +660,7 @@ fun EventDetailsScreen(
                     fontWeight = FontWeight.Normal,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(24.dp, 0.dp, 24.dp, 8.dp)
+                        .padding(32.dp, 0.dp, 32.dp, 8.dp)
                 )
 
                 Spacer(modifier = Modifier.height(48.dp))

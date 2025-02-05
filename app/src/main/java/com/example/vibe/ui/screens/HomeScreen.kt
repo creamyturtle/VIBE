@@ -251,6 +251,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
 
     Card(
         modifier = modifier
+            .padding(4.dp, 4.dp, 4.dp, 12.dp)
             .shadow(10.dp, shape = RoundedCornerShape(16.dp))
             .clickable { onClick() }
             .clip(RoundedCornerShape(16.dp))
@@ -372,7 +373,6 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
         }
     }
 
-    Spacer(Modifier.height(8.dp))
 
 }
 
