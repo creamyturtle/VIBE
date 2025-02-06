@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -110,14 +109,15 @@ fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .then(
-                when {
-                    offsetY == 148.dp -> Modifier.offset(y = offsetY - 188.dp)
-                    else -> Modifier.offset(y = offsetY - 148.dp)
-                }
-            )
+            //.offset(y = )
+            //.then(
+            //    when {
+            //        offsetY == 148.dp -> Modifier.offset(y = offsetY - 188.dp)
+            //        else -> Modifier.offset(y = offsetY - 104.dp)
+            //    }
+            //)
 
-            //.padding(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
+            .padding(bottom = 100.dp)
     ) {
         // Content goes here...
 

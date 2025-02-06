@@ -12,7 +12,7 @@ fun BottomBar(navController: NavController, animatedOffset: Dp, eventsViewModel:
 
     when {
         currentDestination?.startsWith("home_screen") == true -> {
-            VibeBottomAppBar(navController, animatedOffset)
+            VibeBottomAppBarNew(navController, animatedOffset)
         }
         currentDestination?.startsWith("map_screen") == true -> {
             MapBottomAppBar(navController) { filterType ->
