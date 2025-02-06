@@ -3,7 +3,6 @@ package com.example.vibe.ui.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +34,7 @@ import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.components.GenderDropdown
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
+import com.example.vibe.ui.viewmodel.SignupViewModel
 import kotlinx.coroutines.launch
 
 

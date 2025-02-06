@@ -16,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,9 +29,6 @@ import androidx.navigation.NavController
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -42,6 +38,8 @@ fun LoginScreen(
 ) {
     val isLoading = authViewModel.isLoading
     val errorMessage = authViewModel.errorMessage
+
+    //DO SOMETHING WITH THIS TO DISPLAY TO ALREADY LOGGED IN USERS>>>
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     val context = LocalContext.current

@@ -40,7 +40,6 @@ import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.screens.AuthViewModel
 import com.example.vibe.ui.screens.EventsViewModel
-import com.example.vibe.utils.SessionManager
 import kotlin.math.max
 import kotlin.math.min
 
