@@ -44,8 +44,8 @@ fun VibeBottomAppBarNew(navController: NavController, offsetY: Dp) {
         modifier = Modifier
             //.offset(y = offsetY)
             .height(104.dp),
-        containerColor = Color(0xFF333F57),
-        contentColor = Color.White,
+        containerColor = Color.White,
+        contentColor = Color.Gray,
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(

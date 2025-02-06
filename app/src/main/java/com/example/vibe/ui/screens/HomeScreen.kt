@@ -44,6 +44,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -255,7 +256,8 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
             .padding(4.dp, 4.dp, 4.dp, 12.dp)
             .shadow(10.dp, shape = RoundedCornerShape(16.dp))
             .clickable { onClick() }
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column {
             Text(

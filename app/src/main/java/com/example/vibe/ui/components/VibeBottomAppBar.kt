@@ -31,6 +31,7 @@ import com.example.vibe.R
 @Composable
 fun VibeBottomAppBar(navController: NavController, offsetY: Dp) {
 
+
     BottomAppBar (
         modifier = Modifier
             .offset(y = offsetY)

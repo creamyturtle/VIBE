@@ -28,16 +28,15 @@ fun BottomNavItem(
 ) {
     val isSelected = currentRoute?.startsWith(baseRoute) == true
     val iconColor by animateColorAsState(
-        targetValue = if (isSelected) Color.Yellow else Color.White,
+        targetValue = if (isSelected) Color.Black else Color.Gray,
         animationSpec = tween(300)
     )
 
     FancyAnimatedButtonNew(
         onClick = {
-            val destinationRoute = if (baseRoute.contains("{")) {
-                baseRoute.replace("{filterType}", "all") // ✅ Handle dynamic routes
-            } else {
-                baseRoute // ✅ Keep simple routes unchanged (e.g., "login")
+            val destinationRoute = when (baseRoute) {
+                "home_screen" -> "home_screen/all" // ✅ Ensure Explore button navigates properly
+                else -> baseRoute // ✅ Other buttons work normally
             }
 
             navController.navigate(destinationRoute) {
@@ -48,7 +47,7 @@ fun BottomNavItem(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
                 imageVector = icon,
