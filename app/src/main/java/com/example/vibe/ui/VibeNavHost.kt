@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
@@ -16,7 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.network.SignupApi
-import com.example.vibe.ui.components.ReservationsBottomBar
+import com.example.vibe.ui.screens.AuthViewModel
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
@@ -33,10 +35,13 @@ fun VibeNavHost(
     listState: LazyListState,
     innerPadding: PaddingValues,
     eventsViewModel: EventsViewModel,
-    authRepository: AuthRepository,
     signupApi: SignupApi,
-    animatedOffset: Dp
+    animatedOffset: Dp,
+    authViewModel: AuthViewModel
 ) {
+
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+
     NavHost(
         navController = navController,
         startDestination = "home_screen/{filterType}",
@@ -127,7 +132,10 @@ fun VibeNavHost(
                 eventsViewModel.selectEvent(eventId) // ✅ Load the correct event
             }
 
-            ReservationScreen(event = event)
+            ReservationScreen(
+                event = event,
+                onBack = { navController.navigateUp() }
+            )
         }
 
 
@@ -136,8 +144,7 @@ fun VibeNavHost(
 
             LoginScreen(
                 navController = navController,
-                authRepository = authRepository,
-                onLoginSuccess = { navController.popBackStack() }, // Navigates back after login
+                authViewModel = authViewModel,
                 onBack = { navController.navigateUp() }
             )
         }

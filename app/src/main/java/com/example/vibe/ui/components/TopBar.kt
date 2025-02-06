@@ -8,9 +8,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun TopBar(navController: NavController) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    val noTopBarScreens = setOf("login", "signup") // Screens that don't show a top bar
+    val noTopBarScreens = setOf("login", "signup", "reservation_screen") // Add base route
 
-    if (currentDestination !in noTopBarScreens && currentDestination?.startsWith("event_details") == false) {
+    if (currentDestination !in noTopBarScreens &&
+        currentDestination?.startsWith("event_details") == false &&
+        currentDestination?.startsWith("reservation_screen") == false) { // Check prefix for dynamic routes
         VibeTopAppBar(navController)
     }
 }
+

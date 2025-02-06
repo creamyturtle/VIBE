@@ -1,8 +1,8 @@
 package com.example.vibe.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,28 +16,36 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vibe.data.AuthRepository
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    authRepository: AuthRepository, // ✅ Inject Repository Instead of AppContainer
-    onLoginSuccess: () -> Unit, // ✅ No Need to Pass UserData, Extract from JWT Instead
+    authViewModel: AuthViewModel, // ✅ Use AuthViewModel
     onBack: () -> Unit
 ) {
-    val viewModel = remember { LoginViewModel(authRepository) } // ✅ Use AuthRepository
+    val isLoading = authViewModel.isLoading
+    val errorMessage = authViewModel.errorMessage
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+
+    val context = LocalContext.current
+
 
     Column(
         modifier = Modifier
@@ -46,38 +54,20 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Spacer(modifier = Modifier.height(48.dp))
-
-
-
-
-
-
 
         IconButton(
             onClick = onBack,
             modifier = Modifier
-                //.padding(16.dp)
                 .align(Alignment.Start)
                 .background(color = Color.White, shape = CircleShape)
                 .size(40.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize() // Fill the `IconButton` area
-                    .padding(0.dp) // Adjust the internal padding here
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(28.dp)
-                )
-            }
-
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.Black
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -88,43 +78,42 @@ fun LoginScreen(
             fontWeight = FontWeight.Normal
         )
 
-
-
         Spacer(modifier = Modifier.height(20.dp))
 
         StyledTextField(
-            value = viewModel.email,
-            onValueChange = { viewModel.email = it },
+            value = authViewModel.email, // ✅ Use ViewModel state
+            onValueChange = { authViewModel.updateEmail(it) }, // ✅ Update ViewModel
             label = "Email"
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         StyledTextField(
-            value = viewModel.password,
-            onValueChange = { viewModel.password = it },
+            value = authViewModel.password,
+            onValueChange = { authViewModel.updatePassword(it) },
             label = "Password",
-            isPassword  = true
+            isPassword = true
         )
+
         Spacer(modifier = Modifier.height(24.dp))
 
-        if (viewModel.errorMessage != null) {
-            Text(viewModel.errorMessage!!, color = Color.Red)
+        if (authViewModel.errorMessage != null) {
+            Text(authViewModel.errorMessage!!, color = Color.Red, fontSize = 16.sp)
             Spacer(modifier = Modifier.height(8.dp))
         }
 
         StyledButton(
             text = "Login",
-            isLoading = viewModel.isLoading,
+            isLoading = authViewModel.isLoading,
             onClick = {
-                viewModel.login {
-                    onLoginSuccess()
-                    navController.navigate("home_screen/all") {
+                authViewModel.login {
+                    Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show() // ✅ Show toast
+                    navController.navigate("home_screen/all") { // ✅ Navigate
                         popUpTo("login") { inclusive = true }
                     }
                 }
             }
         )
-
 
         Spacer(modifier = Modifier.height(48.dp))
 
@@ -148,33 +137,9 @@ fun LoginScreen(
                 }
             }
         )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        /*
-
-            //OLD LOGOUT CODE.  CAN REUSE
-
-        OrDivider()
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        StyledButton(
-            text = "Logout",
-            onClick = {
-                viewModel.logout {
-                    navController.navigate("login") {
-                        popUpTo("login") { inclusive = true } // Clears back stack
-                    }
-                }
-            }
-        )
-
-         */
-
-
     }
 }
+
 
 
 

@@ -12,16 +12,17 @@ class AuthRepository(
         return try {
             val response = authApi.login(LoginRequest(email, password))
             if (response.status == "success" && response.token != null) {
-                sessionManager.saveToken(response.token) // ✅ Store JWT token
+                sessionManager.saveToken(response.token) // ✅ Save token securely
                 true
             } else {
-                false
+                false // ✅ Return false instead of crashing
             }
         } catch (e: Exception) {
-            Log.e("AuthRepository", "Network error during login", e)
-            false
+            Log.e("AuthRepository", "Login failed", e)
+            false // ✅ Prevent crashes by safely handling exceptions
         }
     }
+
 
     // ✅ Logout function clears the stored token
     fun logout() {

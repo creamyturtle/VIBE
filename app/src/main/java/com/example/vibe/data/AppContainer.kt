@@ -34,6 +34,7 @@ import com.example.vibe.network.SignupApi
  * Dependency Injection container at the application level.
  */
 interface AppContainer {
+    val sessionManager: SessionManager
     val eventsRepository: EventsRepository
     val authApi: AuthApi
     val signupApi: SignupApi
@@ -53,7 +54,7 @@ private val json = Json {
 class DefaultAppContainer(context: Context) : AppContainer {
     private val BASE_URL = "https://www.vibesocial.org/"
 
-    private val sessionManager = SessionManager(context)
+    override val sessionManager = SessionManager(context)
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter

@@ -38,6 +38,7 @@ import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
 import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.TopBar
+import com.example.vibe.ui.screens.AuthViewModel
 import com.example.vibe.ui.screens.EventsViewModel
 import com.example.vibe.utils.SessionManager
 import kotlin.math.max
@@ -81,7 +82,9 @@ fun VibeApp() {
     val context = LocalContext.current
 
     val appContainer = remember { DefaultAppContainer(context) } // ✅ Initialize AppContainer
-    val authRepository = remember { AuthRepository(appContainer.authApi, SessionManager(context)) }
+
+    val authRepository = remember { AuthRepository(appContainer.authApi, appContainer.sessionManager) } // ✅ Inject properly
+    val authViewModel = remember { AuthViewModel(appContainer.sessionManager, authRepository) } // ✅ Pass AuthRepository
 
     val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
 
@@ -99,9 +102,9 @@ fun VibeApp() {
             listState = listState,
             innerPadding = innerPadding,
             eventsViewModel = eventsViewModel,
-            authRepository = authRepository,
             signupApi = appContainer.signupApi,
-            animatedOffset = animatedOffset
+            animatedOffset = animatedOffset,
+            authViewModel = authViewModel
         )
 
 
