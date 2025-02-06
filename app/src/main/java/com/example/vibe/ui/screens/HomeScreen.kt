@@ -71,6 +71,7 @@ import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.theme.VibeTheme
+import com.example.vibe.ui.viewmodel.EventsUiState
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

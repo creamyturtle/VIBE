@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
+import com.example.vibe.ui.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(

@@ -38,8 +38,8 @@ import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
 import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.TopBar
-import com.example.vibe.ui.screens.AuthViewModel
-import com.example.vibe.ui.screens.EventsViewModel
+import com.example.vibe.ui.viewmodel.AuthViewModel
+import com.example.vibe.ui.viewmodel.EventsViewModel
 import kotlin.math.max
 import kotlin.math.min
 

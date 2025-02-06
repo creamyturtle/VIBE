@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.vibe.ui.screens.EventsViewModel
+import com.example.vibe.ui.viewmodel.EventsViewModel
 
 @Composable
 fun BottomBar(navController: NavController, animatedOffset: Dp, eventsViewModel: EventsViewModel) {

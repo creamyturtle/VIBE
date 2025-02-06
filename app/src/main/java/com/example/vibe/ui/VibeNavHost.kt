@@ -16,11 +16,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.vibe.data.AuthRepository
 import com.example.vibe.network.SignupApi
-import com.example.vibe.ui.screens.AuthViewModel
+import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.screens.EventDetailsScreen
-import com.example.vibe.ui.screens.EventsViewModel
+import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.vibe.ui.screens
+package com.example.vibe.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

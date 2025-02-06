@@ -1,4 +1,4 @@
-package com.example.vibe.ui.screens
+package com.example.vibe.ui.viewmodel
 
 /*
 class ReservationViewModel(private val reservationRepository: ReservationRepository) : ViewModel() {
