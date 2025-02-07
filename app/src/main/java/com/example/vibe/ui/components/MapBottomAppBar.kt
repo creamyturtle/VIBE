@@ -1,30 +1,30 @@
 package com.example.vibe.ui.components
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsBike
+import androidx.compose.material.icons.filled.Agriculture
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Pool
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vibe.R
 
 
 @Composable
@@ -32,80 +32,61 @@ fun MapBottomAppBar(
     navController: NavController,
     onFilterSelected: (String) -> Unit
 ) {
-    BottomAppBar(
-        containerColor = Color(0xFF333F57),
-        contentColor = Color.White,
-        modifier = Modifier
-            .height(148.dp),
-    ) {
-        Row(
+
+    val density = LocalDensity.current.density
+    val onePixel = 1f / density
+
+    var selectedFilter by remember { mutableStateOf<String?>("") }
+
+    Column {
+        // Separator bar (1px light grey)
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 4.dp)
-                .offset(x = (-4).dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .height(onePixel.dp)
+                .background(Color.LightGray) // Light grey separator
+        )
+
+        BottomAppBar(
+            containerColor = Color.White,
+            contentColor = Color.Black,
+            modifier = Modifier
+                .height(92.dp),
+            contentPadding = PaddingValues(0.dp)
         ) {
 
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("House") }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.house),
-                        contentDescription = "House Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "House Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-                }
-            }
-            Spacer(Modifier.width(0.dp))
 
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("Finca") }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.Top
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.finca),
-                        contentDescription = "Finca Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "Finca Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-                }
-            }
 
-            Spacer(Modifier.width(0.dp))
-
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("Pool") }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.pool),
-                        contentDescription = "Pool Parties",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "Pool Parties", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                MapBottomNavItem("House", Icons.Default.Home, "House Parties", selectedFilter) {
+                    selectedFilter = "House"
+                    onFilterSelected("House")
                 }
+
+
+                MapBottomNavItem("Finca", Icons.Default.Agriculture, "Finca Parties", selectedFilter) {
+                    selectedFilter = "Finca"
+                    onFilterSelected("Finca")
+                }
+
+                MapBottomNavItem("Pool", Icons.Default.Pool, "Pool Parties", selectedFilter) {
+                    selectedFilter = "Pool"
+                    onFilterSelected("Pool")
+                }
+
+                MapBottomNavItem("Activity", Icons.AutoMirrored.Filled.DirectionsBike, "Activities", selectedFilter) {
+                    selectedFilter = "Activity"
+                    onFilterSelected("Activity")
+                }
+
+
             }
 
-            Spacer(Modifier.width(8.dp))
-
-            FancyAnimatedButton(
-                onClick = { onFilterSelected("Activity") }
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(R.drawable.activities),
-                        contentDescription = "Activities",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(50.dp).clip(CircleShape)
-                    )
-                    Text(text = "Activities", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
-                }
-            }
         }
     }
 }

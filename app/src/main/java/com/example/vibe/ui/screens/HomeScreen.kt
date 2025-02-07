@@ -116,7 +116,7 @@ fun HomeScreen(
             //    }
             //)
 
-            .padding(bottom = 100.dp)
+            .padding(bottom = 92.dp)
     ) {
         // Content goes here...
 
