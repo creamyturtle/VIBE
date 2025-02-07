@@ -24,7 +24,8 @@ fun BottomNavItem(
     baseRoute: String,
     currentRoute: String?,
     icon: ImageVector,
-    label: String
+    label: String,
+    onClick: (() -> Unit)? = null
 ) {
     val isSelected = currentRoute?.startsWith(baseRoute) == true
     val iconColor by animateColorAsState(
@@ -34,13 +35,17 @@ fun BottomNavItem(
 
     FancyAnimatedButtonNew(
         onClick = {
-            val destinationRoute = when (baseRoute) {
-                "home_screen" -> "home_screen/all" // ✅ Ensure Explore button navigates properly
-                else -> baseRoute // ✅ Other buttons work normally
-            }
+            if (onClick != null) {
+                onClick() // ✅ Execute custom action (like logout)
+            } else {
+                val destinationRoute = when (baseRoute) {
+                    "home_screen" -> "home_screen/all" // ✅ Fix navigation for Explore
+                    else -> baseRoute // ✅ Other routes work normally
+                }
 
-            navController.navigate(destinationRoute) {
-                popUpTo("home_screen/all") { inclusive = false }
+                navController.navigate(destinationRoute) {
+                    popUpTo("home_screen/all") { inclusive = false }
+                }
             }
         },
         isSelected = isSelected

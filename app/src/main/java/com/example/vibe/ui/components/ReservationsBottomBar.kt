@@ -48,7 +48,7 @@ fun ReservationsBottomBar(
             modifier = Modifier
                 //.offset(y = offsetY)
                 .height(128.dp),
-            containerColor = Color(0xFFFCFDF6),
+            containerColor = Color.White,
             contentColor = Color.DarkGray
         ) {
 

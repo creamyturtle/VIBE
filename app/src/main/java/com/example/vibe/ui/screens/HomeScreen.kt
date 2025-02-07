@@ -53,7 +53,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -61,7 +60,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -253,23 +251,14 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
 
     Card(
         modifier = modifier
-            .padding(4.dp, 4.dp, 4.dp, 12.dp)
-            .shadow(10.dp, shape = RoundedCornerShape(16.dp))
+            .padding(6.dp, 6.dp, 6.dp, 8.dp)
+            //.shadow(10.dp, shape = RoundedCornerShape(16.dp))
             .clickable { onClick() }
             .clip(RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column {
-            Text(
-                text = event.partyname,
-                //fontFamily = Route159Bold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp, 12.dp, 12.dp, 12.dp),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
+
 
             Box(
                 modifier = Modifier
@@ -281,7 +270,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                     state = pagerState,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp, 0.dp, 16.dp, 8.dp)
+                        .padding(0.dp, 0.dp, 0.dp, 8.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .pointerInput(Unit) {
                             detectTapGestures(
@@ -307,7 +296,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .padding(28.dp, 16.dp, 16.dp, 16.dp)
+                        .padding(16.dp, 16.dp, 16.dp, 16.dp)
                         .background(
                             color = Color.White,
                             shape = RoundedCornerShape(16.dp)
@@ -342,34 +331,58 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
             }
 
             Text(
-                text = event.location,
-                style = MaterialTheme.typography.titleSmall,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 4.dp)
+                text = event.partyname,
+                //fontFamily = Route159Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp, 8.dp, 12.dp, 8.dp),
+                color = Color.Black,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Light,
+                fontSize = 20.sp
             )
 
-            Text(
-                text = event.openslots + " Open Slots",
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 0.dp),
-                color = Color.DarkGray
-            )
+
+
+
 
             Text(
                 text = event.formattedDate + " @ " + event.formattedTime,
                 style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 0.dp),
-                color = Color.DarkGray
+                modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
+                color = Color.Gray
             )
 
 
+
+            Text(
+                text = event.openslots + " Open Slots",
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
+                color = Color.Gray
+            )
+
+            Text(
+                text = event.location,
+                style = MaterialTheme.typography.titleSmall,
+                fontSize = 16.sp,
+                color = Color.DarkGray,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(8.dp, 0.dp, 16.dp, 4.dp)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            /*
             Text(
                 text = event.description,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(16.dp),
-                maxLines = 4,
+                maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
+
+             */
 
 
 

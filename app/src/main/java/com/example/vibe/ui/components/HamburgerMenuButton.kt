@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 
@@ -40,15 +39,19 @@ fun HamburgerMenuButton() {
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { menuExpanded = true } // Open main menu
-                .padding(8.dp, 8.dp, 16.dp, 8.dp),
+                .padding(16.dp, 0.dp, 24.dp, 0.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            /*
             Text(
                 text = "Menu",
                 style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
                 color = Color(0xFFFE1943),
                 modifier = Modifier.padding(end = 4.dp)
             )
+
+             */
 
             Spacer(Modifier.size(8.dp))
 

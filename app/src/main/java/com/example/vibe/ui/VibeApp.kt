@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -86,12 +87,12 @@ fun VibeApp() {
     val authViewModel = remember { AuthViewModel(appContainer.sessionManager, authRepository) } // ✅ Pass AuthRepository
 
     val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
-
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBar(navController) },
-        bottomBar = { BottomBar(navController, animatedOffset, eventsViewModel) }
+        bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel) }
 
     ) { innerPadding ->
 
