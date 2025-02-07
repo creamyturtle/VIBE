@@ -21,8 +21,8 @@ Future Updates
 1. Display party listings - DONE
 2. User registrations/logins - DONE
 3. User control panel
-4. UI redesign
-5. Event reservations
+4. UI redesign - DONE
+5. Event reservations - working
 6. Google Maps API integration - DONE
 7. Event hosting w/ image & video uploads
 8. Host control panel
