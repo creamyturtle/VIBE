@@ -23,6 +23,7 @@ import com.example.vibe.ui.screens.SignupScreen
 import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
+import com.example.vibe.ui.viewmodel.RSVPViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -32,7 +33,8 @@ fun VibeNavHost(
     innerPadding: PaddingValues,
     eventsViewModel: EventsViewModel,
     signupApi: SignupApi,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    rsvpViewModel: RSVPViewModel
 ) {
 
     //val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
@@ -129,7 +131,8 @@ fun VibeNavHost(
             ReservationScreen(
                 event = event,
                 onBack = { navController.navigateUp() },
-                authViewModel = authViewModel
+                authViewModel = authViewModel,
+                rsvpViewModel = rsvpViewModel
             )
         }
 

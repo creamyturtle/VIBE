@@ -27,6 +27,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import android.content.Context
 import com.example.vibe.network.AuthInterceptor
+import com.example.vibe.network.RSVPApi
 import com.example.vibe.network.SignupApi
 
 
@@ -38,6 +39,7 @@ interface AppContainer {
     val eventsRepository: EventsRepository
     val authApi: AuthApi
     val signupApi: SignupApi
+    val rsvpApi: RSVPApi
 }
 
 
@@ -77,6 +79,10 @@ class DefaultAppContainer(context: Context) : AppContainer {
     /**
      * Retrofit service object for creating api calls
      */
+
+    override val rsvpApi: RSVPApi by lazy {
+        retrofit.create(RSVPApi::class.java)
+    }
 
     // ✅ Add AuthApi service
     override val authApi: AuthApi by lazy {
