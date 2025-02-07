@@ -18,21 +18,15 @@ package com.example.vibe.ui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.vibe.data.AuthRepository
@@ -41,8 +35,6 @@ import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
-import kotlin.math.max
-import kotlin.math.min
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -51,30 +43,7 @@ fun VibeApp() {
 
     val listState = rememberLazyListState()
 
-        // CODE FOR ANIMATED APP BAR
 
-        var appBarOffset by remember { mutableStateOf(0f) }
-        var previousOffset by remember { mutableStateOf(0) }
-
-        LaunchedEffect(listState.firstVisibleItemScrollOffset, listState.firstVisibleItemIndex) {
-            val currentOffset = listState.firstVisibleItemScrollOffset
-            val scrollDelta = currentOffset - previousOffset
-
-            // Update the appBarOffset based on scroll direction
-            appBarOffset = when {
-                scrollDelta > 0 -> min(148f, appBarOffset + scrollDelta) // Scrolling down
-                scrollDelta < 0 -> max(0f, appBarOffset + scrollDelta)  // Scrolling up
-                else -> appBarOffset
-            }
-
-            // Update the previous offset for the next comparison
-            previousOffset = currentOffset
-        }
-
-        val animatedOffset by animateDpAsState(
-            targetValue = appBarOffset.dp,
-            animationSpec = tween(durationMillis = 600) // Smooth animation
-        )
 
 
     val navController = rememberNavController()
@@ -103,7 +72,6 @@ fun VibeApp() {
             innerPadding = innerPadding,
             eventsViewModel = eventsViewModel,
             signupApi = appContainer.signupApi,
-            animatedOffset = animatedOffset,
             authViewModel = authViewModel
         )
 

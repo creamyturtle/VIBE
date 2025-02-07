@@ -10,22 +10,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vibe.network.SignupApi
-import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.screens.EventDetailsScreen
-import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen
 import com.example.vibe.ui.screens.ReservationScreen
 import com.example.vibe.ui.screens.SignupScreen
 import com.example.vibe.ui.screens.geocodeAddress
+import com.example.vibe.ui.viewmodel.AuthViewModel
+import com.example.vibe.ui.viewmodel.EventsViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -35,11 +34,10 @@ fun VibeNavHost(
     innerPadding: PaddingValues,
     eventsViewModel: EventsViewModel,
     signupApi: SignupApi,
-    animatedOffset: Dp,
     authViewModel: AuthViewModel
 ) {
 
-    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+    //val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     NavHost(
         navController = navController,
@@ -70,8 +68,7 @@ fun VibeNavHost(
                 onEventClick = { eventId ->
                     navController.navigate("event_details/$eventId")
                 },
-                navController = navController,
-                offsetY = animatedOffset
+                navController = navController
             )
         }
 
@@ -133,7 +130,8 @@ fun VibeNavHost(
 
             ReservationScreen(
                 event = event,
-                onBack = { navController.navigateUp() }
+                onBack = { navController.navigateUp() },
+                authViewModel = authViewModel
             )
         }
 
