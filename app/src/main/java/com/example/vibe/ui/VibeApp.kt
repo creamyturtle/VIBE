@@ -43,9 +43,6 @@ fun VibeApp() {
 
     val listState = rememberLazyListState()
 
-
-
-
     val navController = rememberNavController()
 
     val context = LocalContext.current
