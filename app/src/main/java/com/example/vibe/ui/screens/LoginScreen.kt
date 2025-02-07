@@ -108,7 +108,7 @@ fun LoginScreen(
                 authViewModel.login {
                     Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show() // ✅ Show toast
                     navController.navigate("home_screen/all") { // ✅ Navigate
-                        popUpTo("login") { inclusive = true }
+                        popUpTo("login") { inclusive = false }
                     }
                 }
             }
@@ -132,7 +132,7 @@ fun LoginScreen(
             text = "Sign up",
             onClick = {
                 navController.navigate("signup") {
-                    popUpTo("login") { inclusive = true }
+                    popUpTo("login") { inclusive = false }
                 }
             }
         )

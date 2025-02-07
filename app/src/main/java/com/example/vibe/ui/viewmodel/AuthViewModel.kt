@@ -1,5 +1,7 @@
 package com.example.vibe.ui.viewmodel
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,7 +30,7 @@ class AuthViewModel(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    private val _isLoggedIn = MutableStateFlow(sessionManager.getToken() != null)
+    private val _isLoggedIn = MutableStateFlow(sessionManager.isLoggedIn()) // ✅ Uses SessionManager
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
 
     fun updateEmail(newEmail: String) {
@@ -68,9 +70,14 @@ class AuthViewModel(
     }
 
 
-    fun logout() {
+    fun logout(context: Context) {
         sessionManager.clearToken()
-        _isLoggedIn.value = false
+        _isLoggedIn.value = sessionManager.isLoggedIn()
+
+        // ✅ Show Toast message on the main thread
+        viewModelScope.launch(Dispatchers.Main) {
+            Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+        }
     }
 
 

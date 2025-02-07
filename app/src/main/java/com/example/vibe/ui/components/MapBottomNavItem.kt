@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
 fun MapBottomNavItem(
@@ -23,6 +24,7 @@ fun MapBottomNavItem(
     icon: ImageVector,
     label: String,
     selectedFilter: String?,
+    navController: NavController, // ✅ Add NavController to check current route
     onClick: () -> Unit
 ) {
     val isSelected = filterName == selectedFilter
@@ -31,8 +33,14 @@ fun MapBottomNavItem(
         animationSpec = tween(300)
     )
 
+    val currentRoute = navController.currentBackStackEntry?.destination?.route // ✅ Get current route
+
     FancyAnimatedButton(
-        onClick = { onClick() } // ✅ Keeps FancyAnimatedButton unchanged
+        onClick = {
+            if (currentRoute != "map_screen/$filterName") { // ✅ Prevent duplicate navigation
+                onClick() // ✅ Only navigate if it's a different filter
+            }
+        }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

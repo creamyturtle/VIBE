@@ -72,7 +72,7 @@ class SessionManager(context: Context) {
 
 
     fun clearToken() {
-        prefs.edit().remove("jwt_token").apply()
+        prefs.edit().remove("auth_token").apply()
     }
 
     fun isLoggedIn(): Boolean {

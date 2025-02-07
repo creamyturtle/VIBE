@@ -70,8 +70,13 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         }
     }
 
+    private var lastFilter = ""
 
     fun getEventsByType(type: String) {
+
+        if (lastFilter == type) return // ✅ Prevent duplicate API calls
+        lastFilter = type
+
         viewModelScope.launch {
             eventsUiState = EventsUiState.Loading
             eventsUiState = try {

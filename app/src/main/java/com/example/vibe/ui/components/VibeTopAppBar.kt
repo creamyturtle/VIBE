@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -12,16 +11,8 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +35,7 @@ fun VibeTopAppBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(114.dp)
+            .height(104.dp)
             .background(Color.White)
             .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()) // ✅ Adds padding for status bar
     ) {
@@ -55,7 +46,7 @@ fun VibeTopAppBar(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     //.background(Color.Green)
-                    .padding(0.dp, 0.dp, 0.dp, 0.dp),
+                    .padding(0.dp, 16.dp, 0.dp, 0.dp),
                 verticalAlignment = Alignment.Top
             ) {
                 Column(
@@ -68,9 +59,6 @@ fun VibeTopAppBar(navController: NavController) {
                         }
                     ) {
 
-
-
-
                         Text(
                             text = "VIBE",
                             fontWeight = FontWeight.ExtraBold,
@@ -79,10 +67,6 @@ fun VibeTopAppBar(navController: NavController) {
                             color = Color(0xFFFE1943),
                             modifier = Modifier.padding(24.dp, 0.dp, 0.dp, 0.dp)
                         )
-
-
-
-
 
                     }
 

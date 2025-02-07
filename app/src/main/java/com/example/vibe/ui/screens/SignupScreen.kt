@@ -43,8 +43,7 @@ import kotlinx.coroutines.launch
 fun SignupScreen(
     navController: NavController,
     signupApi: SignupApi,
-    onSignupSuccess: () -> Unit,
-    onBack: () -> Unit
+    onSignupSuccess: () -> Unit
 ) {
     val viewModel = remember { SignupViewModel(signupApi) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -63,7 +62,7 @@ fun SignupScreen(
             Spacer(modifier = Modifier.height(48.dp))
 
             IconButton(
-                onClick = onBack,
+                onClick = { navController.popBackStack() },
                 modifier = Modifier
                     .align(Alignment.Start)
                     .background(color = Color.White, shape = CircleShape)

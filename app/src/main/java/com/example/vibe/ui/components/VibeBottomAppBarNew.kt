@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -46,6 +47,8 @@ fun VibeBottomAppBarNew(navController: NavController, isLoggedIn: Boolean, authV
     val density = LocalDensity.current.density
     val onePixel = 1f / density
 
+    val context = LocalContext.current
+
     Column {
         // Separator bar (1px light grey)
         Box(
@@ -58,7 +61,7 @@ fun VibeBottomAppBarNew(navController: NavController, isLoggedIn: Boolean, authV
         BottomAppBar(
             modifier = Modifier
                 //.offset(y = offsetY)
-                .height(92.dp),
+                .height(104.dp),
             containerColor = Color.White,
             contentColor = Color.Gray,
             contentPadding = PaddingValues(0.dp)
@@ -104,7 +107,8 @@ fun VibeBottomAppBarNew(navController: NavController, isLoggedIn: Boolean, authV
                         icon = Icons.Default.ExitToApp,
                         label = "Log Out",
                         onClick = {
-                            authViewModel.logout() // ✅ Logout user
+                             // ✅ Get context for Toast
+                            authViewModel.logout(context) // ✅ Pass context for Toast
                             navController.navigate("login") { popUpTo("home_screen/all") { inclusive = false } }
                         }
                     )

@@ -118,7 +118,7 @@ fun MapScreen(
             Box(
                 modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 114.dp, bottom = 92.dp)
+                .padding(top = 104.dp, bottom = 104.dp)
             ) {
 
 

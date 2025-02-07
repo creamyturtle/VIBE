@@ -13,6 +13,7 @@ import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.Agriculture
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Pool
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +37,7 @@ fun MapBottomAppBar(
     val density = LocalDensity.current.density
     val onePixel = 1f / density
 
-    var selectedFilter by remember { mutableStateOf<String?>("") }
+    var selectedFilter by remember { mutableStateOf<String?>("all") }
 
     Column {
         // Separator bar (1px light grey)
@@ -51,7 +52,7 @@ fun MapBottomAppBar(
             containerColor = Color.White,
             contentColor = Color.Black,
             modifier = Modifier
-                .height(92.dp),
+                .height(104.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
 
@@ -63,23 +64,28 @@ fun MapBottomAppBar(
                 verticalAlignment = Alignment.Top
             ) {
 
-                MapBottomNavItem("House", Icons.Default.Home, "House Parties", selectedFilter) {
+                MapBottomNavItem("all", Icons.Default.Public, "All Events", selectedFilter, navController) {
+                    selectedFilter = "all"
+                    onFilterSelected("All Events")
+                }
+
+                MapBottomNavItem("House", Icons.Default.Home, "House Parties", selectedFilter, navController) {
                     selectedFilter = "House"
                     onFilterSelected("House")
                 }
 
 
-                MapBottomNavItem("Finca", Icons.Default.Agriculture, "Finca Parties", selectedFilter) {
+                MapBottomNavItem("Finca", Icons.Default.Agriculture, "Finca Parties", selectedFilter, navController) {
                     selectedFilter = "Finca"
                     onFilterSelected("Finca")
                 }
 
-                MapBottomNavItem("Pool", Icons.Default.Pool, "Pool Parties", selectedFilter) {
+                MapBottomNavItem("Pool", Icons.Default.Pool, "Pool Parties", selectedFilter, navController) {
                     selectedFilter = "Pool"
                     onFilterSelected("Pool")
                 }
 
-                MapBottomNavItem("Activity", Icons.AutoMirrored.Filled.DirectionsBike, "Activities", selectedFilter) {
+                MapBottomNavItem("Activity", Icons.AutoMirrored.Filled.DirectionsBike, "Activities", selectedFilter, navController) {
                     selectedFilter = "Activity"
                     onFilterSelected("Activity")
                 }

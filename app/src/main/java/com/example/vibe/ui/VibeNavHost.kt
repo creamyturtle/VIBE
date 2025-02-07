@@ -154,8 +154,7 @@ fun VibeNavHost(
             SignupScreen(
                 navController = navController,
                 signupApi = signupApi,
-                onSignupSuccess = { navController.popBackStack() }, // Navigates back after login
-                onBack = { navController.navigateUp() }
+                onSignupSuccess = { navController.popBackStack() }
             )
         }
     }
