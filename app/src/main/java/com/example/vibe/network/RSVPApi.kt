@@ -1,21 +1,27 @@
 package com.example.vibe.network
 
+import com.example.vibe.data.RSVPRequest
+import com.example.vibe.data.RSVPResponse
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.Response
+import retrofit2.http.Headers
 
 interface RSVPApi {
 
-    @POST("api/rsvp_api.php")
+    @POST("rsvp_api.php")
+    @Headers(
+        "Content-Type: application/json",
+        "User-Agent: VibeApp Android Client" // ✅ This makes the request look more like a normal browser
+    )
     suspend fun submitRSVP(
-        @Header("Authorization") token: String,
         @Body rsvpRequest: RSVPRequest
     ): Response<RSVPResponse>
 
-    @GET("api/rsvp_api.php")
+    @GET("rsvp_api.php")
     suspend fun checkRSVP(
         @Header("Authorization") token: String,
         @Query("party_id") partyId: Int

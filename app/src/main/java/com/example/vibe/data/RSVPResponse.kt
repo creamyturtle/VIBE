@@ -7,21 +7,21 @@ import kotlinx.serialization.Serializable
 data class RSVPResponse(
     val status: String? = null,
     val message: String? = null,
-    val user: UserData? = null,
+    val user: RSVPUserData? = null,
     val party: PartyData? = null,
     val error: String? = null
 )
 
-/*
+
 @Serializable
-data class UserData(
+data class RSVPUserData(
     val name: String,
     val age: Int,
     val gender: String,
     val instagram: String
 )
 
- */
+
 
 @Serializable
 data class PartyData(

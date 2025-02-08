@@ -1,6 +1,7 @@
 package com.example.vibe.ui.screens
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,6 +36,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,14 +63,17 @@ fun ReservationScreen(
     authViewModel: AuthViewModel,
     rsvpViewModel: RSVPViewModel
 ) {
-
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
-
     val rsvpState by rsvpViewModel.rsvpStatus.observeAsState()
 
+    // Store user input (guest names and additional items)
+    var guest1 by remember { mutableStateOf("") }
+    var guest2 by remember { mutableStateOf("") }
+    var guest3 by remember { mutableStateOf("") }
+    var guest4 by remember { mutableStateOf("") }
+    var bringingItems by remember { mutableStateOf("") }
 
-    if(isLoggedIn) {
-
+    if (isLoggedIn) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -74,21 +81,16 @@ fun ReservationScreen(
                 .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-
-
             if (event == null) {
                 // Show loading indicator while waiting for event data
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Spacer(Modifier.height(120.dp))
                     CircularProgressIndicator()
                 }
-
             } else {
-
                 IconButton(
                     onClick = onBack,
                     modifier = Modifier
@@ -97,25 +99,13 @@ fun ReservationScreen(
                         .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
                         .size(32.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize() // Fill the `IconButton` area
-                            .padding(0.dp) // Adjust the internal padding here
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.Black,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(20.dp)
-                        )
-                    }
-
-
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.Black,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
-
-
 
                 EventSummaryCard(
                     eventName = event.partyname,
@@ -126,35 +116,85 @@ fun ReservationScreen(
                     imageUrl = event.fullImgSrc ?: ""
                 )
 
-
                 GuestDetailsCard(
-                    name = "Peter Daveloose",
+                    name = "Peter Daveloose", // This should come from logged-in user data
                     age = 40,
                     gender = "Male",
                     instagram = "creamyturte"
                 )
 
-                AdditionalGuestsSection()
+                // Collect user input for additional guests
+                AdditionalGuestsSection(
+                    guest1 = guest1,
+                    onGuest1Change = { guest1 = it },
+                    guest2 = guest2,
+                    onGuest2Change = { guest2 = it },
+                    guest3 = guest3,
+                    onGuest3Change = { guest3 = it },
+                    guest4 = guest4,
+                    onGuest4Change = { guest4 = it },
+                    bringingItems = bringingItems,
+                    onBringingChange = { bringingItems = it }
+                )
 
+                AgreementSection(
+                    onSubmit = {
+                        event.id?.toIntOrNull()?.let { partyId ->
+                            rsvpViewModel.submitRSVP(
+                                partyId = partyId,
+                                guest1 = guest1.ifBlank { null },
+                                guest2 = guest2.ifBlank { null },
+                                guest3 = guest3.ifBlank { null },
+                                guest4 = guest4.ifBlank { null },
+                                bringing = bringingItems.ifBlank { null }
+                            )
+                        } ?: Log.e("ReservationScreen", "Invalid party ID: ${event.id}")
+                    }
+                )
 
-                AgreementSection()
+                Spacer(Modifier.height(16.dp))
+
+                // ✅ Display RSVP Response Messages
+                rsvpState?.let { result ->
+                    when {
+                        result.isSuccess -> {
+                            val response = result.getOrNull()
+                            if (response?.status == "already_rsvp") {
+                                Text(
+                                    text = "You have already RSVP'd for this event.",
+                                    color = Color.Red,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = "RSVP Successful!",
+                                    color = Color.Green,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            }
+                        }
+                        result.isFailure -> {
+                            Text(
+                                text = "RSVP Failed: ${result.exceptionOrNull()?.message}",
+                                color = Color.Red,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    }
+                }
 
                 Spacer(Modifier.height(148.dp))
             }
         }
-
-
     } else {
-
         Text("Please log in to view this page")
-
-        //need to add back button
-
-        //login button
-
-
     }
 }
+
+
 
 @Composable
 fun EventSummaryCard(
@@ -273,9 +313,19 @@ fun GuestDetailsCard(
     }
 }
 
-
 @Composable
-fun AdditionalGuestsSection() {
+fun AdditionalGuestsSection(
+    guest1: String,
+    onGuest1Change: (String) -> Unit,
+    guest2: String,
+    onGuest2Change: (String) -> Unit,
+    guest3: String,
+    onGuest3Change: (String) -> Unit,
+    guest4: String,
+    onGuest4Change: (String) -> Unit,
+    bringingItems: String,
+    onBringingChange: (String) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -289,47 +339,42 @@ fun AdditionalGuestsSection() {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text("Additional Guests (add up to 4)", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        shape = RoundedCornerShape(8.dp),
-                        label = { Text("Guest #1") },
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        shape = RoundedCornerShape(8.dp),
-                        label = { Text("Guest #2") },
-                        modifier = Modifier.weight(1f)
-                    )
-
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        shape = RoundedCornerShape(8.dp),
-                        label = { Text("Guest #3") },
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = {},
-                        shape = RoundedCornerShape(8.dp),
-                        label = { Text("Guest #4") },
-                        modifier = Modifier.weight(1f)
-                    )
-
-            }
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = guest1,
+                onValueChange = onGuest1Change,
+                shape = RoundedCornerShape(8.dp),
+                label = { Text("Guest #1") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = guest2,
+                onValueChange = onGuest2Change,
+                shape = RoundedCornerShape(8.dp),
+                label = { Text("Guest #2") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = guest3,
+                onValueChange = onGuest3Change,
+                shape = RoundedCornerShape(8.dp),
+                label = { Text("Guest #3") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = guest4,
+                onValueChange = onGuest4Change,
+                shape = RoundedCornerShape(8.dp),
+                label = { Text("Guest #4") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = bringingItems,
+                onValueChange = onBringingChange,
                 shape = RoundedCornerShape(8.dp),
                 label = { Text("Bringing Any Items? (Optional)") },
                 modifier = Modifier.fillMaxWidth()
@@ -339,8 +384,9 @@ fun AdditionalGuestsSection() {
 }
 
 
+
 @Composable
-fun AgreementSection() {
+fun AgreementSection(onSubmit: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -355,35 +401,25 @@ fun AgreementSection() {
         ) {
             Text("Agreement", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Divider()
+            Text("RSVP Data:", fontSize = 14.sp, textDecoration = TextDecoration.Underline)
             Text(
-                "RSVP Data:",
-                fontSize = 14.sp,
-                textDecoration = TextDecoration.Underline,
-            )
-            Text(
-                "To request entry to the party, some of your personal data will be shared with the host. This includes your name, age, gender, and Instagram profile. The host will use this info to make a decision about whether to accept or deny your RSVP.",
+                "To request entry to the party, some of your personal data will be shared with the host...",
                 fontSize = 14.sp
             )
 
             Spacer(Modifier.height(8.dp))
 
-            Text(
-                "By clicking here, you agree to have your information sent to the Host of this event.",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            Text("By clicking here, you agree to have your information sent to the Host.", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
 
             Spacer(Modifier.height(8.dp))
 
-            Button(
-                onClick = { /* Confirm action */ },
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Button(onClick = onSubmit, modifier = Modifier.fillMaxWidth()) {
                 Text("Confirm & Submit")
             }
         }
     }
 }
+
 
 
 
