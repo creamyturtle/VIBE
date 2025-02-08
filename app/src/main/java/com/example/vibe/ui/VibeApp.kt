@@ -36,6 +36,7 @@ import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
+import com.example.vibe.ui.viewmodel.UserViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -53,7 +54,9 @@ fun VibeApp() {
     val authRepository = remember { AuthRepository(appContainer.authApi, appContainer.sessionManager) } // ✅ Inject properly
     val authViewModel = remember { AuthViewModel(appContainer.sessionManager, authRepository) } // ✅ Pass AuthRepository
 
-    val rsvpViewModel = remember { RSVPViewModel(appContainer.rsvpApi, appContainer.sessionManager) } // ✅ Pass RSVPApi
+    val rsvpViewModel = remember { RSVPViewModel(appContainer.rsvpApi, appContainer.sessionManager) }
+
+    val userViewModel = remember { UserViewModel(appContainer.userApi, appContainer.sessionManager) }
 
     val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
@@ -73,7 +76,8 @@ fun VibeApp() {
             eventsViewModel = eventsViewModel,
             signupApi = appContainer.signupApi,
             authViewModel = authViewModel,
-            rsvpViewModel = rsvpViewModel
+            rsvpViewModel = rsvpViewModel,
+            userViewModel = userViewModel
         )
 
 

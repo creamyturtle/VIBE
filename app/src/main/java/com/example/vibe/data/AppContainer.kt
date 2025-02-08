@@ -29,6 +29,7 @@ import android.content.Context
 import com.example.vibe.network.AuthInterceptor
 import com.example.vibe.network.RSVPApi
 import com.example.vibe.network.SignupApi
+import com.example.vibe.network.UserApi
 
 
 /**
@@ -40,6 +41,7 @@ interface AppContainer {
     val authApi: AuthApi
     val signupApi: SignupApi
     val rsvpApi: RSVPApi
+    val userApi: UserApi
 }
 
 
@@ -82,6 +84,10 @@ class DefaultAppContainer(context: Context) : AppContainer {
 
     override val rsvpApi: RSVPApi by lazy {
         retrofit.create(RSVPApi::class.java)
+    }
+
+    override val userApi: UserApi by lazy {
+        retrofit.create(UserApi::class.java)
     }
 
     // ✅ Add AuthApi service

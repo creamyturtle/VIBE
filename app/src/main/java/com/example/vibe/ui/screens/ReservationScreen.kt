@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,6 +34,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -49,10 +51,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.vibe.model.Event
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
+import com.example.vibe.ui.viewmodel.UserViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -61,10 +65,18 @@ fun ReservationScreen(
     event: Event?,
     onBack: () -> Unit,
     authViewModel: AuthViewModel,
-    rsvpViewModel: RSVPViewModel
+    rsvpViewModel: RSVPViewModel,
+    userViewModel: UserViewModel
 ) {
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
     val rsvpState by rsvpViewModel.rsvpStatus.observeAsState()
+
+    LaunchedEffect(Unit) {
+        userViewModel.fetchUserData() // ✅ Fetch user details on screen load
+    }
+
+    val userData by userViewModel.userData.observeAsState()
+
 
     // Store user input (guest names and additional items)
     var guest1 by remember { mutableStateOf("") }
@@ -116,12 +128,21 @@ fun ReservationScreen(
                     imageUrl = event.fullImgSrc ?: ""
                 )
 
-                GuestDetailsCard(
-                    name = "Peter Daveloose", // This should come from logged-in user data
-                    age = 40,
-                    gender = "Male",
-                    instagram = "creamyturte"
-                )
+                // This should come from logged-in user data
+
+                userData?.let { user ->
+                    GuestDetailsCard(
+                        name = user.name,
+                        age = user.age,
+                        gender = user.gender,
+                        instagram = user.instagram
+                    )
+                } ?: run {
+                    Text(
+                        text = "Loading user details...",
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
 
                 // Collect user input for additional guests
                 AdditionalGuestsSection(
@@ -403,17 +424,28 @@ fun AgreementSection(onSubmit: () -> Unit) {
             Divider()
             Text("RSVP Data:", fontSize = 14.sp, textDecoration = TextDecoration.Underline)
             Text(
-                "To request entry to the party, some of your personal data will be shared with the host...",
+                "To request entry to the party, some of your personal data will be shared with the host. This includes your name, age, gender, and Instagram profile. The host will use this info to make a decision about whether to accept or deny your RSVP.",
                 fontSize = 14.sp
             )
 
             Spacer(Modifier.height(8.dp))
 
-            Text("By clicking here, you agree to have your information sent to the Host.", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+            Text("By clicking here, you agree to have your information sent to the Host of this event.", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
 
             Spacer(Modifier.height(8.dp))
 
-            Button(onClick = onSubmit, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = onSubmit,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = true,
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFE1943),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color(0xFFBDBDBD),
+                    disabledContentColor = Color.White
+                )
+            ) {
                 Text("Confirm & Submit")
             }
         }

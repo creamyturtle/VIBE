@@ -24,6 +24,7 @@ import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
+import com.example.vibe.ui.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -34,7 +35,8 @@ fun VibeNavHost(
     eventsViewModel: EventsViewModel,
     signupApi: SignupApi,
     authViewModel: AuthViewModel,
-    rsvpViewModel: RSVPViewModel
+    rsvpViewModel: RSVPViewModel,
+    userViewModel: UserViewModel
 ) {
 
     //val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
@@ -132,7 +134,8 @@ fun VibeNavHost(
                 event = event,
                 onBack = { navController.navigateUp() },
                 authViewModel = authViewModel,
-                rsvpViewModel = rsvpViewModel
+                rsvpViewModel = rsvpViewModel,
+                userViewModel = userViewModel
             )
         }
 

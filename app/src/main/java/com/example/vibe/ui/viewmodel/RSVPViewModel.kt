@@ -63,5 +63,7 @@ class RSVPViewModel(private val rsvpApi: RSVPApi, private val sessionManager: Se
             }
         }
     }
+
+
 }
 
