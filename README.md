@@ -22,7 +22,7 @@ Future Updates
 2. User registrations/logins - DONE
 3. User control panel
 4. UI redesign - DONE
-5. Event reservations - working
+5. Event reservations - DONE
 6. Google Maps API integration - DONE
 7. Event hosting w/ image & video uploads
 8. Host control panel
