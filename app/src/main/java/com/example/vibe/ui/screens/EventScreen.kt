@@ -261,7 +261,7 @@ fun EventDetailsScreen(
 
                 Text(
                     text = event.partyname,
-                    fontFamily = Route159Bold,
+                    //fontFamily = Route159Bold,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(32.dp, 16.dp, 16.dp, 16.dp),

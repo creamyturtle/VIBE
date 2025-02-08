@@ -22,6 +22,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -47,11 +51,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.vibe.model.Event
 import com.example.vibe.ui.viewmodel.AuthViewModel
@@ -236,7 +245,7 @@ fun EventSummaryCard(
     ) {
         // Add a Column with padding to apply padding to all inner content
         Column(
-            modifier = Modifier.padding(16.dp) // Add padding inside the Card
+            modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp) // Add padding inside the Card
         ) {
             Text(
                 text = eventName,
@@ -256,7 +265,7 @@ fun EventSummaryCard(
                 // Event Image Box
                 Box(
                     modifier = Modifier
-                        .size(80.dp) // Adjust size as needed
+                        .size(120.dp) // Adjust size as needed
                         .clip(RoundedCornerShape(12.dp))
                         .background(Color.LightGray)
                         .align(Alignment.Top)
@@ -269,33 +278,79 @@ fun EventSummaryCard(
                     )
                 }
 
+                Spacer(Modifier.width(4.dp)) // Space between image and event info
+
                 // Event Info Column
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(
-                        text = "📍 $location",
-                        fontSize = 14.sp,
-                        color = Color.DarkGray
-                    )
-                    Text(
-                        text = "🟢 Open Slots: $openSlots",
-                        fontSize = 14.sp,
-                        color = Color(0xFF4CAF50), // Green
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = "📅 $date",
-                        fontSize = 14.sp,
-                        color = Color.DarkGray
-                    )
-                    Text(
-                        text = "⏰ $time",
-                        fontSize = 14.sp,
-                        color = Color.DarkGray
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.LocationOn,
+                            contentDescription = "Location Icon",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = location,
+                            fontSize = 14.sp,
+                            color = Color.Black
+                        )
+                    }
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.CheckCircle,
+                            contentDescription = "Open Slots Icon",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            buildAnnotatedString {
+                                append("Open Slots:  ")
+                                withStyle(SpanStyle(color = Color(0xFFFE1943), fontWeight = FontWeight.Bold)) { // Green for number
+                                    append(openSlots)
+                                }
+                            },
+                            fontSize = 14.sp,
+                            color = Color.Black
+                        )
+                    }
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.CalendarToday,
+                            contentDescription = "Date Icon",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = date,
+                            fontSize = 14.sp,
+                            color = Color.Black
+                        )
+                    }
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.AccessTime,
+                            contentDescription = "Time Icon",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = time,
+                            fontSize = 14.sp,
+                            color = Color.Black
+                        )
+                    }
                 }
+
             }
         }
     }
@@ -321,15 +376,57 @@ fun GuestDetailsCard(
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text("Guest Details", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             HorizontalDivider()
-            Text("Name: $name", fontSize = 16.sp)
-            Text("Age: $age", fontSize = 16.sp)
-            Text("Gender: $gender", fontSize = 16.sp)
-            Text("Instagram: @$instagram", fontSize = 16.sp, color = Color.Blue)
+
+            Row() {
+
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)){
+
+                    Text(
+                        text = "Name:",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "Age:",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "Gender:",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "Instagram:",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                }
+
+                Spacer(Modifier.weight(1f))
+
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)){
+
+                    Text("$name", fontSize = 16.sp)
+                    Text("$age", fontSize = 16.sp)
+                    Text("$gender", fontSize = 16.sp)
+                    Text("@$instagram", fontSize = 16.sp, color = Color.Blue)
+
+
+                }
+
+                Spacer(Modifier.weight(1f))
+
+
+            }
+
+
         }
     }
 }
@@ -356,7 +453,7 @@ fun AdditionalGuestsSection(
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text("Additional Guests (add up to 4)", fontSize = 18.sp, fontWeight = FontWeight.Bold)
@@ -417,14 +514,14 @@ fun AgreementSection(onSubmit: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text("Agreement", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Divider()
-            Text("RSVP Data:", fontSize = 14.sp, textDecoration = TextDecoration.Underline)
+
             Text(
-                "To request entry to the party, some of your personal data will be shared with the host. This includes your name, age, gender, and Instagram profile. The host will use this info to make a decision about whether to accept or deny your RSVP.",
+                "To request entry to the event, some of your personal data will be shared with the host. This includes your name, age, gender, and Instagram profile. The host will use this info to make a decision about whether to accept or deny your RSVP.",
                 fontSize = 14.sp
             )
 
