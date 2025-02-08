@@ -68,13 +68,10 @@ import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.HostInfoCard
-import com.example.vibe.ui.theme.Route159Bold
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -714,7 +711,7 @@ fun EventDetailsScreen(
 
 @Composable
 fun CustomVideoPlayer(videoUrl: String?) {
-    val context = LocalContext.current
+    //val context = LocalContext.current
     var isPlaying by remember { mutableStateOf(false) }
 
     Box(
