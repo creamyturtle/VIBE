@@ -87,10 +87,10 @@ fun VibeBottomAppBarNew(navController: NavController, isLoggedIn: Boolean, authV
                 )
                 BottomNavItem(
                     navController,
-                    "attending",
+                    "calendar",
                     currentRoute,
                     Icons.Default.Event,
-                    "Attending"
+                    "Calendar"
                 )
                 BottomNavItem(
                     navController,

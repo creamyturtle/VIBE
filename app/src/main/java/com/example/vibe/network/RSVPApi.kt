@@ -9,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.Response
 import retrofit2.http.Headers
+import retrofit2.http.Path
 
 interface RSVPApi {
 
@@ -21,9 +22,18 @@ interface RSVPApi {
         @Body rsvpRequest: RSVPRequest
     ): Response<RSVPResponse>
 
+
+    @GET("rsvp/status/{partyId}")
+    suspend fun getRSVPStatus(@Path("partyId") partyId: Int): RSVPResponse
+
+
+
     @GET("rsvp_api.php")
     suspend fun checkRSVP(
         @Header("Authorization") token: String,
         @Query("party_id") partyId: Int
     ): Response<RSVPResponse>
+
+
+
 }

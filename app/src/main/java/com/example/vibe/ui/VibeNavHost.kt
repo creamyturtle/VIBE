@@ -135,7 +135,8 @@ fun VibeNavHost(
                 onBack = { navController.navigateUp() },
                 authViewModel = authViewModel,
                 rsvpViewModel = rsvpViewModel,
-                userViewModel = userViewModel
+                userViewModel = userViewModel,
+                navController = navController
             )
         }
 

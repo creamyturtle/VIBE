@@ -64,6 +64,17 @@ class RSVPViewModel(private val rsvpApi: RSVPApi, private val sessionManager: Se
         }
     }
 
+    fun checkRSVPStatus(partyId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = rsvpApi.getRSVPStatus(partyId)
+                _rsvpStatus.postValue(Result.success(response))
+            } catch (e: Exception) {
+                _rsvpStatus.postValue(Result.failure(e))
+            }
+        }
+    }
+
 
 }
 

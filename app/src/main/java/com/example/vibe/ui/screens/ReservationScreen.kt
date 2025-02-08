@@ -52,17 +52,16 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.model.Event
+import com.example.vibe.ui.components.OrDivider
+import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
@@ -75,7 +74,8 @@ fun ReservationScreen(
     onBack: () -> Unit,
     authViewModel: AuthViewModel,
     rsvpViewModel: RSVPViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    navController: NavController
 ) {
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
     val rsvpState by rsvpViewModel.rsvpStatus.observeAsState()
@@ -220,9 +220,151 @@ fun ReservationScreen(
             }
         }
     } else {
-        Text("Please log in to view this page")
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 48.dp), // Push content slightly down from the very top
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally, // Centers everything horizontally
+            ) {
+                IconButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .align(Alignment.Start) // Aligns to the left of the screen
+                        .padding(16.dp) // Adds spacing from the edges
+                        .background(color = Color.White, shape = CircleShape)
+                        //.border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
+                        .size(40.dp) // Slightly larger size for easier clicking
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.Black
+                    )
+                }
+
+                //Spacer(Modifier.height(12.dp)) // Adds spacing between back button and card
+
+                PleaseLogin(navController = navController, authViewModel = authViewModel)
+            }
+        }
+
+
+
     }
 }
+
+
+
+@Composable
+fun PleaseLogin(
+    navController: NavController,
+    authViewModel: AuthViewModel
+) {
+
+    // Add a Column with padding to apply padding to all inner content
+    Column(
+        modifier = Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally// Add padding inside the Card
+    ) {
+
+
+        Text(
+            text = "Returning User",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color.Black
+        )
+
+        Spacer(Modifier.height(32.dp))
+
+        StyledButton(
+            text = "Login",
+            isLoading = authViewModel.isLoading,
+            onClick = {
+                navController.navigate("login")
+            }
+        )
+
+
+        Spacer(Modifier.height(48.dp))
+
+        OrDivider()
+
+        Spacer(Modifier.height(32.dp))
+
+        Text(
+            text = "New User",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color.Black
+        )
+
+        Spacer(Modifier.height(32.dp))
+
+        StyledButton(
+            text = "Sign Up",
+            isLoading = authViewModel.isLoading,
+            onClick = {
+                navController.navigate("signup")
+            }
+        )
+
+
+
+    }
+
+
+
+}
+
+
+
+@Composable
+fun AlreadyRsvpd(
+    eventName: String,
+    location: String,
+    openSlots: String,
+    date: String,
+    time: String,
+    imageUrl: String // Add Image URL Parameter
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .shadow(8.dp, shape = RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        // Add a Column with padding to apply padding to all inner content
+        Column(
+            modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp) // Add padding inside the Card
+        ) {
+
+
+            Text(
+                text = "You have already RSVP'd for this event.",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+
+
+
+
+
+
+
+        }
+    }
+}
+
 
 
 
