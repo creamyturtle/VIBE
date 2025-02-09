@@ -8,7 +8,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun TopBar(navController: NavController) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    val noTopBarScreens = setOf("login", "signup", "reservation_screen") // Add base route
+    val noTopBarScreens = setOf("login", "signup", "reservation_screen", "host_event") // Add base route
 
     if (currentDestination !in noTopBarScreens &&
         currentDestination?.startsWith("event_details") == false &&

@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vibe.network.SignupApi
+import com.example.vibe.ui.screens.EventCreationForm
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoginScreen
@@ -160,5 +161,14 @@ fun VibeNavHost(
                 onSignupSuccess = { navController.popBackStack() }
             )
         }
+
+        composable(route = "host_event") {
+
+            EventCreationForm(
+                navController = navController
+            )
+        }
+
+
     }
 }
