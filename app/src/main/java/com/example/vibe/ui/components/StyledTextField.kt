@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun StyledTextField(
@@ -38,7 +39,11 @@ fun StyledTextField(
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         modifier = Modifier
             .fillMaxWidth() // Extends across the screen width
-            .padding(horizontal = 16.dp) // Adds side padding
+            .padding(horizontal = 16.dp),
+        textStyle = TextStyle( // Ensures text starts from the top-left
+            textAlign = TextAlign.Start,
+            fontSize = 16.sp
+        )
     )
 }
 
@@ -66,7 +71,8 @@ fun StyledTextField2(
             .padding(horizontal = 16.dp)
             .height(120.dp), // Adjust height as needed
         textStyle = TextStyle( // Ensures text starts from the top-left
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
+            fontSize = 16.sp
         ),
         maxLines = 4 // Ensures at least 3-4 lines appear
     )

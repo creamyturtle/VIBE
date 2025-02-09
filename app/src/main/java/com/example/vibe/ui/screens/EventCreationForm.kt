@@ -6,6 +6,7 @@ import android.content.Context
 import android.location.Geocoder
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,7 +27,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -51,7 +52,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -72,6 +75,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -125,14 +129,18 @@ fun EventCreationForm(
             modifier = Modifier
                 .align(Alignment.Start)
                 .background(color = Color.White, shape = CircleShape)
-                .size(40.dp)
+                .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
+                .size(32.dp)
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.Black
+                tint = Color.Black,
+                modifier = Modifier.size(20.dp)
             )
         }
+
+        Spacer(Modifier.height(2.dp))
 
         // Host Event Section
         SectionTitle("Host an Event")
@@ -295,32 +303,58 @@ fun CustomDropdownMenu(
     label: String
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Box {
+    val dropdownWidth = remember { mutableStateOf(0) } // Store width dynamically
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp)
+    ) {
         OutlinedTextField(
             value = selectedOption.value,
             onValueChange = {},
             readOnly = true,
             label = { Text(label) },
             trailingIcon = {
-                Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown", modifier = Modifier.clickable { expanded = true })
+                Icon(
+                    Icons.Filled.ArrowDropDown,
+                    contentDescription = "Dropdown",
+                    modifier = Modifier.clickable { expanded = true }
+                )
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .onGloballyPositioned { coordinates ->
+                    dropdownWidth.value = coordinates.size.width // Capture text field width
+                },
             shape = RoundedCornerShape(8.dp)
         )
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { dropdownWidth.value.toDp() }) // Match text field width
+                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
+                .padding(0.dp) // Ensures it stays within the boundaries
+        ) {
             options.forEach { option ->
-                DropdownMenuItem(onClick = {
-                    selectedOption.value = option
-                    expanded = false
-                }) {
-                    Text(option)
-                }
+                DropdownMenuItem(
+                    onClick = {
+                        selectedOption.value = option
+                        expanded = false
+                    },
+                    text = { Text(option) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                )
             }
         }
     }
 }
+
+
 
 @Composable
 fun UploadButton(label: String) {
@@ -410,7 +444,6 @@ fun showTimePicker(context: Context, time: MutableState<String>) {
     }, hour, minute, true).show()
 }
 
-
 @Composable
 fun MapWithSearch(locationLong: MutableState<String>) {
     val context = LocalContext.current
@@ -423,6 +456,12 @@ fun MapWithSearch(locationLong: MutableState<String>) {
     // Camera position state
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(mapPosition.value, 12f)
+    }
+
+    // 🔥 Fix: Ensure map initializes correctly before user interaction
+    LaunchedEffect(Unit) {
+        delay(500) // Small delay ensures the map is fully ready before moving the camera
+        cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(medellin, cameraPositionState.position.zoom))
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -441,10 +480,10 @@ fun MapWithSearch(locationLong: MutableState<String>) {
             label = { Text("Complete Address") },
             shape = RoundedCornerShape(8.dp), // Rounded corners
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White, // White background
-                focusedBorderColor = Color(0xFFFE1943), // Red border when focused
-                unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
-                cursorColor = Color.Black // Cursor color
+                backgroundColor = Color.White,
+                focusedBorderColor = Color(0xFFFE1943),
+                unfocusedBorderColor = Color.LightGray,
+                cursorColor = Color.Black
             ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = {
@@ -460,7 +499,6 @@ fun MapWithSearch(locationLong: MutableState<String>) {
         Spacer(modifier = Modifier.height(12.dp))
 
         // Google Map
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -475,17 +513,16 @@ fun MapWithSearch(locationLong: MutableState<String>) {
                     .height(400.dp),
                 cameraPositionState = cameraPositionState,
                 onMapClick = { latLng ->
-                    mapPosition.value = latLng
                     coroutineScope.launch {
+                        mapPosition.value = latLng
                         val address = getAddressFromLatLng(context, latLng)
                         locationLong.value = address // ✅ Updates text field when clicking map
-                        val currentZoom = cameraPositionState.position.zoom // ✅ Get current zoom level
+                        val currentZoom = cameraPositionState.position.zoom // ✅ Maintain zoom level
                         cameraPositionState.animate(
-                            CameraUpdateFactory.newLatLngZoom(latLng, currentZoom) // ✅ Maintain zoom level
+                            CameraUpdateFactory.newLatLngZoom(latLng, currentZoom)
                         )
                     }
                 }
-
             ) {
                 Marker(
                     state = MarkerState(position = mapPosition.value),
@@ -495,6 +532,7 @@ fun MapWithSearch(locationLong: MutableState<String>) {
         }
     }
 }
+
 
 // Function to Search for Address and Update Map + Text Field + Focus Map
 suspend fun searchLocation(

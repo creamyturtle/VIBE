@@ -1,6 +1,9 @@
 package com.example.vibe.ui.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,8 +20,12 @@ class RSVPViewModel(private val rsvpApi: RSVPApi, private val sessionManager: Se
     private val _rsvpStatus = MutableLiveData<Result<RSVPResponse>>()
     val rsvpStatus: LiveData<Result<RSVPResponse>> = _rsvpStatus
 
+
+
     fun submitRSVP(partyId: Int, guest1: String?, guest2: String?, guest3: String?, guest4: String?, bringing: String?) {
         viewModelScope.launch {
+
+
             try {
                 val token = sessionManager.getToken()
                 if (token.isNullOrBlank()) {

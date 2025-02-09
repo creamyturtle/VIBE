@@ -64,6 +64,7 @@ import coil.compose.AsyncImage
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
+import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
@@ -542,49 +543,45 @@ fun AdditionalGuestsSection(
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
-            modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
+            modifier = Modifier.padding(top = 24.dp, start = 8.dp, end = 8.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Additional Guests (add up to 4)", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = "Additional Guests (add up to 4)",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+            )
 
-            OutlinedTextField(
+            StyledTextField(
                 value = guest1,
                 onValueChange = onGuest1Change,
-                shape = RoundedCornerShape(8.dp),
-                label = { Text("Guest #1") },
-                modifier = Modifier.fillMaxWidth()
+                label = "Guest #1"
             )
 
-            OutlinedTextField(
+            StyledTextField(
                 value = guest2,
                 onValueChange = onGuest2Change,
-                shape = RoundedCornerShape(8.dp),
-                label = { Text("Guest #2") },
-                modifier = Modifier.fillMaxWidth()
+                label = "Guest #2"
             )
 
-            OutlinedTextField(
+            StyledTextField(
                 value = guest3,
                 onValueChange = onGuest3Change,
-                shape = RoundedCornerShape(8.dp),
-                label = { Text("Guest #3") },
-                modifier = Modifier.fillMaxWidth()
+                label = "Guest #3"
             )
 
-            OutlinedTextField(
+            StyledTextField(
                 value = guest4,
                 onValueChange = onGuest4Change,
-                shape = RoundedCornerShape(8.dp),
-                label = { Text("Guest #4") },
-                modifier = Modifier.fillMaxWidth()
+                label = "Guest #4"
             )
 
-            OutlinedTextField(
+            StyledTextField(
                 value = bringingItems,
                 onValueChange = onBringingChange,
-                shape = RoundedCornerShape(8.dp),
-                label = { Text("Bringing Any Items? (Optional)") },
-                modifier = Modifier.fillMaxWidth()
+                label = "Bringing Any Items? (Optional)"
             )
         }
     }
@@ -622,9 +619,11 @@ fun AgreementSection(onSubmit: () -> Unit) {
 
             Button(
                 onClick = onSubmit,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 enabled = true,
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFFE1943),
                     contentColor = Color.White,
@@ -632,8 +631,20 @@ fun AgreementSection(onSubmit: () -> Unit) {
                     disabledContentColor = Color.White
                 )
             ) {
-                Text("Confirm & Submit")
+                Text(
+                    text = "Confirm & Submit",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal
+                )
             }
+/*
+            StyledButton(
+                text = "Confirm & Submit",
+                onClick = onSubmit,
+                isLoading = rsvpViewModel.isLoading
+            )
+*/
+
         }
     }
 }
