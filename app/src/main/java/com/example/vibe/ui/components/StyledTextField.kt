@@ -1,6 +1,7 @@
 package com.example.vibe.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
@@ -9,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -28,7 +31,7 @@ fun StyledTextField(
         shape = RoundedCornerShape(8.dp), // Rounded corners
         colors = TextFieldDefaults.outlinedTextFieldColors(
             backgroundColor = Color.White, // White background
-            focusedBorderColor = Color.Gray, // Gray border when focused
+            focusedBorderColor = Color(0xFFFE1943), // Gray border when focused
             unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
             cursorColor = Color.Black // Cursor color
         ),
@@ -36,5 +39,35 @@ fun StyledTextField(
         modifier = Modifier
             .fillMaxWidth() // Extends across the screen width
             .padding(horizontal = 16.dp) // Adds side padding
+    )
+}
+
+@Composable
+fun StyledTextField2(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    isPassword: Boolean = false
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        shape = RoundedCornerShape(8.dp), // Rounded corners
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            backgroundColor = Color.White, // White background
+            focusedBorderColor = Color(0xFFFE1943), // Red border when focused
+            unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
+            cursorColor = Color.Black // Cursor color
+        ),
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(120.dp), // Adjust height as needed
+        textStyle = TextStyle( // Ensures text starts from the top-left
+            textAlign = TextAlign.Start
+        ),
+        maxLines = 4 // Ensures at least 3-4 lines appear
     )
 }
