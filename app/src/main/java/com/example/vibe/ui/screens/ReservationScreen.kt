@@ -2,6 +2,7 @@ package com.example.vibe.ui.screens
 
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,6 +52,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -93,6 +95,8 @@ fun ReservationScreen(
     var guest3 by remember { mutableStateOf("") }
     var guest4 by remember { mutableStateOf("") }
     var bringingItems by remember { mutableStateOf("") }
+
+    val context = LocalContext.current // ✅ Get the app context for Toast messages
 
     if (isLoggedIn) {
         Column(
@@ -167,6 +171,8 @@ fun ReservationScreen(
                     onBringingChange = { bringingItems = it }
                 )
 
+
+
                 AgreementSection(
                     onSubmit = {
                         event.id?.toIntOrNull()?.let { partyId ->
@@ -178,43 +184,28 @@ fun ReservationScreen(
                                 guest4 = guest4.ifBlank { null },
                                 bringing = bringingItems.ifBlank { null }
                             )
+
+                            // ✅ Show Toast Message AFTER Submission
+                            rsvpState?.let { result ->
+                                when {
+                                    result.isSuccess -> {
+                                        val response = result.getOrNull()
+                                        val message = if (response?.status == "already_rsvp") {
+                                            "You have already RSVP'd for this event."
+                                        } else {
+                                            "RSVP Sent to Event Host!  Please watch your email or profile page for updates"
+                                        }
+                                        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                                    }
+                                    result.isFailure -> {
+                                        Toast.makeText(context, "RSVP Failed: ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            }
                         } ?: Log.e("ReservationScreen", "Invalid party ID: ${event.id}")
                     }
                 )
 
-                Spacer(Modifier.height(16.dp))
-
-                // ✅ Display RSVP Response Messages
-                rsvpState?.let { result ->
-                    when {
-                        result.isSuccess -> {
-                            val response = result.getOrNull()
-                            if (response?.status == "already_rsvp") {
-                                Text(
-                                    text = "You have already RSVP'd for this event.",
-                                    color = Color.Red,
-                                    fontSize = 16.sp,
-                                    modifier = Modifier.padding(16.dp)
-                                )
-                            } else {
-                                Text(
-                                    text = "RSVP Successful!",
-                                    color = Color.Green,
-                                    fontSize = 16.sp,
-                                    modifier = Modifier.padding(16.dp)
-                                )
-                            }
-                        }
-                        result.isFailure -> {
-                            Text(
-                                text = "RSVP Failed: ${result.exceptionOrNull()?.message}",
-                                color = Color.Red,
-                                fontSize = 16.sp,
-                                modifier = Modifier.padding(16.dp)
-                            )
-                        }
-                    }
-                }
 
                 Spacer(Modifier.height(148.dp))
             }
@@ -321,50 +312,6 @@ fun PleaseLogin(
 
 
 }
-
-
-
-@Composable
-fun AlreadyRsvpd(
-    eventName: String,
-    location: String,
-    openSlots: String,
-    date: String,
-    time: String,
-    imageUrl: String // Add Image URL Parameter
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .shadow(8.dp, shape = RoundedCornerShape(16.dp)),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        // Add a Column with padding to apply padding to all inner content
-        Column(
-            modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp) // Add padding inside the Card
-        ) {
-
-
-            Text(
-                text = "You have already RSVP'd for this event.",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-
-
-
-
-
-
-
-
-        }
-    }
-}
-
 
 
 

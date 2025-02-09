@@ -23,10 +23,6 @@ interface RSVPApi {
     ): Response<RSVPResponse>
 
 
-    @GET("rsvp/status/{partyId}")
-    suspend fun getRSVPStatus(@Path("partyId") partyId: Int): RSVPResponse
-
-
 
     @GET("rsvp_api.php")
     suspend fun checkRSVP(
