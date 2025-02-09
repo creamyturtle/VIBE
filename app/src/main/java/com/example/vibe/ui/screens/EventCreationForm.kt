@@ -3,6 +3,8 @@ package com.example.vibe.ui.screens
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.location.Geocoder
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +21,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -31,27 +36,47 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.components.StyledTextField2
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.util.Calendar
+import java.util.Locale
 
 
 @Composable
@@ -168,10 +193,15 @@ fun EventCreationForm(
 
 
         Spacer(Modifier.height(24.dp))
-
+/*
         // Precise Location Section
         SectionTitle("Precise Location")
         StyledTextField(value = locationLong.value, onValueChange = { locationLong.value = it }, label = "Complete Address")
+*/
+
+        MapWithSearch(locationLong = locationLong)
+
+
 
         Spacer(Modifier.height(24.dp))
 
@@ -380,4 +410,140 @@ fun showTimePicker(context: Context, time: MutableState<String>) {
     }, hour, minute, true).show()
 }
 
+
+@Composable
+fun MapWithSearch(locationLong: MutableState<String>) {
+    val context = LocalContext.current
+    val medellin = LatLng(6.2442, -75.5812) // Default location: Medellín, Colombia
+
+    // States
+    val mapPosition = remember { mutableStateOf(medellin) }
+    val coroutineScope = rememberCoroutineScope()
+
+    // Camera position state
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(mapPosition.value, 12f)
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+
+        SectionTitle("Precise Location")
+
+        // Address Input Field
+        OutlinedTextField(
+            value = locationLong.value, // ✅ Syncs with the state
+            onValueChange = { newValue ->
+                locationLong.value = newValue
+                coroutineScope.launch {
+                    searchLocation(context, newValue, mapPosition, locationLong, cameraPositionState)
+                }
+            },
+            label = { Text("Complete Address") },
+            shape = RoundedCornerShape(8.dp), // Rounded corners
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White, // White background
+                focusedBorderColor = Color(0xFFFE1943), // Red border when focused
+                unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
+                cursorColor = Color.Black // Cursor color
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = {
+                coroutineScope.launch {
+                    searchLocation(context, locationLong.value, mapPosition, locationLong, cameraPositionState)
+                }
+            }),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Google Map
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp, 0.dp, 8.dp, 0.dp)
+                .height(300.dp)
+                .clip(RoundedCornerShape(16.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp),
+                cameraPositionState = cameraPositionState,
+                onMapClick = { latLng ->
+                    mapPosition.value = latLng
+                    coroutineScope.launch {
+                        val address = getAddressFromLatLng(context, latLng)
+                        locationLong.value = address // ✅ Updates text field when clicking map
+                        val currentZoom = cameraPositionState.position.zoom // ✅ Get current zoom level
+                        cameraPositionState.animate(
+                            CameraUpdateFactory.newLatLngZoom(latLng, currentZoom) // ✅ Maintain zoom level
+                        )
+                    }
+                }
+
+            ) {
+                Marker(
+                    state = MarkerState(position = mapPosition.value),
+                    title = locationLong.value
+                )
+            }
+        }
+    }
+}
+
+// Function to Search for Address and Update Map + Text Field + Focus Map
+suspend fun searchLocation(
+    context: Context,
+    address: String,
+    mapPosition: MutableState<LatLng>,
+    locationLong: MutableState<String>,
+    cameraPositionState: CameraPositionState
+) {
+    getLatLngFromAddress(context, address)?.let { newLocation ->
+        mapPosition.value = newLocation
+        locationLong.value = address // ✅ Ensures text field keeps the correct address
+        cameraPositionState.animate(CameraUpdateFactory.newLatLngZoom(newLocation, 15f)) // ✅ Move focus
+    }
+}
+
+
+
+// Function to Convert Address to LatLng
+suspend fun getLatLngFromAddress(
+    context: Context,
+    address: String
+): LatLng? {
+    return withContext(Dispatchers.IO) {
+        try {
+            val geocoder = Geocoder(context, Locale.getDefault())
+            val results = geocoder.getFromLocationName(address, 1)
+            results?.firstOrNull()?.let {
+                LatLng(it.latitude, it.longitude)
+            }
+        } catch (e: IOException) {
+            Log.e("Geocoder", "Failed to get location", e)
+            null
+        }
+    }
+}
+
+
+// Function to Convert LatLng to Address
+suspend fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
+    return withContext(Dispatchers.IO) {
+        try {
+            val geocoder = Geocoder(context, Locale.getDefault())
+            val results = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            results?.firstOrNull()?.getAddressLine(0) ?: "Unknown Location"
+        } catch (e: IOException) {
+            Log.e("Geocoder", "Failed to get address", e)
+            "Unknown Location"
+        }
+    }
+}
 
