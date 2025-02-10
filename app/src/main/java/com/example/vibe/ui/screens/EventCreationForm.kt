@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -56,9 +58,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -151,13 +155,10 @@ fun EventCreationForm(
         Spacer(Modifier.height(2.dp))
 
         // Host Event Section
-        SectionTitle("Host an Event")
+        SectionTitle("Host your Event on VIBE")
 
 
-        Text(
-            text = "Want to publish your event on VIBE?  Fill out the form below to get started!",
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        )
+
 
         Text(
             text = "VIBE is a completely free platform and charging entry fees is not allowed.  Any commercial events or businesses will be denied.",
@@ -321,7 +322,14 @@ fun CustomDropdownMenu(
             value = selectedOption.value,
             onValueChange = {},
             readOnly = true,
-            label = { Text(label) },
+            label = {
+                Text(
+                    text = label
+                )
+            },
+            textStyle = TextStyle( // ✅ Makes selected text bigger
+                fontSize = 16.sp
+            ),
             trailingIcon = {
                 Icon(
                     Icons.Filled.ArrowDropDown,
@@ -334,7 +342,8 @@ fun CustomDropdownMenu(
                 .onGloballyPositioned { coordinates ->
                     dropdownWidth.value = coordinates.size.width // Capture text field width
                 },
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true
         )
 
         DropdownMenu(
@@ -352,7 +361,12 @@ fun CustomDropdownMenu(
                         selectedOption.value = option
                         expanded = false
                     },
-                    text = { Text(option) },
+                    text = {
+                        Text(
+                            text = option,
+                            fontSize = 16.sp
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.White)
@@ -543,10 +557,17 @@ fun MapWithSearch(locationLong: MutableState<String>) {
                     }
                 },
                 label = { Text("Complete Address") },
+                shape = RoundedCornerShape(8.dp),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     showDropdown = false // Close dropdown on done
                 }),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White, // White background
+                    focusedBorderColor = Color(0xFFFE1943), // Gray border when focused
+                    unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
+                    cursorColor = Color.Black // Cursor color
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
