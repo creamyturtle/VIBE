@@ -25,25 +25,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,6 +50,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -61,22 +62,29 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vibe.R
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.components.StyledTextField2
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompletePrediction
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.Calendar
@@ -444,6 +452,8 @@ fun showTimePicker(context: Context, time: MutableState<String>) {
     }, hour, minute, true).show()
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapWithSearch(locationLong: MutableState<String>) {
     val context = LocalContext.current
@@ -452,51 +462,36 @@ fun MapWithSearch(locationLong: MutableState<String>) {
     // States
     val mapPosition = remember { mutableStateOf(medellin) }
     val coroutineScope = rememberCoroutineScope()
-
-    // Camera position state
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(mapPosition.value, 12f)
     }
 
-    // 🔥 Fix: Ensure map initializes correctly before user interaction
+    val predictions = remember { mutableStateListOf<AutocompletePrediction>() }
+    var showDropdown by remember { mutableStateOf(false) }
+    var debounceJob by remember { mutableStateOf<Job?>(null) }
+
+    // Focus management
+    val focusRequester = FocusRequester()
+
     LaunchedEffect(Unit) {
-        delay(500) // Small delay ensures the map is fully ready before moving the camera
-        cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(medellin, cameraPositionState.position.zoom))
+        if (!Places.isInitialized()) {
+            Places.initialize(context, context.getString(R.string.google_maps_api_key))
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-
         SectionTitle("Precise Location")
 
-        // Address Input Field
-        OutlinedTextField(
-            value = locationLong.value, // ✅ Syncs with the state
-            onValueChange = { newValue ->
-                locationLong.value = newValue
-                coroutineScope.launch {
-                    searchLocation(context, newValue, mapPosition, locationLong, cameraPositionState)
-                }
-            },
-            label = { Text("Complete Address") },
-            shape = RoundedCornerShape(8.dp), // Rounded corners
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White,
-                focusedBorderColor = Color(0xFFFE1943),
-                unfocusedBorderColor = Color.LightGray,
-                cursorColor = Color.Black
-            ),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = {
-                coroutineScope.launch {
-                    searchLocation(context, locationLong.value, mapPosition, locationLong, cameraPositionState)
-                }
-            }),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Select the exact location of your event by clicking on the map or entering the complete address below.",
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(horizontal = 24.dp)
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Google Map
         Box(
@@ -508,18 +503,15 @@ fun MapWithSearch(locationLong: MutableState<String>) {
             contentAlignment = Alignment.Center
         ) {
             GoogleMap(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp),
+                modifier = Modifier.fillMaxWidth().height(400.dp),
                 cameraPositionState = cameraPositionState,
                 onMapClick = { latLng ->
                     coroutineScope.launch {
                         mapPosition.value = latLng
                         val address = getAddressFromLatLng(context, latLng)
-                        locationLong.value = address // ✅ Updates text field when clicking map
-                        val currentZoom = cameraPositionState.position.zoom // ✅ Maintain zoom level
+                        locationLong.value = address
                         cameraPositionState.animate(
-                            CameraUpdateFactory.newLatLngZoom(latLng, currentZoom)
+                            CameraUpdateFactory.newLatLngZoom(latLng, cameraPositionState.position.zoom)
                         )
                     }
                 }
@@ -530,45 +522,146 @@ fun MapWithSearch(locationLong: MutableState<String>) {
                 )
             }
         }
+
+        Spacer(Modifier.height(12.dp))
+
+        // Address Input Field
+        Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            OutlinedTextField(
+                value = locationLong.value,
+                onValueChange = { newValue ->
+                    locationLong.value = newValue
+                    showDropdown = true
+
+                    debounceJob?.cancel() // Cancel previous debounce
+                    debounceJob = coroutineScope.launch {
+                        delay(300) // Delay for 300ms
+                        predictions.clear()
+                        if (newValue.isNotEmpty()) {
+                            predictions.addAll(getPlacePredictions(context, newValue))
+                        }
+                    }
+                },
+                label = { Text("Complete Address") },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    showDropdown = false // Close dropdown on done
+                }),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+            )
+
+            // Custom Dropdown
+            if (showDropdown && predictions.isNotEmpty()) {
+                Dropdown(predictions = predictions, onSelect = { prediction ->
+                    locationLong.value = prediction.getFullText(null).toString()
+                    showDropdown = false
+                    coroutineScope.launch {
+                        val latLng = getLatLngFromPlaceId(context, prediction.placeId)
+                        if (latLng != null) {
+                            mapPosition.value = latLng
+                            cameraPositionState.animate(
+                                CameraUpdateFactory.newLatLngZoom(latLng, cameraPositionState.position.zoom)
+                            )
+                        }
+                    }
+                })
+            }
+        }
+
+
+
+
     }
 }
 
-
-// Function to Search for Address and Update Map + Text Field + Focus Map
-suspend fun searchLocation(
-    context: Context,
-    address: String,
-    mapPosition: MutableState<LatLng>,
-    locationLong: MutableState<String>,
-    cameraPositionState: CameraPositionState
+@Composable
+fun Dropdown(
+    predictions: List<AutocompletePrediction>,
+    onSelect: (AutocompletePrediction) -> Unit
 ) {
-    getLatLngFromAddress(context, address)?.let { newLocation ->
-        mapPosition.value = newLocation
-        locationLong.value = address // ✅ Ensures text field keeps the correct address
-        cameraPositionState.animate(CameraUpdateFactory.newLatLngZoom(newLocation, 15f)) // ✅ Move focus
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 56.dp, start = 16.dp, end = 16.dp) // Add padding to move it down
+            .background(Color.White, RoundedCornerShape(8.dp))
+            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            predictions.forEach { prediction ->
+                DropdownMenuItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = {
+                        Column {
+                            Text(
+                                text = prediction.getPrimaryText(null).toString(),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = prediction.getSecondaryText(null).toString(),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.Gray
+                            )
+                        }
+                    },
+                    onClick = { onSelect(prediction) }
+                )
+            }
+        }
     }
 }
 
 
 
-// Function to Convert Address to LatLng
-suspend fun getLatLngFromAddress(
-    context: Context,
-    address: String
-): LatLng? {
+// Updated `getPlacePredictions` with Debouncing
+suspend fun getPlacePredictions(context: Context, query: String): List<AutocompletePrediction> {
     return withContext(Dispatchers.IO) {
         try {
-            val geocoder = Geocoder(context, Locale.getDefault())
-            val results = geocoder.getFromLocationName(address, 1)
-            results?.firstOrNull()?.let {
-                LatLng(it.latitude, it.longitude)
-            }
-        } catch (e: IOException) {
-            Log.e("Geocoder", "Failed to get location", e)
+            val placesClient = Places.createClient(context)
+            val request = FindAutocompletePredictionsRequest.builder()
+                .setQuery(query)
+                .setCountries("CO") // Explicitly restrict to Colombia
+                .setLocationBias(
+                    RectangularBounds.newInstance(
+                        LatLng(4.0, -75.0),  // SouthWest corner of Colombia
+                        LatLng(12.0, -67.0)  // NorthEast corner of Colombia
+                    )
+                )
+                .setTypeFilter(TypeFilter.GEOCODE) // Broader results, including cities/neighborhoods
+                .build()
+
+            val response = placesClient.findAutocompletePredictions(request).await()
+
+            Log.d("PlacesAPI", "Predictions: ${response.autocompletePredictions.map { it.getFullText(null) }}")
+            response.autocompletePredictions
+        } catch (e: Exception) {
+            Log.e("PlacesAPI", "Error fetching predictions: ${e.message}")
+            emptyList()
+        }
+    }
+}
+
+
+
+
+
+
+suspend fun getLatLngFromPlaceId(context: Context, placeId: String): LatLng? {
+    return withContext(Dispatchers.IO) {
+        try {
+            val placesClient = Places.createClient(context)
+            val request = FetchPlaceRequest.builder(placeId, listOf(Place.Field.LAT_LNG)).build()
+
+            val response = placesClient.fetchPlace(request).await()
+            response.place.latLng
+        } catch (e: Exception) {
+            Log.e("PlacesAPI", "Error fetching place details: ${e.message}")
             null
         }
     }
 }
+
 
 
 // Function to Convert LatLng to Address

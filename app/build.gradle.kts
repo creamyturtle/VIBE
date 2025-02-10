@@ -100,6 +100,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
     implementation("com.google.firebase:firebase-perf-ktx:21.0.4")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.7")
+    implementation("com.google.android.libraries.places:places:4.1.0")
 
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
