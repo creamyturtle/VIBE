@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -58,11 +59,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -165,10 +170,16 @@ fun EventCreationForm(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)
         )
 
+
+        AboutUsLink(navController)
+
+        /*
         Text(
             text = "Please read our About Us page for more information.",
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)
         )
+
+         */
 
         Spacer(Modifier.height(16.dp))
 
@@ -236,21 +247,27 @@ fun EventCreationForm(
 
         Spacer(Modifier.height(24.dp))
 
-        // Amenities Section
-        SectionTitle("Amenities")
-        amenities.value.forEach { (label, state) ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = state,
-                    onCheckedChange = { checked ->
-                        amenities.value = amenities.value.toMutableMap().apply { this[label] = checked }
-                    }
-                )
-                Text(text = label, modifier = Modifier.padding(start = 8.dp))
+        Column() {
+            // Amenities Section
+            SectionTitle("Amenities")
+
+            Spacer(Modifier.height(16.dp))
+
+            amenities.value.forEach { (label, state) ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = state,
+                        onCheckedChange = { checked ->
+                            amenities.value = amenities.value.toMutableMap().apply { this[label] = checked }
+                        }
+                    )
+                    Text(text = label, modifier = Modifier.padding(start = 8.dp))
+                }
             }
         }
 
         Spacer(Modifier.height(8.dp))
+
 
         // Terms Agreement
         Row(
@@ -264,7 +281,7 @@ fun EventCreationForm(
                 fontWeight = FontWeight.SemiBold)
         }
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(8.dp))
 
         // Submit Button
         StyledButton(
@@ -280,7 +297,6 @@ fun EventCreationForm(
             fontStyle = FontStyle.Italic
         )
 
-        Spacer(Modifier.height(8.dp))
 
         Text(
             text = "Please note that all events are subject to approval by our VIBE moderators.  Your event will be published within 24 hours.  Watch for an email from VIBE with your event link, or check your profile for updates.",
@@ -698,4 +714,52 @@ suspend fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
         }
     }
 }
+
+@Composable
+fun AboutUsLink(navController: NavController) {
+    val annotatedText = buildAnnotatedString {
+        withStyle(style = SpanStyle(fontSize = 12.sp, fontFamily = FontFamily.Default)) {
+            append("Please read our ")
+        }
+
+        // Make "About Us" a clickable link
+        pushStringAnnotation(tag = "about_us", annotation = "about_us")
+        withStyle(
+            style = SpanStyle(
+                color = Color.Blue,
+                fontSize = 12.sp,
+                fontFamily = FontFamily.Default, // ✅ Matches default typography
+                fontWeight = FontWeight.Normal,
+                letterSpacing = 0.15.sp, // ✅ Matches MaterialTheme's letter spacing
+                //lineHeight = 22.sp // ✅ Ensures the same height as regular Text()
+            )
+        ) {
+            append("About Us")
+        }
+        pop() // End the clickable part
+
+        withStyle(style = SpanStyle(fontSize = 12.sp, fontFamily = FontFamily.Default)) {
+            append(" page for more information.")
+        }
+    }
+
+    ClickableText(
+        text = annotatedText,
+        onClick = { offset ->
+            annotatedText.getStringAnnotations(tag = "about_us", start = offset, end = offset)
+                .firstOrNull()?.let {
+                    navController.navigate("about_us_screen") // ✅ Navigate to About Us
+                }
+        },
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+        style = TextStyle( // ✅ This ensures ClickableText matches Text() component
+            fontSize = 16.sp,
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Normal,
+            letterSpacing = 0.15.sp,
+            lineHeight = 22.sp
+        )
+    )
+}
+
 
