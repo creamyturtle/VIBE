@@ -748,7 +748,7 @@ fun AboutUsLink(navController: NavController) {
         onClick = { offset ->
             annotatedText.getStringAnnotations(tag = "about_us", start = offset, end = offset)
                 .firstOrNull()?.let {
-                    navController.navigate("about_us_screen") // ✅ Navigate to About Us
+                    navController.navigate("about_us") // ✅ Navigate to About Us
                 }
         },
         modifier = Modifier.padding(start = 24.dp, end = 24.dp),

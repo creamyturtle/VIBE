@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vibe.network.SignupApi
+import com.example.vibe.ui.screens.AboutUsScreen
 import com.example.vibe.ui.screens.EventCreationForm
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.HomeScreen
@@ -168,6 +169,19 @@ fun VibeNavHost(
                 navController = navController
             )
         }
+
+
+        composable(route = "about_us") {
+
+            AboutUsScreen(
+                navController = navController,
+                onBack = { navController.navigateUp() }
+            )
+
+        }
+
+
+
 
 
     }
