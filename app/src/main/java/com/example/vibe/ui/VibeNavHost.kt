@@ -20,8 +20,10 @@ import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen
+import com.example.vibe.ui.screens.PrivacyPolicyScreen
 import com.example.vibe.ui.screens.ReservationScreen
 import com.example.vibe.ui.screens.SignupScreen
+import com.example.vibe.ui.screens.TermsAndConditionsScreen
 import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
@@ -174,6 +176,26 @@ fun VibeNavHost(
         composable(route = "about_us") {
 
             AboutUsScreen(
+                navController = navController,
+                onBack = { navController.navigateUp() }
+            )
+
+        }
+
+
+        composable(route = "terms_and_conditions") {
+
+            TermsAndConditionsScreen(
+                navController = navController,
+                onBack = { navController.navigateUp() }
+            )
+
+        }
+
+
+        composable(route = "privacy_policy") {
+
+            PrivacyPolicyScreen(
                 navController = navController,
                 onBack = { navController.navigateUp() }
             )

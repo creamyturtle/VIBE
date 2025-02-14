@@ -33,7 +33,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,6 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -159,8 +163,36 @@ fun EventCreationForm(
 
         Spacer(Modifier.height(2.dp))
 
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .shadow(8.dp, shape = RoundedCornerShape(20.dp)),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Column(
+                modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(text = "Host your event on VIBE", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Divider()
+
+                Text(
+                    text = "VIBE is a completely free platform and charging entry fees is not allowed.  Any commercial events or businesses will be denied.",
+                    fontSize = 14.sp
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                AboutUsLink(navController)
+
+
+            }
+        }
+        /*
         // Host Event Section
-        SectionTitle("Host your Event on VIBE")
+        SectionTitle("Host your event on VIBE")
 
 
 
@@ -170,8 +202,8 @@ fun EventCreationForm(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)
         )
 
+         */
 
-        AboutUsLink(navController)
 
         /*
         Text(
@@ -751,7 +783,7 @@ fun AboutUsLink(navController: NavController) {
                     navController.navigate("about_us") // ✅ Navigate to About Us
                 }
         },
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+        //modifier = Modifier.padding(start = 24.dp, end = 24.dp),
         style = TextStyle( // ✅ This ensures ClickableText matches Text() component
             fontSize = 16.sp,
             fontFamily = FontFamily.Default,
