@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.vibe.ui.components.ContentCard
 import com.example.vibe.ui.components.SectionTitle
 
@@ -31,7 +30,6 @@ import com.example.vibe.ui.components.SectionTitle
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FAQScreen(
-    navController: NavController,
     onBack: () -> Unit
 ) {
 

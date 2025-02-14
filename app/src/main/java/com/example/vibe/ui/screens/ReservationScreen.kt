@@ -32,7 +32,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -502,9 +501,9 @@ fun GuestDetailsCard(
 
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)){
 
-                    Text("$name", fontSize = 16.sp)
+                    Text(name, fontSize = 16.sp)
                     Text("$age", fontSize = 16.sp)
-                    Text("$gender", fontSize = 16.sp)
+                    Text(gender, fontSize = 16.sp)
                     Text("@$instagram", fontSize = 16.sp, color = Color.Blue)
 
 
@@ -603,7 +602,7 @@ fun AgreementSection(onSubmit: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text("Agreement", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Divider()
+            HorizontalDivider()
 
             Text(
                 "To request entry to the event, some of your personal data will be shared with the host. This includes your name, age, gender, and Instagram profile. The host will use this info to make a decision about whether to accept or deny your RSVP.",

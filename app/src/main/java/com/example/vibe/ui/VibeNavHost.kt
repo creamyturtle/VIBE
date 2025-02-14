@@ -177,7 +177,6 @@ fun VibeNavHost(
         composable(route = "about_us") {
 
             AboutUsScreen(
-                navController = navController,
                 onBack = { navController.navigateUp() }
             )
 
@@ -187,7 +186,6 @@ fun VibeNavHost(
         composable(route = "terms_and_conditions") {
 
             TermsAndConditionsScreen(
-                navController = navController,
                 onBack = { navController.navigateUp() }
             )
 
@@ -197,7 +195,6 @@ fun VibeNavHost(
         composable(route = "privacy_policy") {
 
             PrivacyPolicyScreen(
-                navController = navController,
                 onBack = { navController.navigateUp() }
             )
 
@@ -207,7 +204,6 @@ fun VibeNavHost(
         composable(route = "faq") {
 
             FAQScreen(
-                navController = navController,
                 onBack = { navController.navigateUp() }
             )
 
