@@ -17,6 +17,7 @@ import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
 import com.example.vibe.ui.screens.EventCreationForm
 import com.example.vibe.ui.screens.EventDetailsScreen
+import com.example.vibe.ui.screens.FAQScreen
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen
@@ -196,6 +197,16 @@ fun VibeNavHost(
         composable(route = "privacy_policy") {
 
             PrivacyPolicyScreen(
+                navController = navController,
+                onBack = { navController.navigateUp() }
+            )
+
+        }
+
+
+        composable(route = "faq") {
+
+            FAQScreen(
                 navController = navController,
                 onBack = { navController.navigateUp() }
             )

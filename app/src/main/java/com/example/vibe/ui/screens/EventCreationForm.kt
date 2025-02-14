@@ -11,7 +11,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -63,19 +61,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vibe.R
+import com.example.vibe.ui.components.SectionTitle
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.components.StyledTextField2
@@ -185,33 +179,54 @@ fun EventCreationForm(
 
                 Spacer(Modifier.height(8.dp))
 
-                AboutUsLink(navController)
+                Text(
+                    text = "Please read the pages below for more information",
+                    fontSize = 14.sp
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                        //.padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(
+                        onClick = { navController.navigate("faq") },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF3F51B5),
+                            contentColor = Color.White,
+                            disabledContainerColor = Color(0xFFBDBDBD),
+                            disabledContentColor = Color.White
+                        ),
+                    ) {
+                        Text("FAQ")
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Button(
+                        onClick = { navController.navigate("about_us") },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF3F51B5),
+                            contentColor = Color.White,
+                            disabledContainerColor = Color(0xFFBDBDBD),
+                            disabledContentColor = Color.White
+                        ),
+                    ) {
+                        Text("About Us")
+                    }
+                }
 
 
             }
         }
-        /*
-        // Host Event Section
-        SectionTitle("Host your event on VIBE")
 
-
-
-
-        Text(
-            text = "VIBE is a completely free platform and charging entry fees is not allowed.  Any commercial events or businesses will be denied.",
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        )
-
-         */
-
-
-        /*
-        Text(
-            text = "Please read our About Us page for more information.",
-            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
-        )
-
-         */
 
         Spacer(Modifier.height(16.dp))
 
@@ -298,7 +313,7 @@ fun EventCreationForm(
             }
         }
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(2.dp))
 
 
         // Terms Agreement
@@ -330,6 +345,45 @@ fun EventCreationForm(
         )
 
 
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                onClick = { navController.navigate("terms_and_conditions") },
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(12.dp),
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF3F51B5),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color(0xFFBDBDBD),
+                    disabledContentColor = Color.White
+                ),
+            ) {
+                Text("Terms & Cond's")
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Button(
+                onClick = { navController.navigate("privacy_policy") },
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(12.dp),
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF3F51B5),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color(0xFFBDBDBD),
+                    disabledContentColor = Color.White
+                ),
+            ) {
+                Text("Privacy Policy")
+            }
+        }
+
+
         Text(
             text = "Please note that all events are subject to approval by our VIBE moderators.  Your event will be published within 24 hours.  Watch for an email from VIBE with your event link, or check your profile for updates.",
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
@@ -343,15 +397,7 @@ fun EventCreationForm(
 }
 
 
-@Composable
-fun SectionTitle(title: String) {
-    Text(
-        text = title,
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(start = 24.dp)
-    )
-}
+
 
 @Composable
 fun CustomDropdownMenu(
@@ -745,53 +791,6 @@ suspend fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
             "Unknown Location"
         }
     }
-}
-
-@Composable
-fun AboutUsLink(navController: NavController) {
-    val annotatedText = buildAnnotatedString {
-        withStyle(style = SpanStyle(fontSize = 12.sp, fontFamily = FontFamily.Default)) {
-            append("Please read our ")
-        }
-
-        // Make "About Us" a clickable link
-        pushStringAnnotation(tag = "about_us", annotation = "about_us")
-        withStyle(
-            style = SpanStyle(
-                color = Color.Blue,
-                fontSize = 12.sp,
-                fontFamily = FontFamily.Default, // ✅ Matches default typography
-                fontWeight = FontWeight.Normal,
-                letterSpacing = 0.15.sp, // ✅ Matches MaterialTheme's letter spacing
-                //lineHeight = 22.sp // ✅ Ensures the same height as regular Text()
-            )
-        ) {
-            append("About Us")
-        }
-        pop() // End the clickable part
-
-        withStyle(style = SpanStyle(fontSize = 12.sp, fontFamily = FontFamily.Default)) {
-            append(" page for more information.")
-        }
-    }
-
-    ClickableText(
-        text = annotatedText,
-        onClick = { offset ->
-            annotatedText.getStringAnnotations(tag = "about_us", start = offset, end = offset)
-                .firstOrNull()?.let {
-                    navController.navigate("about_us") // ✅ Navigate to About Us
-                }
-        },
-        //modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-        style = TextStyle( // ✅ This ensures ClickableText matches Text() component
-            fontSize = 16.sp,
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
-            letterSpacing = 0.15.sp,
-            lineHeight = 22.sp
-        )
-    )
 }
 
 
