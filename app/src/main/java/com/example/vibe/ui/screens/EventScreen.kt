@@ -686,13 +686,6 @@ fun EventDetailsScreen(
 
 
 
-
-
-
-
-
-
-
                 //spacer to protect bottom bar from blocking at scroll bottom
 
                 Spacer(modifier = Modifier.height(148.dp))

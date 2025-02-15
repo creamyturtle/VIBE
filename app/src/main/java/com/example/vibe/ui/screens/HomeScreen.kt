@@ -50,6 +50,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,8 +71,11 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.ui.components.ShimmerEffect
+import com.example.vibe.ui.components.ShimmerEventCard
 import com.example.vibe.ui.theme.VibeTheme
 import com.example.vibe.ui.viewmodel.EventsUiState
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -167,6 +174,8 @@ fun HomeScreen(
 /**
  * The home screen displaying the loading message.
  */
+
+/*
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
 
@@ -176,6 +185,24 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         modifier = modifier
     )
 }
+
+*/
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Spacer(Modifier.height(104.dp))
+
+        repeat(5) {
+            ShimmerEventCard()
+        }
+    }
+}
+
 
 /**
  * The home screen displaying error message with re-attempt button.
@@ -229,9 +256,6 @@ private fun EventsListScreen(
         }
     }
 
-
-
-
 }
 
 
@@ -245,67 +269,51 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
         event.fullImgSrc4
     )
 
-    val pagerState = rememberPagerState(pageCount = { 4 })
+    val pagerState = rememberPagerState(pageCount = { images.size }) // Ensure proper count
+    var isImageLoading by remember { mutableStateOf(true) } // Track loading state
 
     Card(
         modifier = modifier
-            .padding(6.dp, 6.dp, 6.dp, 8.dp)
-            //.shadow(10.dp, shape = RoundedCornerShape(16.dp))
+            .padding(6.dp)
             .clickable { onClick() }
             .clip(RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column {
-
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(260.dp)
             ) {
-                // Horizontal Pager
+                // Shimmer placeholder (Only visible when loading)
+                if (isImageLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(brush = ShimmerEffect()) // ✅ FIXED
+                    )
+                }
+
+                // Horizontal Pager for event images
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(0.dp, 0.dp, 0.dp, 8.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    onClick() // Trigger the card's click action on tap
-                                }
-                            )
+                            detectTapGestures(onTap = { onClick() })
                         }
-
                 ) { page ->
                     AsyncImage(
                         model = images[page],
                         contentDescription = null,
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp))
+                            .then(if (isImageLoading) Modifier.background(brush = ShimmerEffect()) else Modifier), // ✅ FIXED
                         contentScale = ContentScale.Crop,
-                        placeholder = painterResource(id = R.drawable.loading_img),
-                        error = painterResource(id = R.drawable.defaultimg)
-                    )
-                }
-
-                // Floating Bubble
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(16.dp, 16.dp, 16.dp, 16.dp)
-                        .background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .padding(horizontal = 12.dp, vertical = 6.dp) // Padding inside the bubble
-                ) {
-                    Text(
-                        text = event.partyMod, // The bubble text
-                        color = Color.Black, // Text color
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold
+                        onSuccess = { isImageLoading = false }, // Hide shimmer when loaded
+                        onError = { isImageLoading = false } // Also hide shimmer on error
                     )
                 }
 
@@ -314,7 +322,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp) // Add space between dots
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     repeat(images.size) { index ->
                         val isSelected = pagerState.currentPage == index
@@ -328,33 +336,27 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 }
             }
 
+            // Event Details
             Text(
                 text = event.partyname,
-                //fontFamily = Route159Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp, 8.dp, 12.dp, 8.dp),
+                    .padding(8.dp),
                 color = Color.Black,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Light,
                 fontSize = 20.sp
             )
 
-
-
-
-
             Text(
-                text = event.formattedDate + " @ " + event.formattedTime,
+                text = "${event.formattedDate} @ ${event.formattedTime}",
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
                 color = Color.Gray
             )
 
-
-
             Text(
-                text = event.openslots + " Open Slots",
+                text = "${event.openslots} Open Slots",
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
                 color = Color.Gray
@@ -370,25 +372,10 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
             )
 
             Spacer(Modifier.height(8.dp))
-
-            /*
-            Text(
-                text = event.description,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(16.dp),
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-
-             */
-
-
-
         }
     }
-
-
 }
+
 
 
 
