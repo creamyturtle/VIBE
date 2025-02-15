@@ -55,7 +55,19 @@ fun ShimmerEventCard(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
-                    .height(16.dp)
+                    .height(12.dp)
+                    .fillMaxWidth(0.4f)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(brush = ShimmerEffect()) // Shimmer Effect
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Shimmer Subtitle (Open Slots) Placeholder
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .height(12.dp)
                     .fillMaxWidth(0.4f)
                     .clip(RoundedCornerShape(8.dp))
                     .background(brush = ShimmerEffect()) // Shimmer Effect
@@ -68,7 +80,7 @@ fun ShimmerEventCard(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(horizontal = 12.dp, vertical = 4.dp)
                     .height(16.dp)
-                    .fillMaxWidth(0.8f)
+                    .fillMaxWidth(0.5f)
                     .clip(RoundedCornerShape(8.dp))
                     .background(brush = ShimmerEffect()) // Shimmer Effect
             )

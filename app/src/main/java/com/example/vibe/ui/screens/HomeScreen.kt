@@ -313,7 +313,8 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                             .then(if (isImageLoading) Modifier.background(brush = ShimmerEffect()) else Modifier), // ✅ FIXED
                         contentScale = ContentScale.Crop,
                         onSuccess = { isImageLoading = false }, // Hide shimmer when loaded
-                        onError = { isImageLoading = false } // Also hide shimmer on error
+                        onError = { isImageLoading = false },
+                        error = painterResource(id = R.drawable.defaultimg)
                     )
                 }
 
