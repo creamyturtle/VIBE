@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.vibe.ui.components.ContentCard
+import com.example.vibe.ui.components.SectionTitle
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -59,45 +60,67 @@ fun PrivacyPolicyScreen(
             )
         }
 
+        Spacer(Modifier.height(16.dp))
+
+        SectionTitle(title = "Privacy Policy")
+
         ContentCard(
-            title = "Welcome to VIBE Social",
-            content = "VIBE is a unique new concept that connects partygoers and hosts in your city who want to get together and have a great time. We host only private events that are free to enter as a guest. No businesses or commercial promotions allowed.\n" +
+            title = "1. Information We Collect",
+            content = "We may collect the following personal information about you:\n" +
                     "\n" +
-                    "This platform was designed to create unique experiences and allow people to meet each other in a more intimate setting, without having to be concerned about paying cover charges or going to a place where it's difficult to meet people."
-
+                    "Email Address\n" +
+                    "Name\n" +
+                    "Instagram Username\n" +
+                    "Age\n" +
+                    "Gender"
         )
 
         ContentCard(
-            title = "Our Mission",
-            content = "Our Mission Is Simple: Make Finding Parties Easier.\n\n" +
-                    "By connecting willing hosts with eager partygoers, we provide a new way to enjoy nightlife in Medellin. Enjoy a more intimate experience where you can truly get to know other people.\n" +
+            title = "2. How We Use Your Information",
+            content = "We use the information we collect for the following purposes:\n" +
                     "\n" +
-                    "No more waiting in lines, paying cover, and trying to meet new people in a distant corporate setting. With VIBE you can go to people's private homes or events and meet them on a more personal level."
-
+                    "Account Registration and Management: We use your email address, first name, and Instagram username to create and manage your account.\n" +
+                    "\n" +
+                    "Communications: We may use your email address to communicate important updates or notifications regarding your account and our services.\n" +
+                    "\n" +
+                    "Improving Our Service: We may use aggregated and anonymized information to improve our Service."
         )
 
         ContentCard(
-            title = "A Unique New Experience",
-            content = "The VIBE platform is open to anybody age 18+. We make registration simple so you can quickly find a party and have a great night out.\n\n" + "The onus is on party hosts and their potential guests to learn about each other and see if they want to party together. It's almost like Tinder in a way, but in a more open group-based environment. \n\nOur hope is to help people make new friends and connect them in a new fun and interesting way."
-
+            title = "3. Data Security",
+            content = "We take reasonable precautions to protect your information. However, no method of transmission over the Internet or method of electronic storage is 100% secure, and we cannot guarantee absolute security."
         )
 
         ContentCard(
-            title = "Secure Platform",
-            content = "Utilizing Instagram, we allow hosts and guests to communicate to understand each other better before deciding to accept a reservation. Party with confidence."
-
+            title = "4. Data Retention",
+            content = "We retain your personal information as long as necessary to fulfill the purposes outlined in this Privacy Policy, or as required by law."
         )
 
         ContentCard(
-            title = "Completely Free",
-            content = "There are no charges on the VIBE platform, neither for hosts nor guests to participate. We don't charge any subscription fees and everything is totally free to enjoy."
-
+            title = "5. Sharing Your Information",
+            content = "We do not sell, trade, or otherwise transfer your personal information to outside parties, except:\n" +
+                    "\n" +
+                    "\n" +
+                    "If required by law or to comply with legal processes.\n" +
+                    "\n" +
+                    "To enforce our Terms & Conditions.\n" +
+                    "\n" +
+                    "To protect the rights, safety, and security of our users or the public."
         )
 
         ContentCard(
-            title = "More Information",
-            content = "For more information, please check out our Frequently Asked Questions page.\n\n" + "Also, check out our Terms of Service and Privacy Policy pages."
+            title = "6. Third-Party Services",
+            content = "Our Service may include links to third-party websites or services, such as social media platforms. We are not responsible for the privacy practices or content of these third parties."
+        )
 
+        ContentCard(
+            title = "7. Your Rights",
+            content = "Depending on your jurisdiction, you may have rights regarding your personal information, including the right to access, update, or delete it. Please contact us if you have any requests regarding your information."
+        )
+
+        ContentCard(
+            title = "8. Changes to This Privacy Policy",
+            content = "We may update our Privacy Policy from time to time. We will notify you of any significant changes by posting the new Privacy Policy on this page. Your continued use of our Service constitutes your acceptance of any changes."
         )
 
 
