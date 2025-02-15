@@ -155,7 +155,7 @@ fun EventCreationForm(
             )
         }
 
-        Spacer(Modifier.height(2.dp))
+        //Spacer(Modifier.height(2.dp))
 
         Card(
             modifier = Modifier

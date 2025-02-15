@@ -60,45 +60,62 @@ fun TermsAndConditionsScreen(
         }
 
         ContentCard(
-            title = "Welcome to VIBE Social",
-            content = "VIBE is a unique new concept that connects partygoers and hosts in your city who want to get together and have a great time. We host only private events that are free to enter as a guest. No businesses or commercial promotions allowed.\n" +
+            title = "VIBE Terms and Conditions",
+            content = "Welcome to VIBE! These Terms & Conditions (\"Terms\") govern your access to and use of our website (the \"Service\"). By using our Service, you agree to comply with these Terms. If you do not agree to these Terms, please do not use our Service."
+        )
+
+        ContentCard(
+            title = "1. User Accounts",
+            content = "To access certain features of our Service, you must create an account. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account."
+        )
+
+        ContentCard(
+            title = "2. User Conduct",
+            content = "We use the information we collect for the following purposes:\n" +
                     "\n" +
-                    "This platform was designed to create unique experiences and allow people to meet each other in a more intimate setting, without having to be concerned about paying cover charges or going to a place where it's difficult to meet people."
-
-        )
-
-        ContentCard(
-            title = "Our Mission",
-            content = "Our Mission Is Simple: Make Finding Parties Easier.\n\n" +
-                    "By connecting willing hosts with eager partygoers, we provide a new way to enjoy nightlife in Medellin. Enjoy a more intimate experience where you can truly get to know other people.\n" +
+                    "Account Registration and Management: We use your email address, first name, and Instagram username to create and manage your account.\n" +
                     "\n" +
-                    "No more waiting in lines, paying cover, and trying to meet new people in a distant corporate setting. With VIBE you can go to people's private homes or events and meet them on a more personal level."
-
+                    "Communications: We may use your email address to communicate important updates or notifications regarding your account and our services.\n" +
+                    "\n" +
+                    "Improving Our Service: We may use aggregated and anonymized information to improve our Service."
         )
 
         ContentCard(
-            title = "A Unique New Experience",
-            content = "The VIBE platform is open to anybody age 18+. We make registration simple so you can quickly find a party and have a great night out.\n\n" + "The onus is on party hosts and their potential guests to learn about each other and see if they want to party together. It's almost like Tinder in a way, but in a more open group-based environment. \n\nOur hope is to help people make new friends and connect them in a new fun and interesting way."
-
+            title = "3. User Content",
+            content = "By submitting content (e.g., photos, descriptions, reviews) on our platform, you grant us a non-exclusive, worldwide, royalty-free license to use, modify, and display your content on our Service. You represent and warrant that you own or have the rights to submit the content you post."
         )
 
         ContentCard(
-            title = "Secure Platform",
-            content = "Utilizing Instagram, we allow hosts and guests to communicate to understand each other better before deciding to accept a reservation. Party with confidence."
-
+            title = "4. Privacy",
+            content = "By using the Service, you consent to the collection and use of information as described in our Privacy Policy."
         )
 
         ContentCard(
-            title = "Completely Free",
-            content = "There are no charges on the VIBE platform, neither for hosts nor guests to participate. We don't charge any subscription fees and everything is totally free to enjoy."
-
+            title = "5. Limitation of Liability",
+            content = "To the fullest extent permitted by law, VIBE and its affiliates will not be liable for any damages, including but not limited to indirect, incidental, or consequential damages, arising out of your use of the Service or any content therein."
         )
 
         ContentCard(
-            title = "More Information",
-            content = "For more information, please check out our Frequently Asked Questions page.\n\n" + "Also, check out our Terms of Service and Privacy Policy pages."
-
+            title = "6. Disclaimer",
+            content = "Our Service is provided \"as is\" without warranties of any kind, either express or implied. We do not warrant that the Service will be error-free or uninterrupted, nor do we guarantee the accuracy or reliability of any information on the Service."
         )
+
+        ContentCard(
+            title = "7. Termination",
+            content = "We reserve the right to suspend or terminate your account and access to the Service at our sole discretion, without prior notice, for conduct that violates these Terms or is otherwise harmful to the Service or other users."
+        )
+
+        ContentCard(
+            title = "8. Governing Law",
+            content = "These Terms are governed by and construed in accordance with the laws of Colombia, without regard to its conflict of law principles."
+        )
+
+        ContentCard(
+            title = "9. Changes to These Terms",
+            content = "We may update these Terms from time to time. We will notify you of any significant changes by posting the new Terms on this page. Your continued use of the Service after any such changes constitutes your acceptance of the new Terms."
+        )
+
+
 
 
 
