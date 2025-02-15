@@ -119,31 +119,26 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
-
         viewModelScope.launch {
             try {
-                // ✅ Upload images
                 val uploadedImageUrls = mutableListOf<String>()
+
                 for (uri in selectedImages) {
                     val imagePart = uriToMultipartBody(context, uri, "image") ?: continue
                     val response = eventsRepository.uploadMedia(imagePart)
-
-                    if (response.success && response.fileUrl != null) { // ✅ Ensure fileUrl is not null
+                    if (response.success && response.fileUrl != null) {
                         uploadedImageUrls.add(response.fileUrl)
                     } else {
                         Log.e("Upload", "Upload failed or fileUrl is null")
                     }
                 }
 
-
-                // ✅ Upload video (if selected)
                 val uploadedVideoUrl = selectedVideo?.let { uri ->
                     val videoPart = uriToMultipartBody(context, uri, "video") ?: return@let null
                     val response = eventsRepository.uploadMedia(videoPart)
                     if (response.success) response.fileUrl else null
                 }
 
-                // ✅ Update event with media URLs
                 val updatedEvent = event.copy(
                     imgSrc = uploadedImageUrls.getOrNull(0),
                     imgSrc2 = uploadedImageUrls.getOrNull(1),
@@ -152,7 +147,6 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                     videourl = uploadedVideoUrl
                 )
 
-                // ✅ Submit event data
                 val response = eventsRepository.submitEvent(updatedEvent)
                 if (response.success) {
                     onSuccess()
@@ -162,10 +156,11 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
 
             } catch (e: Exception) {
                 Log.e("EventsViewModel", "Error submitting event: ${e.message}", e)
-                onError(e.message ?: "An unknown error occurred")
+                onError(e.message ?: "Unknown error")
             }
         }
     }
+
 
 
 

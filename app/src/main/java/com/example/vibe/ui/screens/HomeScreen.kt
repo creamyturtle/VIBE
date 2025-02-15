@@ -240,16 +240,16 @@ private fun EventsListScreen(
         items(
             items = events,
             key = { event ->
-                event.id
+                event.id ?: "default_${event.hashCode()}" // ✅ Provide a fallback key
             }
         ) { event ->
             EventCard(
                 event = event,
-                onClick = { onEventClick(event.id) },
-                modifier = Modifier
-                    .fillMaxSize(),
+                onClick = { onEventClick(event.id ?: "") }, // ✅ Ensure it's not null
+                modifier = Modifier.fillMaxSize(),
             )
         }
+
 
         item {
             Spacer(modifier = Modifier.height(64.dp)) // Adjust height as needed
