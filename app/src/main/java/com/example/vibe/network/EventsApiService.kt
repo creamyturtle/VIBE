@@ -101,18 +101,13 @@ interface EventsApiService {
 
 
 
-
-
-
-
-
-
-    @POST("api/{table}/insert")
-    fun insertEvent(
-        @Path("table") table: String,
-        @Query("api_token") apiToken: String,
+    @POST("submitEvent.php")
+    suspend fun insertEvent(
         @Body event: Event
-    ): Call<ApiResponse>
+    ): ApiResponse // ✅ Now it's `suspend`, no need for `.execute()`
+
+
+
 
 
 

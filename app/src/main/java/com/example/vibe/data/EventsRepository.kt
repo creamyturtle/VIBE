@@ -69,16 +69,15 @@ class DefaultEventsRepository(
 
     override suspend fun submitEvent(event: Event): ApiResponse {
         return try {
-            eventsApiService.insertEvent(
-                table = "parties",
-                apiToken = secretToken,
-                event = event
-            ).execute().body() ?: ApiResponse(false, "Submission failed")
+            eventsApiService.insertEvent(event) // ✅ Now returns ApiResponse directly
         } catch (e: Exception) {
             Log.e("Repository", "Error submitting event: ${e.message}", e)
-            ApiResponse(false, e.message ?: "Unknown error")
+            ApiResponse(success = false, message = e.message ?: "Unknown error")
         }
     }
+
+
+
 
 
     override suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse {
