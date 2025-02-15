@@ -16,6 +16,9 @@
 
 package com.example.vibe.ui.viewmodel
 
+import android.content.Context
+import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -27,6 +30,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vibe.VibeApplication
 import com.example.vibe.data.EventsRepository
 import com.example.vibe.model.Event
+import com.example.vibe.ui.screens.uriToMultipartBody
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -105,4 +109,64 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
             }
         }
     }
+
+
+    fun submitEventWithMedia(
+        context: Context,
+        event: Event,
+        selectedImages: List<Uri>,
+        selectedVideo: Uri?,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+        viewModelScope.launch {
+            try {
+                // ✅ Upload images
+                val uploadedImageUrls = mutableListOf<String>()
+                for (uri in selectedImages) {
+                    val imagePart = uriToMultipartBody(context, uri, "image") ?: continue
+                    val response = eventsRepository.uploadMedia(imagePart)
+
+                    if (response.success && response.fileUrl != null) { // ✅ Ensure fileUrl is not null
+                        uploadedImageUrls.add(response.fileUrl)
+                    } else {
+                        Log.e("Upload", "Upload failed or fileUrl is null")
+                    }
+                }
+
+
+                // ✅ Upload video (if selected)
+                val uploadedVideoUrl = selectedVideo?.let { uri ->
+                    val videoPart = uriToMultipartBody(context, uri, "video") ?: return@let null
+                    val response = eventsRepository.uploadMedia(videoPart)
+                    if (response.success) response.fileUrl else null
+                }
+
+                // ✅ Update event with media URLs
+                val updatedEvent = event.copy(
+                    imgSrc = uploadedImageUrls.getOrNull(0),
+                    imgSrc2 = uploadedImageUrls.getOrNull(1),
+                    imgSrc3 = uploadedImageUrls.getOrNull(2),
+                    imgSrc4 = uploadedImageUrls.getOrNull(3),
+                    videourl = uploadedVideoUrl
+                )
+
+                // ✅ Submit event data
+                val response = eventsRepository.submitEvent(updatedEvent)
+                if (response.success) {
+                    onSuccess()
+                } else {
+                    onError(response.message)
+                }
+
+            } catch (e: Exception) {
+                Log.e("EventsViewModel", "Error submitting event: ${e.message}", e)
+                onError(e.message ?: "An unknown error occurred")
+            }
+        }
+    }
+
+
+
 }

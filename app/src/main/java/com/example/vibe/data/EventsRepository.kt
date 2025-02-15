@@ -19,6 +19,7 @@ package com.example.vibe.data
 import android.util.Log
 import com.example.vibe.model.Event
 import com.example.vibe.network.EventsApiService
+import okhttp3.MultipartBody
 
 /**
  * Repository retrieves event data from underlying data source.
@@ -27,6 +28,8 @@ interface EventsRepository {
     /** Retrieves list of events from underlying data source */
     suspend fun getEvents(): List<Event>
     suspend fun getEventsByType(type: String): List<Event>
+    suspend fun submitEvent(event: Event): ApiResponse
+    suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse
 }
 
 
@@ -63,6 +66,38 @@ class DefaultEventsRepository(
             emptyList()
         }
     }
+
+    override suspend fun submitEvent(event: Event): ApiResponse {
+        return try {
+            eventsApiService.insertEvent(
+                table = "parties",
+                apiToken = secretToken,
+                event = event
+            ).execute().body() ?: ApiResponse(false, "Submission failed")
+        } catch (e: Exception) {
+            Log.e("Repository", "Error submitting event: ${e.message}", e)
+            ApiResponse(false, e.message ?: "Unknown error")
+        }
+    }
+
+
+    override suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse {
+        return try {
+            val response = eventsApiService.uploadMedia(file).execute()
+
+            if (response.isSuccessful) {
+                response.body() ?: UploadResponse(false, "Upload failed", null)
+            } else {
+                UploadResponse(false, "Upload failed: ${response.message()}", null)
+            }
+
+        } catch (e: Exception) {
+            Log.e("Repository", "Error uploading media: ${e.message}", e)
+            UploadResponse(false, e.message ?: "Unknown error", null)
+        }
+    }
+
+
 
 
 

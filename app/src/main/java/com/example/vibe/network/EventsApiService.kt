@@ -16,18 +16,24 @@
 
 package com.example.vibe.network
 
+import com.example.vibe.data.ApiResponse
 import com.example.vibe.data.LoginRequest
 import com.example.vibe.data.LoginResponse
 import com.example.vibe.data.SignupRequest
 import com.example.vibe.data.SignupResponse
+import com.example.vibe.data.UploadResponse
 import com.example.vibe.model.Event
+//import com.google.firebase.appdistribution.gradle.models.UploadResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -86,30 +92,51 @@ interface EventsApiService {
 
 
 
-    // Insert a new row
+
+    @Multipart
+    @POST("uploadApp.php")  // Change this to your actual API endpoint
+    fun uploadMedia(
+        @Part file: MultipartBody.Part
+    ): Call<UploadResponse>
+
+
+
+
+
+
+
+
+
     @POST("api/{table}/insert")
-    fun insert(
+    fun insertEvent(
         @Path("table") table: String,
         @Query("api_token") apiToken: String,
-        @Body data: Map<String, Any>
-    ): Call<Map<String, Any>>
+        @Body event: Event
+    ): Call<ApiResponse>
 
-    // Update a row by ID
-    @PUT("api/{table}/update")
-    fun update(
-        @Path("table") table: String,
-        @Query("api_token") apiToken: String,
-        @Query("id") id: Int,
-        @Body data: Map<String, Any>
-    ): Call<Map<String, Any>>
 
-    // Delete a row by ID
-    @DELETE("api/{table}/delete")
-    fun delete(
-        @Path("table") table: String,
-        @Query("api_token") apiToken: String,
-        @Query("id") id: Int
-    ): Call<Map<String, Any>>
+
+    /*
+        // Update a row by ID
+        @PUT("api/{table}/update")
+        fun update(
+            @Path("table") table: String,
+            @Query("api_token") apiToken: String,
+            @Query("id") id: Int,
+            @Body data: Map<String, Any>
+        ): Call<Map<String, Any>>
+
+        // Delete a row by ID
+        @DELETE("api/{table}/delete")
+        fun delete(
+            @Path("table") table: String,
+            @Query("api_token") apiToken: String,
+            @Query("id") id: Int
+        ): Call<Map<String, Any>>
+
+     */
+
+
 }
 
 

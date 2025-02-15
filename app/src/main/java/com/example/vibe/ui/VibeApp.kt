@@ -59,6 +59,8 @@ fun VibeApp() {
     val userViewModel = remember { UserViewModel(appContainer.userApi, appContainer.sessionManager) }
 
     val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
+
+
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     Scaffold(
@@ -77,7 +79,8 @@ fun VibeApp() {
             signupApi = appContainer.signupApi,
             authViewModel = authViewModel,
             rsvpViewModel = rsvpViewModel,
-            userViewModel = userViewModel
+            userViewModel = userViewModel,
+            context = context
         )
 
 

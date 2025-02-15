@@ -4,7 +4,13 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.location.Geocoder
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -68,11 +74,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.example.vibe.R
+import com.example.vibe.model.Event
 import com.example.vibe.ui.components.SectionTitle
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.components.StyledTextField2
+import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -93,6 +102,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import java.io.IOException
 import java.util.Calendar
 import java.util.Locale
@@ -100,7 +113,9 @@ import java.util.Locale
 
 @Composable
 fun EventCreationForm(
-    navController: NavController
+    navController: NavController,
+    eventsViewModel: EventsViewModel,
+    context: Context
 ) {
     val partyName = remember { mutableStateOf("") }
     val partyType = remember { mutableStateOf("House Party") }
@@ -110,7 +125,9 @@ fun EventCreationForm(
     val time = remember { mutableStateOf("") }
     val rules = remember { mutableStateOf("") }
     val totalSlots = remember { mutableStateOf("") }
-    val offerings = remember { mutableStateOf(List(3) { "" }) }
+    val offerings1 = remember { mutableStateOf("") }
+    val offerings2 = remember { mutableStateOf("") }
+    val offerings3 = remember { mutableStateOf("") }
     val musicType = remember { mutableStateOf("") }
     val locationLong = remember { mutableStateOf("") }
     val hostInstagram = remember { mutableStateOf("") }
@@ -128,6 +145,9 @@ fun EventCreationForm(
             )
         )
     }
+
+    val selectedImages = remember { mutableStateListOf<Uri>() }
+    val selectedVideo = remember { mutableStateOf<Uri?>(null) }
 
     Column(
         modifier = Modifier
@@ -261,9 +281,17 @@ fun EventCreationForm(
 
         // Attractions Section
         SectionTitle("Attractions")
-        repeat(3) { index ->
-            StyledTextField(value = offerings.value[index], onValueChange = { offerings.value = offerings.value.toMutableList().apply { this[index] = it } }, label = "Offering ${index + 1}")
-        }
+
+        //repeat(3) { index ->
+        //    StyledTextField(value = offerings.value[index], onValueChange = { offerings.value = offerings.value.toMutableList().apply { this[index] = it } }, label = "Offering ${index + 1}")
+        //}
+
+        StyledTextField(value = offerings1.value, onValueChange = { offerings1.value = it }, label = "Offering 1")
+        StyledTextField(value = offerings2.value, onValueChange = { offerings2.value = it }, label = "Offering 2")
+        StyledTextField(value = offerings3.value, onValueChange = { offerings3.value = it }, label = "Offering 3")
+
+
+
         StyledTextField(value = musicType.value, onValueChange = { musicType.value = it }, label = "Music Type")
 
 
@@ -286,10 +314,32 @@ fun EventCreationForm(
 
         Spacer(Modifier.height(24.dp))
 
-        // Media Upload Section
+
+
+        // Image Picker (Max 4 images)
         SectionTitle("Media Uploads")
-        UploadButton(label = "Upload Gallery Images (Max 4)")
-        UploadButton(label = "Upload Video or Enter YouTube URL")
+        repeat(4) { index ->
+            MediaPicker(label = "Select Image ${index + 1}") { uri ->
+                if (selectedImages.size < 4) selectedImages.add(uri)
+            }
+        }
+
+        // Video Picker
+        MediaPicker(label = "Select Video") { uri ->
+            selectedVideo.value = uri
+        }
+
+        // Display Selected Media
+        selectedImages.forEach { uri ->
+            Image(painter = rememberImagePainter(uri), contentDescription = null)
+        }
+
+        selectedVideo.value?.let { uri ->
+            Text("Selected Video: $uri")
+        }
+
+
+
         StyledTextField(value = videoUrl.value, onValueChange = { videoUrl.value = it }, label = "Video URL")
 
         Spacer(Modifier.height(24.dp))
@@ -301,6 +351,8 @@ fun EventCreationForm(
             Spacer(Modifier.height(16.dp))
 
             amenities.value.forEach { (label, state) ->
+
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = state,
@@ -310,6 +362,8 @@ fun EventCreationForm(
                     )
                     Text(text = label, modifier = Modifier.padding(start = 8.dp))
                 }
+
+
             }
         }
 
@@ -333,8 +387,48 @@ fun EventCreationForm(
         // Submit Button
         StyledButton(
             text = "Submit Event",
-            onClick = { /* Handle form submission */ }
+            onClick = {
+                val event = Event(
+                    partyname = partyName.value,
+                    partytype = partyType.value,
+                    description = description.value,
+                    location = location.value,
+                    date = date.value,
+                    time = time.value,
+                    rules = rules.value,
+                    totalslots = totalSlots.value.ifEmpty { "0" },
+                    openslots = totalSlots.value.ifEmpty { "0" },
+                    offerings1 = offerings1.value,
+                    offerings2 = offerings2.value,
+                    offerings3 = offerings3.value,
+                    locationlong = locationLong.value,
+                    hostgram = hostInstagram.value,
+                    videourl = videoUrl.value,
+
+                    // ✅ Convert Boolean to "0" or "1" before sending to API
+                    isfreeparking = if (amenities.value["Free Parking"] == true) "1" else "0",
+                    iswifi = if (amenities.value["WiFi"] == true) "1" else "0",
+                    isalcoholprov = if (amenities.value["Alcohol Provided"] == true) "1" else "0",
+                    ispetfriendly = if (amenities.value["Pet Friendly"] == true) "1" else "0",
+                    issmokingallow = if (amenities.value["Smoking Allowed"] == true) "1" else "0"
+                )
+
+                eventsViewModel.submitEventWithMedia(
+                    context = context,
+                    event = event,
+                    selectedImages = selectedImages,
+                    selectedVideo = selectedVideo.value,
+                    onSuccess = {
+                        Toast.makeText(context, "Event submitted successfully!", Toast.LENGTH_SHORT).show()
+                        navController.popBackStack()
+                    },
+                    onError = { errorMessage ->
+                        Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
         )
+
 
         Spacer(Modifier.height(16.dp))
 
@@ -792,5 +886,35 @@ suspend fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
         }
     }
 }
+
+
+@Composable
+fun MediaPicker(label: String, onMediaSelected: (Uri) -> Unit) {
+    val pickMediaLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        uri?.let { onMediaSelected(it) }
+    }
+
+    Button(onClick = {
+        pickMediaLauncher.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo) // ✅ Corrected
+        )
+    }) {
+        Text(label)
+    }
+}
+
+
+fun uriToMultipartBody(context: Context, uri: Uri, paramName: String): MultipartBody.Part? {
+    val contentResolver = context.contentResolver
+    val inputStream = contentResolver.openInputStream(uri) ?: return null
+    val tempFile = File.createTempFile("upload", null, context.cacheDir).apply {
+        outputStream().use { inputStream.copyTo(it) }
+    }
+    val requestFile = RequestBody.create((contentResolver.getType(uri) ?: "").toMediaTypeOrNull(), tempFile)
+    return MultipartBody.Part.createFormData(paramName, tempFile.name, requestFile)
+}
+
 
 

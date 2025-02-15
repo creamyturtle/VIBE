@@ -1,5 +1,6 @@
 package com.example.vibe.ui
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -41,7 +42,8 @@ fun VibeNavHost(
     signupApi: SignupApi,
     authViewModel: AuthViewModel,
     rsvpViewModel: RSVPViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    context: Context
 ) {
 
     //val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
@@ -169,7 +171,9 @@ fun VibeNavHost(
         composable(route = "host_event") {
 
             EventCreationForm(
-                navController = navController
+                navController = navController,
+                eventsViewModel = eventsViewModel,
+                context = context
             )
         }
 

@@ -30,7 +30,7 @@ import java.util.Locale
  */
 @Serializable
 data class Event(
-    val id: String,
+    val id: String? = null,
     val partyname: String,
     val partytype: String,
     val description: String,
@@ -40,6 +40,8 @@ data class Event(
     val offerings2: String? = "No Special Amenities Offered",
     val offerings3: String? = "No Special Amenities Offered",
     val location: String = "Medellin, Colombia",
+    val locationlong: String = "Medellin, Colombia",
+    val hostgram: String = "@host",
     val date: String,
     val time: String,
     val rules: String? = null,
