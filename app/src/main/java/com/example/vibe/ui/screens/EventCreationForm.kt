@@ -52,6 +52,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -80,6 +81,7 @@ import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.SectionTitle
 import com.example.vibe.ui.components.StyledButton
+import com.example.vibe.ui.components.StyledButton2
 import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.components.StyledTextField2
 import com.example.vibe.ui.viewmodel.EventsViewModel
@@ -389,13 +391,9 @@ fun EventCreationForm(
 
 
         // Submit Button
-        val progressMessage = remember { mutableStateOf<String?>(null) } // ✅ For displaying upload messages
-        val isUploading = remember { mutableStateOf(false) } // ✅ Track if upload is in progress
+        val isUploading by eventsViewModel.isUploading.collectAsState()
+        val progressMessage = remember { mutableStateOf<String?>(null) }
 
-        // Inside Column, above Submit Button:
-        if (isUploading.value) {
-            CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
-        }
 
         progressMessage.value?.let {
             Text(
@@ -407,11 +405,11 @@ fun EventCreationForm(
         }
 
         // Submit Button
-        StyledButton(
-            text = "Submit Event",
-            isLoading = !isUploading.value, // ✅ Disable if uploading
+        StyledButton2(
+            text = if (isUploading) "Uploading..." else "Submit Event",
+            isLoading = isUploading, // ✅ Disable button during upload
+            enabled = !isUploading,  // ✅ Prevent multiple clicks
             onClick = {
-                isUploading.value = true
                 progressMessage.value = "Starting submission..."
 
                 val event = Event(
@@ -429,7 +427,7 @@ fun EventCreationForm(
                     offerings3 = offerings3.value,
                     locationlong = locationLong.value,
                     hostgram = hostInstagram.value,
-                    videourl = videoUrl.value, // Keep typed URL if no video uploaded
+                    videourl = videoUrl.value, // Keep typed URL if no upload
                     isfreeparking = if (amenities.value["Free Parking"] == true) "1" else "0",
                     iswifi = if (amenities.value["WiFi"] == true) "1" else "0",
                     isalcoholprov = if (amenities.value["Alcohol Provided"] == true) "1" else "0",
@@ -443,13 +441,11 @@ fun EventCreationForm(
                     selectedImages = selectedImages,
                     selectedVideo = selectedVideo.value,
                     onSuccess = {
-                        isUploading.value = false
                         progressMessage.value = "Event submitted successfully!"
                         Toast.makeText(context, "Event submitted successfully!", Toast.LENGTH_SHORT).show()
                         navController.popBackStack()
                     },
                     onError = { errorMessage ->
-                        isUploading.value = false
                         progressMessage.value = "Error: $errorMessage"
                         Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
                     },
@@ -459,6 +455,7 @@ fun EventCreationForm(
                 )
             }
         )
+
 
 
 

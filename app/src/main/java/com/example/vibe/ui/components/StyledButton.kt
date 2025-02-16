@@ -54,3 +54,42 @@ fun StyledButton(
 
 }
 
+
+@Composable
+fun StyledButton2(
+    text: String,
+    isLoading: Boolean = false,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        enabled = !isLoading,
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFFE1943),
+            contentColor = Color.White,
+            disabledContainerColor = Color(0xFFBDBDBD),
+            disabledContentColor = Color.White
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+            .padding(horizontal = 16.dp)
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                color = Color.White,
+                modifier = Modifier.size(24.dp)
+            )
+        } else {
+            Text(
+                text = text,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal
+            )
+        }
+    }
+
+}
+

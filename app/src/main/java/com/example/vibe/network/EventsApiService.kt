@@ -92,9 +92,9 @@ interface EventsApiService {
 
     @Multipart
     @POST("uploadApp.php")  // Change this to your actual API endpoint
-    fun uploadMedia(
+    suspend fun uploadMedia(
         @Part file: MultipartBody.Part
-    ): Call<UploadResponse>
+    ): UploadResponse
 
 
 

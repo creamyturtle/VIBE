@@ -83,19 +83,14 @@ class DefaultEventsRepository(
 
     override suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse {
         return try {
-            val response = eventsApiService.uploadMedia(file).execute()
-
-            if (response.isSuccessful) {
-                response.body() ?: UploadResponse(false, "Upload failed", null)
-            } else {
-                UploadResponse(false, "Upload failed: ${response.message()}", null)
-            }
-
+            val response = eventsApiService.uploadMedia(file) // ✅ Remove `.execute()`
+            response // ✅ Let Retrofit handle the response
         } catch (e: Exception) {
             Log.e("Repository", "Error uploading media: ${e.message}", e)
             UploadResponse(false, e.message ?: "Unknown error", null)
         }
     }
+
 
 
 

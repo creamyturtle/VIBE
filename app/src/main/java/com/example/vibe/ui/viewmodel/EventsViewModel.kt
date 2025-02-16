@@ -31,7 +31,10 @@ import com.example.vibe.VibeApplication
 import com.example.vibe.data.EventsRepository
 import com.example.vibe.model.Event
 import com.example.vibe.ui.screens.uriToMultipartBody
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.io.IOException
@@ -49,6 +52,8 @@ sealed interface EventsUiState {
  * ViewModel containing the app data and method to retrieve the data
  */
 class EventsViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
+
+    val isUploading = MutableStateFlow(false)
 
     var eventsUiState: EventsUiState by mutableStateOf(EventsUiState.Loading)
         private set
@@ -123,9 +128,13 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
     ) {
         viewModelScope.launch {
             try {
+                isUploading.value = true
+
                 onProgressUpdate("Uploading media...") // ✅ Show progress start
 
                 val uploadedImageUrls = mutableListOf<String>()
+
+                Log.d("SubmitEvent", "Starting image upload. Selected images: ${selectedImages.size}")
 
                 for (uri in selectedImages) {
                     onProgressUpdate("Uploading image...")
@@ -135,19 +144,38 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                         uploadedImageUrls.add(response.fileUrl)
                         onProgressUpdate("Image uploaded successfully!")
                     } else {
+                        Log.e("Upload", "Upload failed or fileUrl is null")
                         onProgressUpdate("Failed to upload an image.")
                     }
                 }
 
+                // ✅ Log before video upload
+                if (selectedVideo != null) {
+                    Log.d("SubmitEvent", "Starting video upload: ${selectedVideo.lastPathSegment}")
+                } else {
+                    Log.d("SubmitEvent", "No video selected.")
+                }
+
                 val uploadedVideoUrl = selectedVideo?.let { uri ->
                     onProgressUpdate("Uploading video...")
-                    val videoPart = uriToMultipartBody(context, uri, "video") ?: return@let null
-                    val response = eventsRepository.uploadMedia(videoPart)
-                    if (response.success) {
-                        onProgressUpdate("Video uploaded successfully!")
-                        response.fileUrl
-                    } else {
-                        onProgressUpdate("Video upload failed!")
+                    try {
+                        withTimeout(120_000) { // ✅ Timeout set to 30 seconds
+                            val videoPart = uriToMultipartBody(context, uri, "video") ?: return@withTimeout null
+                            val response = eventsRepository.uploadMedia(videoPart)
+
+                            if (response.success) {
+                                Log.d("SubmitEvent", "Video upload complete. URL: ${response.fileUrl}")
+                                onProgressUpdate("Video uploaded successfully!")
+                                response.fileUrl
+                            } else {
+                                Log.e("SubmitEvent", "Video upload failed!")
+                                onProgressUpdate("Video upload failed!")
+                                null
+                            }
+                        }
+                    } catch (e: TimeoutCancellationException) {
+                        Log.e("SubmitEvent", "Upload timeout! Video upload took too long.")
+                        onProgressUpdate("Upload timeout! Try again.")
                         null
                     }
                 }
@@ -160,19 +188,26 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                     videourl = uploadedVideoUrl ?: event.videourl // Keep typed URL if no upload
                 )
 
+                // ✅ Log final JSON before submission
+                Log.d("SubmitEvent", "Final Event JSON: ${Json.encodeToString(updatedEvent)}")
+
                 onProgressUpdate("Submitting event...")
 
                 val response = eventsRepository.submitEvent(updatedEvent)
                 if (response.success) {
                     onProgressUpdate("Event submitted successfully!")
                     onSuccess()
+                    Log.d("SubmitEvent", "Event submission successful!")
                 } else {
                     onProgressUpdate("Error: ${response.message}")
                     onError(response.message)
+                    Log.e("SubmitEvent", "Event submission failed: ${response.message}")
                 }
             } catch (e: Exception) {
                 onProgressUpdate("Error: ${e.message}")
                 onError(e.message ?: "Unknown error")
+            } finally {
+                isUploading.value = false // ✅ Ensure spinner stops even if there's an error
             }
         }
     }
