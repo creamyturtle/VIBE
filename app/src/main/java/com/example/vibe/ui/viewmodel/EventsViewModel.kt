@@ -32,6 +32,7 @@ import com.example.vibe.data.EventsRepository
 import com.example.vibe.model.Event
 import com.example.vibe.ui.screens.uriToMultipartBody
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -117,26 +118,38 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         selectedImages: List<Uri>,
         selectedVideo: Uri?,
         onSuccess: () -> Unit,
-        onError: (String) -> Unit
+        onError: (String) -> Unit,
+        onProgressUpdate: (String) -> Unit // <-- ✅ Added callback for UI updates
     ) {
         viewModelScope.launch {
             try {
+                onProgressUpdate("Uploading media...") // ✅ Show progress start
+
                 val uploadedImageUrls = mutableListOf<String>()
 
                 for (uri in selectedImages) {
+                    onProgressUpdate("Uploading image...")
                     val imagePart = uriToMultipartBody(context, uri, "image") ?: continue
                     val response = eventsRepository.uploadMedia(imagePart)
                     if (response.success && response.fileUrl != null) {
                         uploadedImageUrls.add(response.fileUrl)
+                        onProgressUpdate("Image uploaded successfully!")
                     } else {
-                        Log.e("Upload", "Upload failed or fileUrl is null")
+                        onProgressUpdate("Failed to upload an image.")
                     }
                 }
 
                 val uploadedVideoUrl = selectedVideo?.let { uri ->
+                    onProgressUpdate("Uploading video...")
                     val videoPart = uriToMultipartBody(context, uri, "video") ?: return@let null
                     val response = eventsRepository.uploadMedia(videoPart)
-                    if (response.success) response.fileUrl else null
+                    if (response.success) {
+                        onProgressUpdate("Video uploaded successfully!")
+                        response.fileUrl
+                    } else {
+                        onProgressUpdate("Video upload failed!")
+                        null
+                    }
                 }
 
                 val updatedEvent = event.copy(
@@ -144,18 +157,21 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                     imgSrc2 = uploadedImageUrls.getOrNull(1),
                     imgSrc3 = uploadedImageUrls.getOrNull(2),
                     imgSrc4 = uploadedImageUrls.getOrNull(3),
-                    videourl = uploadedVideoUrl
+                    videourl = uploadedVideoUrl ?: event.videourl // Keep typed URL if no upload
                 )
+
+                onProgressUpdate("Submitting event...")
 
                 val response = eventsRepository.submitEvent(updatedEvent)
                 if (response.success) {
+                    onProgressUpdate("Event submitted successfully!")
                     onSuccess()
                 } else {
+                    onProgressUpdate("Error: ${response.message}")
                     onError(response.message)
                 }
-
             } catch (e: Exception) {
-                Log.e("EventsViewModel", "Error submitting event: ${e.message}", e)
+                onProgressUpdate("Error: ${e.message}")
                 onError(e.message ?: "Unknown error")
             }
         }

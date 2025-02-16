@@ -40,6 +40,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -385,10 +386,34 @@ fun EventCreationForm(
 
         Spacer(Modifier.height(8.dp))
 
+
+
+        // Submit Button
+        val progressMessage = remember { mutableStateOf<String?>(null) } // ✅ For displaying upload messages
+        val isUploading = remember { mutableStateOf(false) } // ✅ Track if upload is in progress
+
+        // Inside Column, above Submit Button:
+        if (isUploading.value) {
+            CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally))
+        }
+
+        progressMessage.value?.let {
+            Text(
+                text = it,
+                color = Color.Gray,
+                fontSize = 14.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp)
+            )
+        }
+
         // Submit Button
         StyledButton(
             text = "Submit Event",
+            isLoading = !isUploading.value, // ✅ Disable if uploading
             onClick = {
+                isUploading.value = true
+                progressMessage.value = "Starting submission..."
+
                 val event = Event(
                     partyname = partyName.value,
                     partytype = partyType.value,
@@ -404,11 +429,7 @@ fun EventCreationForm(
                     offerings3 = offerings3.value,
                     locationlong = locationLong.value,
                     hostgram = hostInstagram.value,
-                    videourl = videoUrl.value?.takeIf { it.isNotEmpty() } ?: "",
-                    //musictype = musicType.value?.takeIf { it.isNotEmpty() } ?: "",
-
-
-                    // ✅ Convert Boolean to "0" or "1" before sending to API
+                    videourl = videoUrl.value, // Keep typed URL if no video uploaded
                     isfreeparking = if (amenities.value["Free Parking"] == true) "1" else "0",
                     iswifi = if (amenities.value["WiFi"] == true) "1" else "0",
                     isalcoholprov = if (amenities.value["Alcohol Provided"] == true) "1" else "0",
@@ -416,24 +437,30 @@ fun EventCreationForm(
                     issmokingallow = if (amenities.value["Smoking Allowed"] == true) "1" else "0"
                 )
 
-                // Debugging: Print JSON before sending request
-                Log.d("SubmitEvent", "Event JSON: ${Json.encodeToString(event)}")
-
                 eventsViewModel.submitEventWithMedia(
                     context = context,
                     event = event,
                     selectedImages = selectedImages,
                     selectedVideo = selectedVideo.value,
                     onSuccess = {
+                        isUploading.value = false
+                        progressMessage.value = "Event submitted successfully!"
                         Toast.makeText(context, "Event submitted successfully!", Toast.LENGTH_SHORT).show()
                         navController.popBackStack()
                     },
                     onError = { errorMessage ->
+                        isUploading.value = false
+                        progressMessage.value = "Error: $errorMessage"
                         Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                    },
+                    onProgressUpdate = { message ->
+                        progressMessage.value = message
                     }
                 )
             }
         )
+
+
 
 
         Spacer(Modifier.height(16.dp))
@@ -571,7 +598,7 @@ fun CustomDropdownMenu(
 }
 
 
-
+/*
 @Composable
 fun UploadButton(label: String) {
     Button(
@@ -590,7 +617,7 @@ fun UploadButton(label: String) {
         Text(label, color = Color.White)
     }
 }
-
+*/
 
 @Composable
 fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {

@@ -51,7 +51,9 @@ data class Event(
     val isalcoholprov: String? = "0",
     val ispetfriendly: String? = "0",
     val issmokingallow: String? = "0",
-    val videourl: String? = null,
+
+    @SerialName("videourl")
+    val videourl: String = "",
     @SerialName("imageurl1") val imgSrc: String? = null,
     @SerialName("imageurl2") val imgSrc2: String? = null,
     @SerialName("imageurl3") val imgSrc3: String? = null,
