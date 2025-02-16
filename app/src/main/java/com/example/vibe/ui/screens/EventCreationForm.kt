@@ -936,15 +936,7 @@ fun MediaPicker(label: String, onMediaSelected: (Uri) -> Unit) {
 }
 
 
-fun uriToMultipartBody(context: Context, uri: Uri, paramName: String): MultipartBody.Part? {
-    val contentResolver = context.contentResolver
-    val inputStream = contentResolver.openInputStream(uri) ?: return null
-    val tempFile = File.createTempFile("upload", null, context.cacheDir).apply {
-        outputStream().use { inputStream.copyTo(it) }
-    }
-    val requestFile = RequestBody.create((contentResolver.getType(uri) ?: "").toMediaTypeOrNull(), tempFile)
-    return MultipartBody.Part.createFormData(paramName, tempFile.name, requestFile)
-}
+
 
 
 

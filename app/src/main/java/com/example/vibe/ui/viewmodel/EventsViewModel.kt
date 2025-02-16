@@ -30,13 +30,14 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vibe.VibeApplication
 import com.example.vibe.data.EventsRepository
 import com.example.vibe.model.Event
-import com.example.vibe.ui.screens.uriToMultipartBody
+import com.example.vibe.utils.uriToMultipartBody
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
+import java.io.File
 import java.io.IOException
 
 /**
@@ -136,6 +137,7 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
 
                 Log.d("SubmitEvent", "Starting image upload. Selected images: ${selectedImages.size}")
 
+
                 for (uri in selectedImages) {
                     onProgressUpdate("Uploading image...")
                     val imagePart = uriToMultipartBody(context, uri, "image") ?: continue
@@ -156,29 +158,47 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                     Log.d("SubmitEvent", "No video selected.")
                 }
 
-                val uploadedVideoUrl = selectedVideo?.let { uri ->
+                val uploadedVideoUrl = selectedVideo?.let { selectedUri ->
                     onProgressUpdate("Uploading video...")
                     try {
-                        withTimeout(120_000) { // ✅ Timeout set to 30 seconds
-                            val videoPart = uriToMultipartBody(context, uri, "video") ?: return@withTimeout null
+                        withTimeout(60_000) { // ⏳ Set a timeout of 30 seconds
+                            val videoPart = uriToMultipartBody(context, selectedUri, "video")
+
+                            if (videoPart == null) {
+                                Log.e("UploadDebug", "Error: Failed to create MultipartBody for video.")
+                                onProgressUpdate("Video upload failed! Please try again.")
+                                return@withTimeout null
+                            }
+
+                            val videoFile = File(context.cacheDir, "upload_video.mp4")
+                            Log.d("UploadDebug", "File exists: ${videoFile.exists()}, Size: ${videoFile.length()} bytes")
+
+                            Log.d("UploadDebug", "Uploading file: ${selectedVideo?.path}")
+                            Log.d("UploadDebug", "File size: ${selectedVideo?.let { File(it.path!!).length() } ?: "N/A"} bytes")
+                            Log.d("UploadDebug", "Request Headers: ${videoPart.headers}")
+                            Log.d("UploadDebug", "Request Content Type: ${videoPart.body.contentType()}")
+
+
+
                             val response = eventsRepository.uploadMedia(videoPart)
 
                             if (response.success) {
-                                Log.d("SubmitEvent", "Video upload complete. URL: ${response.fileUrl}")
+                                Log.d("UploadDebug", "Video upload complete. URL: ${response.fileUrl}")
                                 onProgressUpdate("Video uploaded successfully!")
                                 response.fileUrl
                             } else {
-                                Log.e("SubmitEvent", "Video upload failed!")
-                                onProgressUpdate("Video upload failed!")
+                                Log.e("UploadDebug", "Video upload failed!")
+                                onProgressUpdate("Video upload failed! Please try again.")
                                 null
                             }
                         }
                     } catch (e: TimeoutCancellationException) {
-                        Log.e("SubmitEvent", "Upload timeout! Video upload took too long.")
+                        Log.e("UploadDebug", "Upload timeout! Video upload took too long.")
                         onProgressUpdate("Upload timeout! Try again.")
                         null
                     }
                 }
+
 
                 val updatedEvent = event.copy(
                     imgSrc = uploadedImageUrls.getOrNull(0),
