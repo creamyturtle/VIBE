@@ -12,6 +12,7 @@ Features
 - MVVM Architecture
 - JWT Token Authentication
 - Coroutines and Async
+- DataStore caching
 - PHP Backend
 
 
@@ -26,6 +27,6 @@ Future Updates
 6. Google Maps API integration - DONE
 7. Event hosting w/ image & video uploads
 8. Host control panel
-9. Information pages
+9. Information pages - DONE
 10. Caching / Prediction
 11. Language translations (en/es)

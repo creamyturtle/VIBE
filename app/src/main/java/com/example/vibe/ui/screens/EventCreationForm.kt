@@ -53,6 +53,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,6 +84,7 @@ import com.example.vibe.ui.components.StyledButton2
 import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.components.StyledTextField2
 import com.example.vibe.ui.viewmodel.EventsViewModel
+import com.example.vibe.ui.viewmodel.UserViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -112,10 +114,11 @@ import java.util.Locale
 fun EventCreationForm(
     navController: NavController,
     eventsViewModel: EventsViewModel,
+    userViewModel: UserViewModel,
     context: Context
 ) {
     val partyName = remember { mutableStateOf("") }
-    val partyType = remember { mutableStateOf("House Party") }
+    //val partyType = remember { mutableStateOf("House Party") }
     val description = remember { mutableStateOf("") }
     val location = remember { mutableStateOf("") }
     val date = remember { mutableStateOf("") }
@@ -130,6 +133,8 @@ fun EventCreationForm(
     val hostInstagram = remember { mutableStateOf("") }
     val videoUrl = remember { mutableStateOf("") }
     val isChecked = remember { mutableStateOf(false) }
+
+    val userId by userViewModel.userId.observeAsState()
 
     val amenities = remember {
         mutableStateOf(
@@ -440,7 +445,8 @@ fun EventCreationForm(
                     iswifi = if (amenities.value["WiFi"] == true) "1" else "0",
                     isalcoholprov = if (amenities.value["Alcohol Provided"] == true) "1" else "0",
                     ispetfriendly = if (amenities.value["Pet Friendly"] == true) "1" else "0",
-                    issmokingallow = if (amenities.value["Smoking Allowed"] == true) "1" else "0"
+                    issmokingallow = if (amenities.value["Smoking Allowed"] == true) "1" else "0",
+                    hostid = userId?.toString() ?: "0"
                 )
 
                 eventsViewModel.submitEventWithMedia(

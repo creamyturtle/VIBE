@@ -98,6 +98,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("com.google.maps.android:maps-compose:2.11.2")
 
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 
     implementation("androidx.compose.material:material:1.5.1")
     implementation("androidx.compose.ui:ui-tooling:1.5.1")

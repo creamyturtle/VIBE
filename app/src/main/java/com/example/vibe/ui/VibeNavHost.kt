@@ -173,6 +173,7 @@ fun VibeNavHost(
             EventCreationForm(
                 navController = navController,
                 eventsViewModel = eventsViewModel,
+                userViewModel = userViewModel,
                 context = context
             )
         }

@@ -51,6 +51,7 @@ data class Event(
     val isalcoholprov: String? = "0",
     val ispetfriendly: String? = "0",
     val issmokingallow: String? = "0",
+    val hostid: String? = null,
 
     @SerialName("videourl")
     val videourl: String = "",

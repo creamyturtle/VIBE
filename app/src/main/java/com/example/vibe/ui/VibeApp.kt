@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
+import com.example.vibe.data.UserViewModelFactory
 import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.viewmodel.AuthViewModel
@@ -56,7 +57,12 @@ fun VibeApp() {
 
     val rsvpViewModel = remember { RSVPViewModel(appContainer.rsvpApi, appContainer.sessionManager) }
 
-    val userViewModel = remember { UserViewModel(appContainer.userApi, appContainer.sessionManager) }
+    //val userViewModel = remember { UserViewModel(appContainer.userApi, appContainer.sessionManager, context) }
+
+    val userViewModel: UserViewModel = viewModel(
+        factory = UserViewModelFactory(appContainer.userApi, appContainer.sessionManager, context)
+    )
+
 
     val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
 
