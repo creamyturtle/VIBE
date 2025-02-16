@@ -25,7 +25,6 @@ import com.example.vibe.data.SignupResponse
 import com.example.vibe.data.UploadResponse
 import com.example.vibe.model.Event
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -93,7 +92,7 @@ interface EventsApiService {
     @Multipart
     @POST("uploadApp.php")  // Change this to your actual API endpoint
     suspend fun uploadMedia(
-        @Part video: MultipartBody.Part
+        @Part file: MultipartBody.Part
     ): UploadResponse
 
 

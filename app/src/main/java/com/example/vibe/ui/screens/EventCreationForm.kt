@@ -40,7 +40,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -80,7 +79,6 @@ import coil.compose.rememberImagePainter
 import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.SectionTitle
-import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledButton2
 import com.example.vibe.ui.components.StyledTextField
 import com.example.vibe.ui.components.StyledTextField2
@@ -105,11 +103,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 import java.io.IOException
 import java.util.Calendar
 import java.util.Locale
