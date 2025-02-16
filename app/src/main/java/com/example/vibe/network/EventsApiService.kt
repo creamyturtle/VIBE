@@ -104,7 +104,7 @@ interface EventsApiService {
     @POST("submitEvent.php")
     suspend fun insertEvent(
         @Body event: Event
-    ): ApiResponse // ✅ Now it's `suspend`, no need for `.execute()`
+    ): ApiResponse
 
 
 

@@ -80,6 +80,7 @@ class DefaultEventsRepository(
 
 
 
+
     override suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse {
         return try {
             val response = eventsApiService.uploadMedia(file).execute()
