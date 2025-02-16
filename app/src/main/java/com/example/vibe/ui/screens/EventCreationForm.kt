@@ -143,6 +143,18 @@ fun EventCreationForm(
         )
     }
 
+    // Map UI-friendly labels to database values
+    val partyTypeMap = mapOf(
+        "House Party" to "House",
+        "Pool Party" to "Pool",
+        "Finca Party" to "Finca",
+        "Activity" to "Activity"
+    )
+
+    val selectedPartyType = remember { mutableStateOf("House Party") } // Default UI selection
+
+
+
     val selectedImages = remember { mutableStateListOf<Uri>() }
     val selectedVideo = remember { mutableStateOf<Uri?>(null) }
 
@@ -252,11 +264,13 @@ fun EventCreationForm(
         SectionTitle("Event Information")
 
         StyledTextField(value = partyName.value, onValueChange = { partyName.value = it }, label = "Event Name")
+
         CustomDropdownMenu(
-            options = listOf("House Party", "Finca Party", "Pool Party", "Activity"),
-            selectedOption = partyType,
+            options = partyTypeMap.keys.toList(),
+            selectedOption = selectedPartyType,
             label = "Category"
         )
+
         StyledTextField2(
             value = description.value,
             onValueChange = { description.value = it },
@@ -407,7 +421,7 @@ fun EventCreationForm(
 
                 val event = Event(
                     partyname = partyName.value,
-                    partytype = partyType.value,
+                    partytype = partyTypeMap[selectedPartyType.value] ?: "House",
                     description = description.value,
                     location = location.value,
                     date = date.value,
@@ -418,6 +432,7 @@ fun EventCreationForm(
                     offerings1 = offerings1.value,
                     offerings2 = offerings2.value,
                     offerings3 = offerings3.value,
+                    musictype = musicType.value,
                     locationlong = locationLong.value,
                     hostgram = hostInstagram.value,
                     videourl = videoUrl.value, // Keep typed URL if no upload
