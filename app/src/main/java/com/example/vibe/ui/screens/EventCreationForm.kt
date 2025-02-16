@@ -102,6 +102,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -403,7 +404,9 @@ fun EventCreationForm(
                     offerings3 = offerings3.value,
                     locationlong = locationLong.value,
                     hostgram = hostInstagram.value,
-                    videourl = videoUrl.value,
+                    videourl = videoUrl.value?.takeIf { it.isNotEmpty() } ?: "",
+                    //musictype = musicType.value?.takeIf { it.isNotEmpty() } ?: "",
+
 
                     // ✅ Convert Boolean to "0" or "1" before sending to API
                     isfreeparking = if (amenities.value["Free Parking"] == true) "1" else "0",
@@ -412,6 +415,9 @@ fun EventCreationForm(
                     ispetfriendly = if (amenities.value["Pet Friendly"] == true) "1" else "0",
                     issmokingallow = if (amenities.value["Smoking Allowed"] == true) "1" else "0"
                 )
+
+                // Debugging: Print JSON before sending request
+                Log.d("SubmitEvent", "Event JSON: ${Json.encodeToString(event)}")
 
                 eventsViewModel.submitEventWithMedia(
                     context = context,
