@@ -161,7 +161,7 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                 val uploadedVideoUrl = selectedVideo?.let { selectedUri ->
                     onProgressUpdate("Uploading video...")
                     try {
-                        withTimeout(60_000) { // ⏳ Set a timeout of 30 seconds
+                        withTimeout(120_000) { // ⏳ Set a timeout of 120 seconds
                             val videoPart = uriToMultipartBody(context, selectedUri, "video")
 
                             if (videoPart == null) {
