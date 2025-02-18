@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,7 +36,9 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -47,6 +50,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -298,6 +302,13 @@ fun EventCreationForm(
         // Attractions Section
         SectionTitle("Attractions")
 
+        Text(
+            text = "List three things that your event offers to attract attendees",
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+
         //repeat(3) { index ->
         //    StyledTextField(value = offerings.value[index], onValueChange = { offerings.value = offerings.value.toMutableList().apply { this[index] = it } }, label = "Offering ${index + 1}")
         //}
@@ -306,7 +317,7 @@ fun EventCreationForm(
         StyledTextField(value = offerings2.value, onValueChange = { offerings2.value = it }, label = "Offering 2")
         StyledTextField(value = offerings3.value, onValueChange = { offerings3.value = it }, label = "Offering 3")
 
-
+        Spacer(Modifier.height(8.dp))
 
         StyledTextField(value = musicType.value, onValueChange = { musicType.value = it }, label = "Music Type")
 
@@ -631,68 +642,87 @@ fun CustomDropdownMenu(
 }
 
 
-/*
-@Composable
-fun UploadButton(label: String) {
-    Button(
-        onClick = { /* File picker logic */ },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFE1943),
-            contentColor = Color.White,
-            disabledContainerColor = Color(0xFFBDBDBD),
-            disabledContentColor = Color.White
-        ),
-    ) {
-        Text(label, color = Color.White)
-    }
-}
-*/
+
 
 @Composable
 fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {
     val context = LocalContext.current
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+    Column(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Button(
-            onClick = { showDatePicker(context, date) },
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(12.dp),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFE1943),
-                contentColor = Color.White,
-                disabledContainerColor = Color(0xFFBDBDBD),
-                disabledContentColor = Color.White
-            ),
-        ) {
-            Text(if (date.value.isNotEmpty()) date.value else "Select Date")
-        }
+        Text(
+            text = "Event Date & Time",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 16.dp)
+        )
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = { showTimePicker(context, time) },
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(12.dp),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFE1943),
-                contentColor = Color.White,
-                disabledContainerColor = Color(0xFFBDBDBD),
-                disabledContentColor = Color.White
-            ),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(if (time.value.isNotEmpty()) time.value else "Select Time")
+            OutlinedCard(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showDatePicker(context, date) },
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(2.dp, Color(0xFFFE1943))
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Select Date",
+                        tint = Color(0xFFFE1943),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = if (date.value.isNotEmpty()) date.value else "Select Date",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            OutlinedCard(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showTimePicker(context, time) },
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(2.dp, Color(0xFFFE1943))
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccessTime,
+                        contentDescription = "Select Time",
+                        tint = Color(0xFFFE1943),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = if (time.value.isNotEmpty()) time.value else "Select Time",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
         }
     }
 }
+
 
 // Date Picker Function
 @OptIn(ExperimentalMaterial3Api::class)
@@ -753,7 +783,7 @@ fun MapWithSearch(locationLong: MutableState<String>) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Select the exact location of your event by clicking on the map or entering the complete address below.",
+            text = "Select the exact location of your event by clicking on the map or entering the complete address below.\n\nExact location will only be shown to approved guests.",
             fontSize = 14.sp,
             fontStyle = FontStyle.Italic,
             modifier = Modifier.padding(horizontal = 24.dp)
