@@ -422,6 +422,27 @@ fun EventCreationForm(
             isLoading = isUploading, // ✅ Disable button during upload
             enabled = !isUploading,  // ✅ Prevent multiple clicks
             onClick = {
+
+
+                val isValid = validateFields(
+                    context = context,
+                    partyName = partyName.value,
+                    partyType = partyTypeMap[selectedPartyType.value] ?: "House",
+                    description = description.value,
+                    location = location.value,
+                    date = date.value,
+                    time = time.value,
+                    totalSlots = totalSlots.value,
+                    musicType = musicType.value,
+                    locationLong = locationLong.value,
+                    hostInstagram = hostInstagram.value,
+                    isChecked = isChecked.value
+                )
+
+                if (!isValid) {
+                    return@StyledButton2 // ⛔ Stop submission if validation fails
+                }
+
                 progressMessage.value = "Starting submission..."
 
                 val event = Event(
@@ -448,6 +469,7 @@ fun EventCreationForm(
                     issmokingallow = if (amenities.value["Smoking Allowed"] == true) "1" else "0",
                     hostid = userId?.toString() ?: "0"
                 )
+
 
                 eventsViewModel.submitEventWithMedia(
                     context = context,
@@ -951,6 +973,67 @@ fun MediaPicker(label: String, onMediaSelected: (Uri) -> Unit) {
 
 
 
+fun validateFields(
+    context: Context,
+    partyName: String,
+    partyType: String,
+    description: String,
+    location: String,
+    date: String,
+    time: String,
+    totalSlots: String,
+    musicType: String,
+    locationLong: String,
+    hostInstagram: String,
+    isChecked: Boolean // ✅ Add this parameter
+): Boolean {
+    if (partyName.isBlank()) {
+        Toast.makeText(context, "Event Name is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (partyType.isBlank()) {
+        Toast.makeText(context, "Category is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (description.isBlank()) {
+        Toast.makeText(context, "Event Description is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (location.isBlank()) {
+        Toast.makeText(context, "General Location is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (date.isBlank()) {
+        Toast.makeText(context, "Date is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (time.isBlank()) {
+        Toast.makeText(context, "Time is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (totalSlots.isBlank()) {
+        Toast.makeText(context, "Total Guests is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (musicType.isBlank()) {
+        Toast.makeText(context, "Music Type is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (locationLong.isBlank()) {
+        Toast.makeText(context, "Complete Address is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (hostInstagram.isBlank()) {
+        Toast.makeText(context, "Instagram Username is required", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    if (!isChecked) { // ✅ Ensure checkbox is checked before submission
+        Toast.makeText(context, "You must agree to the Terms & Conditions", Toast.LENGTH_SHORT).show()
+        return false
+    }
+
+    return true // ✅ All fields are filled, and the checkbox is checked
+}
 
 
 
