@@ -33,12 +33,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
+import com.example.vibe.data.LanguageViewModelFactory
 import com.example.vibe.data.UserViewModelFactory
 import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.RightSideDrawer
 import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import java.util.Locale
@@ -80,6 +82,10 @@ fun VibeApp() {
         mutableStateOf(if (systemLanguage == "es") "ES" else "EN") // Default based on system
     }
 
+    val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(context, appContainer.sessionManager))
+
+
+
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -100,12 +106,13 @@ fun VibeApp() {
                 authViewModel = authViewModel,
                 rsvpViewModel = rsvpViewModel,
                 userViewModel = userViewModel,
-                context = context
+                context = context,
+                languageViewModel = languageViewModel
             )
 
 
         }
-        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, selectedLanguage)
+        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, selectedLanguage, languageViewModel)
     }
 
 

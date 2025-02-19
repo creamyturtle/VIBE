@@ -62,6 +62,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.AuthViewModel
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.utils.SessionManager
 import com.example.vibe.utils.setAppLocale
 import kotlinx.coroutines.launch
@@ -75,7 +76,8 @@ fun RightSideDrawer(
     isLoggedIn: Boolean,
     authViewModel: AuthViewModel,
     context: Context,
-    selectedLanguage: MutableState<String>
+    selectedLanguage: MutableState<String>,
+    languageViewModel: LanguageViewModel
 ) {
     val density = LocalDensity.current
     val drawerWidth = with(density) { 280.dp.toPx() } // Drawer width in pixels
@@ -85,6 +87,9 @@ fun RightSideDrawer(
     var shouldRender by remember { mutableStateOf(false) }
 
     val sessionManager = remember { SessionManager(context) }
+
+    val selectedLanguage by languageViewModel.language
+
 
     LaunchedEffect(isOpen.value) {
         if (isOpen.value) {
@@ -140,7 +145,9 @@ fun RightSideDrawer(
             Column {
                 Spacer(Modifier.height(60.dp))
 
-                LanguageToggle(selectedLanguage, context, sessionManager)
+                LanguageToggle(selectedLanguage = selectedLanguage, onLanguageChange = { lang ->
+                    languageViewModel.setLanguage(context, lang)
+                })
 
                 Spacer(Modifier.height(16.dp))
 
@@ -328,17 +335,16 @@ fun DrawerSubMenuItem(text: String, onClick: () -> Unit) {
 
 
 @Composable
-fun LanguageToggle(selectedLanguage: MutableState<String>, context: Context, sessionManager: SessionManager) {
+fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(28.dp, 8.dp, 28.dp, 8.dp)
             .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(20.dp)),
-            //.padding(4.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val isEnglish = selectedLanguage.value == "EN"
+        val isEnglish = selectedLanguage == "EN"
 
         // English Option
         Box(
@@ -346,31 +352,23 @@ fun LanguageToggle(selectedLanguage: MutableState<String>, context: Context, ses
                 .weight(1f)
                 .clip(RoundedCornerShape(16.dp))
                 .background(if (isEnglish) Color(0xFFFE1943) else Color.Transparent)
-                .clickable {
-                    selectedLanguage.value = "EN"
-                    sessionManager.saveLanguage("en")
-                    setAppLocale(context, "en")
-                }
+                .clickable { onLanguageChange("EN") }
                 .padding(4.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-
                 Text(
                     text = "EN",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (isEnglish) Color.White else Color.Black
                 )
-
                 Spacer(Modifier.width(8.dp))
-
                 Image(
                     painter = painterResource(id = R.drawable.usa),
                     contentDescription = "English",
                     modifier = Modifier.size(24.dp)
                 )
-
             }
         }
 
@@ -380,32 +378,28 @@ fun LanguageToggle(selectedLanguage: MutableState<String>, context: Context, ses
                 .weight(1f)
                 .clip(RoundedCornerShape(16.dp))
                 .background(if (!isEnglish) Color(0xFFFE1943) else Color.Transparent)
-                .clickable {
-                    selectedLanguage.value = "ES"
-                    sessionManager.saveLanguage("es")
-                    setAppLocale(context, "es")
-                }
+                .clickable { onLanguageChange("ES") }
                 .padding(4.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-
                 Text(
                     text = "ES",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (!isEnglish) Color.White else Color.Black
                 )
-
                 Spacer(Modifier.width(8.dp))
-
                 Image(
                     painter = painterResource(id = R.drawable.co),
                     contentDescription = "Spanish",
                     modifier = Modifier.size(24.dp)
                 )
-
             }
         }
     }
 }
+
+
+
+

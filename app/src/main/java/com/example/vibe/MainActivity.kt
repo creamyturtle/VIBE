@@ -18,10 +18,8 @@ package com.example.vibe
 
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.vibe.ui.VibeApp
 import com.example.vibe.ui.theme.VibeTheme
-import android.Manifest
 
 
 class MainActivity : ComponentActivity() {
@@ -48,38 +45,11 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        //requestStoragePermissions()
+
 
     }
 
-    /*
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val allGranted = permissions.entries.all { it.value }
-        if (!allGranted) {
-            Toast.makeText(this, "Permissions required for media upload!", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    private fun requestStoragePermissions() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) { // Android 12 and below
-            requestPermissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE // Needed for Android 9-12
-                )
-            )
-        } else { // Android 13+ (Scoped Storage)
-            requestPermissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.READ_MEDIA_VIDEO,
-                    Manifest.permission.READ_MEDIA_IMAGES
-                )
-            )
-        }
-    }
-
-     */
 
 
 }

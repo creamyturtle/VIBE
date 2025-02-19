@@ -29,6 +29,7 @@ import com.example.vibe.ui.screens.TermsAndConditionsScreen
 import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 
@@ -43,7 +44,8 @@ fun VibeNavHost(
     authViewModel: AuthViewModel,
     rsvpViewModel: RSVPViewModel,
     userViewModel: UserViewModel,
-    context: Context
+    context: Context,
+    languageViewModel: LanguageViewModel
 ) {
 
     //val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
