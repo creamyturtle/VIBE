@@ -6,9 +6,15 @@ import android.content.SharedPreferences
 import android.util.Base64
 import com.example.vibe.data.UserData
 import org.json.JSONObject
+import java.util.Locale
 
 class SessionManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
+
+    companion object {
+        private const val KEY_AUTH_TOKEN = "auth_token"
+        private const val KEY_LANGUAGE = "selected_language"
+    }
 
     fun saveToken(token: String) {
         prefs.edit().putString("auth_token", token).apply()
@@ -77,6 +83,16 @@ class SessionManager(context: Context) {
 
     fun isLoggedIn(): Boolean {
         return getToken() != null
+    }
+
+    // ✅ Save selected language
+    fun saveLanguage(language: String) {
+        prefs.edit().putString(KEY_LANGUAGE, language).apply()
+    }
+
+    // ✅ Retrieve language (defaults to system language if not set)
+    fun getLanguage(): String {
+        return prefs.getString(KEY_LANGUAGE, null) ?: Locale.getDefault().language
     }
 
 }

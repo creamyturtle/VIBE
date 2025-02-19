@@ -35,7 +35,10 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun VibeTopAppBar(navController: NavController, isDrawerOpen: MutableState<Boolean>) {
+fun VibeTopAppBar(
+    navController: NavController,
+    isDrawerOpen: MutableState<Boolean>
+) {
 
     val density = LocalDensity.current.density
     val onePixel = 1f / density

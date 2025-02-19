@@ -1,12 +1,13 @@
 package com.example.vibe.ui.components
 
+import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,13 +23,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ExitToApp
+import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Dashboard
+import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,9 +49,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -53,23 +61,30 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.vibe.R
+import com.example.vibe.ui.viewmodel.AuthViewModel
+import com.example.vibe.utils.SessionManager
+import com.example.vibe.utils.setAppLocale
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-
 
 
 @Composable
 fun RightSideDrawer(
     isOpen: MutableState<Boolean>,
     navController: NavController,
-    isLoggedIn: Boolean
+    isLoggedIn: Boolean,
+    authViewModel: AuthViewModel,
+    context: Context,
+    selectedLanguage: MutableState<String>
 ) {
     val density = LocalDensity.current
-    val drawerWidth = with(density) { 300.dp.toPx() } // Drawer width in pixels
+    val drawerWidth = with(density) { 280.dp.toPx() } // Drawer width in pixels
     val animationState = remember { Animatable(drawerWidth) }
     val backgroundAlpha = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
     var shouldRender by remember { mutableStateOf(false) }
+
+    val sessionManager = remember { SessionManager(context) }
 
     LaunchedEffect(isOpen.value) {
         if (isOpen.value) {
@@ -102,7 +117,7 @@ fun RightSideDrawer(
         Box(
             modifier = Modifier
                 .fillMaxHeight()
-                .width(300.dp)
+                .width(280.dp)
                 .offset { IntOffset(animationState.value.roundToInt(), 0) }
                 .background(Color.White, shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
                 .align(Alignment.CenterEnd)
@@ -123,50 +138,85 @@ fun RightSideDrawer(
                 .padding(16.dp)
         ) {
             Column {
-                Spacer(Modifier.height(72.dp))
+                Spacer(Modifier.height(60.dp))
+
+                LanguageToggle(selectedLanguage, context, sessionManager)
+
+                Spacer(Modifier.height(16.dp))
 
                 if (isLoggedIn) {
                     UserProfileSection()
+
+                    // **🔹 Menu Items**
+                    Spacer(Modifier.height(16.dp))
+
+                    DrawerMenuItem(icon = Icons.Outlined.Dashboard, text = stringResource(R.string.dashboard)) {
+                        isOpen.value = false
+                        navController.navigate("dashboard")
+                    }
+
+                    DrawerMenuItem(icon = Icons.Outlined.Event, text = stringResource(R.string.host_event)) {
+                        isOpen.value = false
+                        navController.navigate("host_event")
+                    }
+
+                    DrawerMenuItem(icon = Icons.Outlined.Bookmarks, stringResource(R.string.saved_events)) {
+                        isOpen.value = false
+                        navController.navigate("saved_events")
+                    }
+
+                    DrawerMenuItem(icon = Icons.Outlined.AccountCircle, text = stringResource(R.string.user_profile)) {
+                        isOpen.value = false
+                        navController.navigate("profile")
+                    }
+
+                    // Submenu: Information
+                    var submenuExpanded by remember { mutableStateOf(false) }
+                    DrawerMenuItem(icon = Icons.Outlined.Info, text = stringResource(R.string.information), hasSubmenu = true, isExpanded = submenuExpanded) {
+                        submenuExpanded = !submenuExpanded
+                    }
+                    if (submenuExpanded) {
+                        DrawerSubMenuItem(text = stringResource(R.string.about), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("about_us") })
+                        DrawerSubMenuItem(text = stringResource(R.string.faq), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("faq") })
+                        DrawerSubMenuItem(text = stringResource(R.string.terms_conditions), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("terms_and_conditions") })
+                        DrawerSubMenuItem(text = stringResource(R.string.privacy_policy), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("privacy_policy") })
+                    }
+
+                    DrawerMenuItem(icon = Icons.Outlined.CalendarMonth, text = stringResource(R.string.calendar)) {
+                        isOpen.value = false
+                        navController.navigate("calendar")
+                    }
+
+                    DrawerMenuItem(icon = Icons.Outlined.Map, text = stringResource(R.string.map)) {
+                        isOpen.value = false
+                        navController.navigate("map_screen/all")
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+
+                    DrawerMenuItem(icon = Icons.AutoMirrored.Outlined.ExitToApp, text = stringResource(R.string.logout)) {
+                        isOpen.value = false
+                        authViewModel.logout(context) // ✅ Pass context for Toast
+                        navController.navigate("login") { popUpTo("home_screen/all") { inclusive = false }}
+                    }
+
+
+                } else {
+
+                    DrawerMenuItem(icon = Icons.Outlined.AccountCircle, text = stringResource(R.string.create_account)) {
+                        isOpen.value = false
+                        navController.navigate("signup")
+                    }
+
+                    DrawerMenuItem(icon = Icons.AutoMirrored.Outlined.Login, text = stringResource(R.string.login)) {
+                        isOpen.value = false
+                        navController.navigate("login")
+                    }
+
+
                 }
 
-                // **🔹 Menu Items**
-                Spacer(Modifier.height(8.dp))
 
-                DrawerMenuItem(icon = Icons.Default.Dashboard, text = "Dashboard") {
-                    isOpen.value = false
-                    navController.navigate("dashboard")
-                }
-
-                DrawerMenuItem(icon = Icons.Default.Event, text = "Host an Event") {
-                    isOpen.value = false
-                    navController.navigate("host_event")
-                }
-
-                DrawerMenuItem(icon = Icons.Default.Person, text = "User Profile") {
-                    isOpen.value = false
-                    navController.navigate("profile")
-                }
-
-                // Submenu: Information
-                var submenuExpanded by remember { mutableStateOf(false) }
-                DrawerMenuItem(icon = Icons.Default.Info, text = "Information", hasSubmenu = true, isExpanded = submenuExpanded) {
-                    submenuExpanded = !submenuExpanded
-                }
-                if (submenuExpanded) {
-                    DrawerSubMenuItem(text = "About", onClick = { submenuExpanded = false; navController.navigate("about_us") })
-                    DrawerSubMenuItem(text = "FAQ", onClick = { submenuExpanded = false; navController.navigate("faq") })
-                    DrawerSubMenuItem(text = "Terms & Conditions", onClick = { submenuExpanded = false; navController.navigate("terms_and_conditions") })
-                    DrawerSubMenuItem(text = "Privacy Policy", onClick = { submenuExpanded = false; navController.navigate("privacy_policy") })
-                }
-
-                DrawerMenuItem(icon = Icons.Default.Settings, text = "Settings") {
-                    isOpen.value = false
-                    navController.navigate("settings")
-                }
-
-                DrawerMenuItem(icon = Icons.Default.ExitToApp, text = "Logout") {
-                    isOpen.value = false
-                }
 
             }
         }
@@ -236,6 +286,33 @@ fun UserProfileSection() {
     }
 }
 
+
+@Composable
+fun DrawerMenuItem(icon: ImageVector, text: String, hasSubmenu: Boolean = false, isExpanded: Boolean = false, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp, horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(imageVector = icon, contentDescription = text, tint = Color(0xFFFE1943), modifier = Modifier.size(24.dp))
+        Spacer(Modifier.width(16.dp))
+        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+
+        if (hasSubmenu) {
+            Spacer(Modifier.weight(1f))
+            Icon(
+                imageVector = if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                contentDescription = "Expand Submenu",
+                Modifier.size(20.dp)
+            )
+        }
+    }
+}
+
+
+
 @Composable
 fun DrawerSubMenuItem(text: String, onClick: () -> Unit) {
     Row(
@@ -246,5 +323,89 @@ fun DrawerSubMenuItem(text: String, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color.Gray)
+    }
+}
+
+
+@Composable
+fun LanguageToggle(selectedLanguage: MutableState<String>, context: Context, sessionManager: SessionManager) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(28.dp, 8.dp, 28.dp, 8.dp)
+            .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(20.dp)),
+            //.padding(4.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val isEnglish = selectedLanguage.value == "EN"
+
+        // English Option
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(if (isEnglish) Color(0xFFFE1943) else Color.Transparent)
+                .clickable {
+                    selectedLanguage.value = "EN"
+                    sessionManager.saveLanguage("en")
+                    setAppLocale(context, "en")
+                }
+                .padding(4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
+                Text(
+                    text = "EN",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isEnglish) Color.White else Color.Black
+                )
+
+                Spacer(Modifier.width(8.dp))
+
+                Image(
+                    painter = painterResource(id = R.drawable.usa),
+                    contentDescription = "English",
+                    modifier = Modifier.size(24.dp)
+                )
+
+            }
+        }
+
+        // Spanish Option
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(if (!isEnglish) Color(0xFFFE1943) else Color.Transparent)
+                .clickable {
+                    selectedLanguage.value = "ES"
+                    sessionManager.saveLanguage("es")
+                    setAppLocale(context, "es")
+                }
+                .padding(4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
+                Text(
+                    text = "ES",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (!isEnglish) Color.White else Color.Black
+                )
+
+                Spacer(Modifier.width(8.dp))
+
+                Image(
+                    painter = painterResource(id = R.drawable.co),
+                    contentDescription = "Spanish",
+                    modifier = Modifier.size(24.dp)
+                )
+
+            }
+        }
     }
 }

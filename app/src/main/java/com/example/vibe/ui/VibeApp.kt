@@ -41,6 +41,7 @@ import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
+import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -74,6 +75,12 @@ fun VibeApp() {
 
     val isDrawerOpen = remember { mutableStateOf(false) }
 
+    val systemLanguage = Locale.getDefault().language // Detect system language
+    val selectedLanguage = remember {
+        mutableStateOf(if (systemLanguage == "es") "ES" else "EN") // Default based on system
+    }
+
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -98,7 +105,7 @@ fun VibeApp() {
 
 
         }
-        RightSideDrawer(isDrawerOpen, navController, isLoggedIn)
+        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, selectedLanguage)
     }
 
 
