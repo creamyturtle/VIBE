@@ -7,9 +7,9 @@ Remaking my website [www.vibesocial.org](https://www.vibesocial.org) into an And
 Features
 --------------
 
-- Accesses remote mySQL database via API using Retrofit and Coil
-- NavController
+- Remote mySQL database via API using Retrofit and Coil
 - MVVM Architecture
+- NavController
 - JWT Token Authentication
 - Coroutines and Async
 - DataStore caching
@@ -25,8 +25,12 @@ Future Updates
 4. UI redesign - DONE
 5. Event reservations - DONE
 6. Google Maps API integration - DONE
-7. Event hosting w/ image & video uploads
+7. Event host page w/ image & video uploads - DONE
 8. Host control panel
 9. Information pages - DONE
 10. Caching / Prediction
 11. Language translations (en/es)
+12. Fancy homepage dropdown menu
+13. Dark mode
+14. Homepage filters
+15. User Profile editable
