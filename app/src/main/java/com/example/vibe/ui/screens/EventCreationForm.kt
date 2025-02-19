@@ -623,6 +623,12 @@ fun CustomDropdownMenu(
                     text = label
                 )
             },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White, // White background
+                focusedBorderColor = Color(0xFFFE1943), // Red border when focused
+                unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
+                cursorColor = Color.Black // Cursor color
+            ),
             textStyle = TextStyle( // ✅ Makes selected text bigger
                 fontSize = 16.sp
             ),
