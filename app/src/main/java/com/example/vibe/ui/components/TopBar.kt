@@ -1,11 +1,12 @@
 package com.example.vibe.ui.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun TopBar(navController: NavController) {
+fun TopBar(navController: NavController, isDrawerOpen: MutableState<Boolean>) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
     val noTopBarScreens = setOf("login", "signup", "reservation_screen", "host_event") // Add base route
@@ -13,7 +14,7 @@ fun TopBar(navController: NavController) {
     if (currentDestination !in noTopBarScreens &&
         currentDestination?.startsWith("event_details") == false &&
         currentDestination?.startsWith("reservation_screen") == false) { // Check prefix for dynamic routes
-        VibeTopAppBar(navController)
+        VibeTopAppBar(navController, isDrawerOpen)
     }
 }
 

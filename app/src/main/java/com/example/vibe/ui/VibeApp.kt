@@ -18,12 +18,14 @@ package com.example.vibe.ui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,6 +35,7 @@ import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
 import com.example.vibe.data.UserViewModelFactory
 import com.example.vibe.ui.components.BottomBar
+import com.example.vibe.ui.components.RightSideDrawer
 import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
@@ -69,28 +72,37 @@ fun VibeApp() {
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = { TopBar(navController) },
-        bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel) }
-
-    ) { innerPadding ->
+    val isDrawerOpen = remember { mutableStateOf(false) }
 
 
-        VibeNavHost(
-            navController = navController,
-            listState = listState,
-            innerPadding = innerPadding,
-            eventsViewModel = eventsViewModel,
-            signupApi = appContainer.signupApi,
-            authViewModel = authViewModel,
-            rsvpViewModel = rsvpViewModel,
-            userViewModel = userViewModel,
-            context = context
-        )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = { TopBar(navController, isDrawerOpen) },
+            bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel) }
+
+        ) { innerPadding ->
 
 
+            VibeNavHost(
+                navController = navController,
+                listState = listState,
+                innerPadding = innerPadding,
+                eventsViewModel = eventsViewModel,
+                signupApi = appContainer.signupApi,
+                authViewModel = authViewModel,
+                rsvpViewModel = rsvpViewModel,
+                userViewModel = userViewModel,
+                context = context
+            )
+
+
+        }
+        RightSideDrawer(isDrawerOpen, navController, isLoggedIn)
     }
+
+
+
 }
 
 

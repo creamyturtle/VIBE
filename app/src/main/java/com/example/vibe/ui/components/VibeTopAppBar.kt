@@ -11,9 +11,16 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,11 +33,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 
+
 @Composable
-fun VibeTopAppBar(navController: NavController) {
+fun VibeTopAppBar(navController: NavController, isDrawerOpen: MutableState<Boolean>) {
 
     val density = LocalDensity.current.density
     val onePixel = 1f / density
+
+
 
     Box(
         modifier = Modifier
@@ -46,7 +56,7 @@ fun VibeTopAppBar(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     //.background(Color.Green)
-                    .padding(0.dp, 16.dp, 0.dp, 0.dp),
+                    .padding(0.dp, 16.dp, 16.dp, 0.dp),
                 verticalAlignment = Alignment.Top
             ) {
                 Column(
@@ -90,7 +100,17 @@ fun VibeTopAppBar(navController: NavController) {
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.End
                 ) {
-                    HamburgerMenuButton()
+                    IconButton(
+                        onClick = { isDrawerOpen.value = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu Button",
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .size(36.dp)
+                        )
+                    }
                 }
             }
 
@@ -103,7 +123,13 @@ fun VibeTopAppBar(navController: NavController) {
                     .background(Color.LightGray) // ✅ Light grey separator now aligned
             )
         }
+
+
+
     }
+
+
+
 }
 
 
