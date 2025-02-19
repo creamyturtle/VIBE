@@ -3,13 +3,20 @@ package com.example.vibe.ui.screens
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.location.Geocoder
+import android.media.ThumbnailUtils
 import android.net.Uri
+import android.os.Build
+import android.os.CancellationSignal
+import android.provider.MediaStore
 import android.util.Log
+import android.util.Size
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +33,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +48,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.PlayCircleOutline
+import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -70,6 +82,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -83,6 +96,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.SectionTitle
 import com.example.vibe.ui.components.StyledButton2
 import com.example.vibe.ui.components.StyledTextField
@@ -109,6 +123,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.IOException
 import java.util.Calendar
 import java.util.Locale
@@ -345,6 +360,18 @@ fun EventCreationForm(
 
         // Image Picker (Max 4 images)
         SectionTitle("Media Uploads")
+
+        Text(
+            text = "Add up to 4 images and a video to enhance your event listing",
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+
+        MediaSelectionRow(selectedImages, selectedVideo)
+
+
+        /*
         repeat(4) { index ->
             MediaPicker(label = "Select Image ${index + 1}") { uri ->
                 if (selectedImages.size < 4) selectedImages.add(uri)
@@ -365,9 +392,13 @@ fun EventCreationForm(
             Text("Selected Video: $uri")
         }
 
+        */
+
+        OrDivider()
 
 
-        StyledTextField(value = videoUrl.value, onValueChange = { videoUrl.value = it }, label = "Video URL")
+
+        StyledTextField(value = videoUrl.value, onValueChange = { videoUrl.value = it }, label = "YouTube Video URL")
 
         Spacer(Modifier.height(24.dp))
 
@@ -1063,6 +1094,182 @@ fun validateFields(
     }
 
     return true // ✅ All fields are filled, and the checkbox is checked
+}
+
+@Composable
+fun MediaSelectionRow(selectedImages: MutableList<Uri>, selectedVideo: MutableState<Uri?>) {
+    val context = LocalContext.current
+
+    val pickMultipleImagesLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris: List<Uri> ->
+        if (uris.isNotEmpty()) {
+            val availableSlots = 4 - selectedImages.size
+            selectedImages.addAll(uris.take(availableSlots)) // Limit to 4 images
+        }
+    }
+
+    val pickVideoLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        uri?.let { selectedVideo.value = it }
+    }
+
+    Column {
+        //Text(text = "Upload Media", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        //Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Image Picker Button
+            OutlinedCard(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { pickMultipleImagesLauncher.launch("image/*") },
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(1.dp, Color(0xFFFE1943))
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Image,
+                        contentDescription = "Select Images",
+                        tint = Color(0xFFFE1943),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = if (selectedImages.isEmpty()) "Select Images" else "Images: ${selectedImages.size}/4",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Video Picker Button
+            OutlinedCard(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        pickVideoLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+                        )
+                    },
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(1.dp, Color(0xFFFE1943))
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.VideoLibrary,
+                        contentDescription = "Select Video",
+                        tint = Color(0xFFFE1943),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = if (selectedVideo.value == null) "Select Video" else "Video: 1/1",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        }
+
+        // Show Selected Images
+        if (selectedImages.isNotEmpty()) {
+            LazyRow(modifier = Modifier.padding(top = 8.dp)) {
+                items(selectedImages) { uri ->
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .padding(4.dp)
+                    ) {
+                        Image(
+                            painter = rememberImagePainter(uri),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(8.dp))
+                        )
+                    }
+                }
+            }
+        }
+
+        // Show Selected Video with Thumbnail
+        selectedVideo.value?.let { uri ->
+            val videoThumbnail = remember { getVideoThumbnail(context, uri) }
+
+            Box(
+                modifier = Modifier
+                    .size(120.dp, 80.dp)
+                    .padding(top = 8.dp)
+            ) {
+                if (videoThumbnail != null) {
+                    Image(
+                        bitmap = videoThumbnail.asImageBitmap(),
+                        contentDescription = "Video Thumbnail",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(8.dp))
+                    )
+                } else {
+                    // Show default placeholder if no thumbnail
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color.Gray),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayCircleOutline,
+                            contentDescription = "Video Placeholder",
+                            tint = Color.White,
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    Spacer(Modifier.height(4.dp))
+}
+
+
+fun getVideoThumbnail(context: Context, uri: Uri): Bitmap? {
+    return try {
+        val filePath = getPathFromUri(context, uri)
+        if (filePath != null) {
+            ThumbnailUtils.createVideoThumbnail(File(filePath).toString(), MediaStore.Video.Thumbnails.MINI_KIND)
+        } else {
+            null // Return null if path conversion fails
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+fun getPathFromUri(context: Context, uri: Uri): String? {
+    val cursor = context.contentResolver.query(uri, arrayOf(MediaStore.Video.Media.DATA), null, null, null)
+    return cursor?.use {
+        if (it.moveToFirst()) {
+            it.getString(it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
+        } else null
+    }
 }
 
 
