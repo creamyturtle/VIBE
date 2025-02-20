@@ -25,7 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -54,6 +57,8 @@ fun VibeTopAppBar(
     }
 
     val height by animateDpAsState(if (isExpanded) 164.dp else 104.dp, label = "topbar_height")
+
+    var selectedFilter by rememberSaveable { mutableStateOf("all") }
 
 
 
@@ -135,7 +140,8 @@ fun VibeTopAppBar(
 
             if (isExpanded) {
 
-                MiniTopBar(navController) { filterType ->
+                MiniTopBar(navController, selectedFilter) { filterType ->
+                    selectedFilter = filterType
                     navController.navigate("home_screen/$filterType") {
                         popUpTo("home_screen/all") { inclusive = true }
                     }

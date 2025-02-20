@@ -11,27 +11,19 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Pool
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
 fun MiniTopBar(
     navController: NavController,
+    selectedFilter: String,
     onFilterSelected: (String) -> Unit
 ) {
 
-    val density = LocalDensity.current.density
-    val onePixel = 1f / density
-
-    var selectedFilter by remember { mutableStateOf<String?>("all") }
-
+    //var selectedFilter2 by rememberSaveable { mutableStateOf<String?>("all") }
 
     Row(
         modifier = Modifier
@@ -41,53 +33,59 @@ fun MiniTopBar(
         verticalAlignment = Alignment.Top
     ) {
 
-        MapBottomNavItem("all", Icons.Default.Public, "All Events", selectedFilter, navController) {
-            selectedFilter = "all"
+        EventBottomNavItem(
+            "all",
+            Icons.Default.Public,
+            "All Events",
+            selectedFilter,
+            navController
+        ) {
+            //selectedFilter2 = "all"
             onFilterSelected("All Events")
         }
 
-        MapBottomNavItem(
+        EventBottomNavItem(
             "House",
             Icons.Default.Home,
             "House Parties",
             selectedFilter,
             navController
         ) {
-            selectedFilter = "House"
+            //selectedFilter2 = "House"
             onFilterSelected("House")
         }
 
 
-        MapBottomNavItem(
+        EventBottomNavItem(
             "Finca",
             Icons.Default.Agriculture,
             "Finca Parties",
             selectedFilter,
             navController
         ) {
-            selectedFilter = "Finca"
+            //selectedFilter2 = "Finca"
             onFilterSelected("Finca")
         }
 
-        MapBottomNavItem(
+        EventBottomNavItem(
             "Pool",
             Icons.Default.Pool,
             "Pool Parties",
             selectedFilter,
             navController
         ) {
-            selectedFilter = "Pool"
+            //selectedFilter2 = "Pool"
             onFilterSelected("Pool")
         }
 
-        MapBottomNavItem(
+        EventBottomNavItem(
             "Activity",
             Icons.AutoMirrored.Filled.DirectionsBike,
             "Activities",
             selectedFilter,
             navController
         ) {
-            selectedFilter = "Activity"
+            //selectedFilter2 = "Activity"
             onFilterSelected("Activity")
         }
 
