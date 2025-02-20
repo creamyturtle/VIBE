@@ -22,6 +22,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -106,6 +107,7 @@ import com.example.vibe.ui.viewmodel.UserViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.Place
@@ -114,6 +116,7 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -196,14 +199,14 @@ fun EventCreationForm(
             onClick = { navController.popBackStack() },
             modifier = Modifier
                 .align(Alignment.Start)
-                .background(color = Color.White, shape = CircleShape)
-                .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
+                .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
+                .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
                 .size(32.dp)
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.size(20.dp)
             )
         }
@@ -216,7 +219,7 @@ fun EventCreationForm(
                 .padding(16.dp)
                 .shadow(8.dp, shape = RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Column(
                 modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
@@ -227,14 +230,16 @@ fun EventCreationForm(
 
                 Text(
                     text = "VIBE is a completely free platform and charging entry fees is not allowed.  Any commercial events or businesses will be denied.",
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.secondaryContainer
                 )
 
                 Spacer(Modifier.height(8.dp))
 
                 Text(
                     text = "Please read the pages below for more information",
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.secondaryContainer
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -320,13 +325,10 @@ fun EventCreationForm(
         Text(
             text = "List three things that your event offers to attract attendees",
             fontSize = 14.sp,
-            fontStyle = FontStyle.Italic,
+            color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
 
-        //repeat(3) { index ->
-        //    StyledTextField(value = offerings.value[index], onValueChange = { offerings.value = offerings.value.toMutableList().apply { this[index] = it } }, label = "Offering ${index + 1}")
-        //}
 
         StyledTextField(value = offerings1.value, onValueChange = { offerings1.value = it }, label = "Offering 1")
         StyledTextField(value = offerings2.value, onValueChange = { offerings2.value = it }, label = "Offering 2")
@@ -338,11 +340,7 @@ fun EventCreationForm(
 
 
         Spacer(Modifier.height(24.dp))
-/*
-        // Precise Location Section
-        SectionTitle("Precise Location")
-        StyledTextField(value = locationLong.value, onValueChange = { locationLong.value = it }, label = "Complete Address")
-*/
+
 
         MapWithSearch(locationLong = locationLong)
 
@@ -364,7 +362,7 @@ fun EventCreationForm(
         Text(
             text = "Add up to 4 images and a video to enhance your event listing",
             fontSize = 14.sp,
-            fontStyle = FontStyle.Italic,
+            color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
 
@@ -543,7 +541,7 @@ fun EventCreationForm(
         Text(
             text = "To submit an event, you must agree to our Terms & Conditions and Privacy Policy.",
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-            fontStyle = FontStyle.Italic
+            color = MaterialTheme.colorScheme.secondaryContainer
         )
 
 
@@ -589,7 +587,7 @@ fun EventCreationForm(
         Text(
             text = "Please note that all events are subject to approval by our VIBE moderators.  Your event will be published within 24 hours.  Watch for an email from VIBE with your event link, or check your profile for updates.",
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-            fontStyle = FontStyle.Italic
+            color = MaterialTheme.colorScheme.secondaryContainer
         )
 
 
@@ -624,13 +622,14 @@ fun CustomDropdownMenu(
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White, // White background
+                backgroundColor = MaterialTheme.colorScheme.surface, // White background
                 focusedBorderColor = Color(0xFFFE1943), // Red border when focused
                 unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
-                cursorColor = Color.Black // Cursor color
+                cursorColor = MaterialTheme.colorScheme.onBackground // Cursor color
             ),
             textStyle = TextStyle( // ✅ Makes selected text bigger
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onBackground
             ),
             trailingIcon = {
                 Icon(
@@ -653,7 +652,7 @@ fun CustomDropdownMenu(
             onDismissRequest = { expanded = false },
             modifier = Modifier
                 .width(with(LocalDensity.current) { dropdownWidth.value.toDp() }) // Match text field width
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
                 .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
                 .padding(0.dp) // Ensures it stays within the boundaries
         ) {
@@ -671,7 +670,7 @@ fun CustomDropdownMenu(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White)
+                        .background(MaterialTheme.colorScheme.surface)
                 )
             }
         }
@@ -814,6 +813,19 @@ fun MapWithSearch(locationLong: MutableState<String>) {
         }
     }
 
+    val isDarkTheme = isSystemInDarkTheme() // ✅ Detect dark mode
+    val mapProperties by remember {
+        mutableStateOf(
+            MapProperties(
+                mapStyleOptions = if (isDarkTheme) {
+                    MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_night)
+                } else {
+                    null // Default Google Maps style
+                }
+            )
+        )
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         SectionTitle("Precise Location")
 
@@ -822,7 +834,7 @@ fun MapWithSearch(locationLong: MutableState<String>) {
         Text(
             text = "Select the exact location of your event by clicking on the map or entering the complete address below.\n\nExact location will only be shown to approved guests.",
             fontSize = 14.sp,
-            fontStyle = FontStyle.Italic,
+            color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
 
@@ -838,6 +850,7 @@ fun MapWithSearch(locationLong: MutableState<String>) {
             contentAlignment = Alignment.Center
         ) {
             GoogleMap(
+                properties = mapProperties,
                 modifier = Modifier.fillMaxWidth().height(400.dp),
                 cameraPositionState = cameraPositionState,
                 onMapClick = { latLng ->
@@ -884,7 +897,7 @@ fun MapWithSearch(locationLong: MutableState<String>) {
                     showDropdown = false // Close dropdown on done
                 }),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    backgroundColor = Color.White, // White background
+                    backgroundColor = MaterialTheme.colorScheme.surface, // White background
                     focusedBorderColor = Color(0xFFFE1943), // Gray border when focused
                     unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
                     cursorColor = Color.Black // Cursor color

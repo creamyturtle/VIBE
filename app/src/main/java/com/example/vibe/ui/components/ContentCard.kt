@@ -48,7 +48,7 @@ fun ContentCard(
             Text(
                 text = content,
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.secondaryContainer
             )
 
             //Spacer(Modifier.height(8.dp))

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +32,7 @@ fun StyledTextField(
         singleLine = true,
         shape = RoundedCornerShape(8.dp), // Rounded corners
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            backgroundColor = Color.White, // White background
+            backgroundColor = MaterialTheme.colorScheme.surface, // White background
             focusedBorderColor = Color(0xFFFE1943), // Gray border when focused
             unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
             cursorColor = Color.Black // Cursor color
@@ -60,7 +61,7 @@ fun StyledTextField2(
         label = { Text(label) },
         shape = RoundedCornerShape(8.dp), // Rounded corners
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            backgroundColor = Color.White, // White background
+            backgroundColor = MaterialTheme.colorScheme.surface, // White background
             focusedBorderColor = Color(0xFFFE1943), // Red border when focused
             unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
             cursorColor = Color.Black // Cursor color
