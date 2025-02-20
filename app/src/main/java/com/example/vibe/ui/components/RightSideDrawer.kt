@@ -65,7 +65,6 @@ import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.utils.SessionManager
-import com.example.vibe.utils.setAppLocale
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -85,8 +84,6 @@ fun RightSideDrawer(
     val backgroundAlpha = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
     var shouldRender by remember { mutableStateOf(false) }
-
-    val sessionManager = remember { SessionManager(context) }
 
     val selectedLanguage by languageViewModel.language
 
