@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Pool
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,12 +46,12 @@ fun MapBottomAppBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(onePixel.dp)
-                .background(Color.LightGray) // Light grey separator
+                .background(MaterialTheme.colorScheme.surfaceVariant) // Light grey separator
         )
 
         BottomAppBar(
-            containerColor = Color.White,
-            contentColor = Color.Black,
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .height(104.dp),
             contentPadding = PaddingValues(0.dp)

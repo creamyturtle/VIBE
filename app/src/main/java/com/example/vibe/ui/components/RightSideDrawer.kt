@@ -305,7 +305,7 @@ fun DrawerMenuItem(icon: ImageVector, text: String, hasSubmenu: Boolean = false,
     ) {
         Icon(imageVector = icon, contentDescription = text, tint = Color(0xFFFE1943), modifier = Modifier.size(24.dp))
         Spacer(Modifier.width(16.dp))
-        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onBackground)
+        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.secondaryContainer)
 
         if (hasSubmenu) {
             Spacer(Modifier.weight(1f))
@@ -340,7 +340,7 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
         modifier = Modifier
             .fillMaxWidth()
             .padding(28.dp, 8.dp, 28.dp, 8.dp)
-            .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(20.dp)),
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(20.dp)),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -361,7 +361,7 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
                     text = "EN",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (isEnglish) Color.White else Color.Black
+                    color = if (isEnglish) Color.White else MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(Modifier.width(8.dp))
                 Image(
@@ -387,7 +387,7 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
                     text = "ES",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (!isEnglish) Color.White else Color.Black
+                    color = if (!isEnglish) Color.White else MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(Modifier.width(8.dp))
                 Image(

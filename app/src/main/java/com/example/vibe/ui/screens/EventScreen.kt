@@ -8,6 +8,7 @@ import android.widget.VideoView
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -70,8 +71,10 @@ import com.example.vibe.model.Event
 import com.example.vibe.ui.components.HostInfoCard
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,8 +86,22 @@ import kotlinx.coroutines.withContext
 fun EventDetailsScreen(
     contentPadding: PaddingValues,
     event: Event?,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    context: Context
 ) {
+
+    val isDarkTheme = isSystemInDarkTheme() // ✅ Detect dark mode
+    val mapProperties by remember {
+        mutableStateOf(
+            MapProperties(
+                mapStyleOptions = if (isDarkTheme) {
+                    MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_night)
+                } else {
+                    null // Default Google Maps style
+                }
+            )
+        )
+    }
 
     if (event == null) {
         // Show loading indicator while waiting for event data
@@ -187,7 +204,7 @@ fun EventDetailsScreen(
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.TopStart)
-                            .background(color = Color.White, shape = CircleShape)
+                            .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
                             .size(32.dp)
                     ) {
                         Box(
@@ -198,7 +215,7 @@ fun EventDetailsScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = Color.Black,
+                                tint = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .size(20.dp)
@@ -208,31 +225,6 @@ fun EventDetailsScreen(
 
                     }
 
-
-                    /*
-
-                // Floating Bubble
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(16.dp)
-                        .background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp
-                        ) // Padding inside the bubble
-                ) {
-                    Text(
-                        text = event.partyMod, // The bubble text
-                        color = Color.Black, // Text color
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                */
 
 
                     // Page Indicators
@@ -274,8 +266,8 @@ fun EventDetailsScreen(
                         .fillMaxWidth() // Makes the Box take the full width of the parent
                         .padding(24.dp, 16.dp, 60.dp, 16.dp)
                         .background(
-                            color = Color(0xFFebebeb), // Light grey background
-                            shape = RoundedCornerShape(12.dp) // Rounded corners
+                            color = MaterialTheme.colorScheme.outline, // Light grey background
+                            shape = RoundedCornerShape(12.dp)
                         )
                         .padding(16.dp) // Padding inside the Box to provide space around the content
                 ) {
@@ -319,6 +311,7 @@ fun EventDetailsScreen(
 
                 Text(
                     text = event.description,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(24.dp, 0.dp, 24.dp, 0.dp)
@@ -360,7 +353,7 @@ fun EventDetailsScreen(
                             Text(
                                 text = event.properCaseOffer1,
                                 fontSize = 18.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         }
 
@@ -380,7 +373,7 @@ fun EventDetailsScreen(
                             Text(
                                 text = event.properCaseOffer2,
                                 fontSize = 18.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         }
 
@@ -400,7 +393,7 @@ fun EventDetailsScreen(
                             Text(
                                 text = event.properCaseOffer3,
                                 fontSize = 18.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         }
                     }
@@ -432,7 +425,7 @@ fun EventDetailsScreen(
                     Text(
                         text = event.properCaseRules,
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
 
@@ -451,7 +444,7 @@ fun EventDetailsScreen(
                     Text(
                         text = if (event.isfreeparking == "0") "No Free Parking" else "Free Parking",
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
 
@@ -469,7 +462,7 @@ fun EventDetailsScreen(
                     Text(
                         text = if (event.iswifi == "0") "No Wifi Available" else "Free Wifi",
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
 
@@ -487,7 +480,7 @@ fun EventDetailsScreen(
                     Text(
                         text = if (event.isalcoholprov == "0") "Bring Your Own Alcohol" else "Alcohol Provided",
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
 
@@ -505,7 +498,7 @@ fun EventDetailsScreen(
                     Text(
                         text = if (event.ispetfriendly == "0") "No Pets Allowed" else "Pets Allowed",
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
 
@@ -525,7 +518,7 @@ fun EventDetailsScreen(
                     Text(
                         text = if (event.issmokingallow == "0") "Smoking Not Allowed" else "Smoking Allowed",
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
 
@@ -562,7 +555,7 @@ fun EventDetailsScreen(
                     Text(
                         text = "Music Type: ${event.properCaseMusic}",
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
 
@@ -636,7 +629,7 @@ fun EventDetailsScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     if (coordinates != null) {
-                        GoogleMap(cameraPositionState = cameraPositionState) {
+                        GoogleMap(properties = mapProperties, cameraPositionState = cameraPositionState) {
                             coordinates?.let { position ->
                                 Circle(
                                     center = position,

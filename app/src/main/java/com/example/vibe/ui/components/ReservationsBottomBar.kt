@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -41,15 +42,15 @@ fun ReservationsBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(onePixel.dp)
-                .background(Color.LightGray) // Light grey separator
+                .background(MaterialTheme.colorScheme.surfaceVariant) // Light grey separator
         )
 
         BottomAppBar(
             modifier = Modifier
                 //.offset(y = offsetY)
                 .height(128.dp),
-            containerColor = Color.White,
-            contentColor = Color.DarkGray
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.secondaryContainer
         ) {
 
             Row(

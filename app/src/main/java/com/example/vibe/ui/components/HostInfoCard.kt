@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,7 +56,7 @@ fun HostInfoCard(
             .padding(24.dp, 16.dp, 24.dp, 0.dp)
             .shadow(8.dp, shape = RoundedCornerShape(20.dp)),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
         Row(modifier = Modifier
@@ -87,14 +88,14 @@ fun HostInfoCard(
                     text = hostName,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 // ✅ Age & Gender
                 Text(
                     text = "$age • $gender",
                     fontSize = 16.sp,
-                    color = Color.DarkGray
+                    color = MaterialTheme.colorScheme.secondaryContainer
                 )
 
 

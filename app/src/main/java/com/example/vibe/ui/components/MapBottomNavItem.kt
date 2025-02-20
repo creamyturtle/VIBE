@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.TextStyle
@@ -29,7 +30,7 @@ fun MapBottomNavItem(
 ) {
     val isSelected = filterName == selectedFilter
     val color by animateColorAsState(
-        targetValue = if (isSelected) Color.Black else Color.Gray,
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Gray,
         animationSpec = tween(300)
     )
 

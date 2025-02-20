@@ -122,7 +122,8 @@ fun VibeNavHost(
             EventDetailsScreen(
                 contentPadding = innerPadding,
                 event = event,
-                onBack = { navController.navigateUp() }
+                onBack = { navController.navigateUp() },
+                context = context
             )
 
         }

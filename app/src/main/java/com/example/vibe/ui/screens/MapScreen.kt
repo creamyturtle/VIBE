@@ -6,7 +6,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +28,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,7 +61,9 @@ import com.example.vibe.ui.viewmodel.EventsUiState
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -73,6 +78,21 @@ fun MapScreen(
 ) {
     val context = LocalContext.current
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
+
+    val isDarkTheme = isSystemInDarkTheme() // ✅ Detect dark mode
+    val mapProperties by remember {
+        mutableStateOf(
+            MapProperties(
+                mapStyleOptions = if (isDarkTheme) {
+                    MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_night)
+                } else {
+                    null // Default Google Maps style
+                }
+            )
+        )
+    }
+
+
 
     when (eventsUiState) {
         is EventsUiState.Loading -> {
@@ -124,6 +144,7 @@ fun MapScreen(
 
                 Box(modifier = Modifier.fillMaxSize()) {
                     GoogleMap(
+                        properties = mapProperties,
                         cameraPositionState = cameraPositionState,
                         modifier = Modifier
                             .fillMaxSize()
@@ -166,7 +187,8 @@ fun MapScreen(
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.TopStart)
-                        .background(color = Color.White, shape = CircleShape)
+                        .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
+                        .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
                         .size(32.dp)
                 ) {
                     Box(
@@ -177,7 +199,7 @@ fun MapScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier
                                 .align(Alignment.Center)
                                 .size(20.dp)
@@ -245,7 +267,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .background(Color.White, shape = RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             //.shadow(8.dp)
             .padding(16.dp, 4.dp, 16.dp, 16.dp)
 
@@ -256,7 +278,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = event.partyname, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                Text(text = event.partyname, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondaryContainer, fontSize = 18.sp)
                 IconButton(onClick = onClose) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
                 }
@@ -289,7 +311,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
                     Text(
                         text = "📍 ${event.location}",
                         fontSize = 16.sp,
-                        color = Color.DarkGray,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         style = TextStyle(
                             textAlign = TextAlign.Start,
                             lineHeight = 20.sp,
@@ -302,6 +324,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
                     Text(
                         text = "🎉 ${event.partyMod}",
                         fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         style = TextStyle(
                             textAlign = TextAlign.Start,
                             lineHeight = 20.sp,
@@ -314,6 +337,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
                     Text(
                         text = "📅 ${event.formattedDate}",
                         fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         style = TextStyle(
                             textAlign = TextAlign.Start,
                             lineHeight = 20.sp,

@@ -124,7 +124,7 @@ fun VibeTopAppBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(onePixel.dp)
-                    .background(Color.LightGray) // ✅ Light grey separator now aligned
+                    .background(MaterialTheme.colorScheme.surfaceVariant) // ✅ Light grey separator now aligned
             )
         }
 

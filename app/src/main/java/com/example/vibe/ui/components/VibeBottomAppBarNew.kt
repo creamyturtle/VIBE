@@ -67,7 +67,7 @@ fun VibeBottomAppBarNew(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(onePixel.dp)
-                    .background(Color.LightGray) // Light grey separator
+                    .background(MaterialTheme.colorScheme.surfaceVariant) // Light grey separator
             )
 
             BottomAppBar(
