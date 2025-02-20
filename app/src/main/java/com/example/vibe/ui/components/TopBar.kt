@@ -1,12 +1,13 @@
 package com.example.vibe.ui.components
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun TopBar(navController: NavController, isDrawerOpen: MutableState<Boolean>) {
+fun TopBar(navController: NavController, isDrawerOpen: MutableState<Boolean>, listState: LazyListState) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
     when {
@@ -25,7 +26,7 @@ fun TopBar(navController: NavController, isDrawerOpen: MutableState<Boolean>) {
 
         // Default case: Show the main top bar
         else -> {
-            VibeTopAppBar(navController, isDrawerOpen)
+            VibeTopAppBar(navController, isDrawerOpen, listState)
         }
     }
 }

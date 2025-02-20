@@ -1,5 +1,6 @@
 package com.example.vibe.ui.components
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
@@ -21,6 +23,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -35,18 +40,27 @@ import androidx.navigation.NavController
 @Composable
 fun VibeTopAppBar(
     navController: NavController,
-    isDrawerOpen: MutableState<Boolean>
+    isDrawerOpen: MutableState<Boolean>,
+    listState: LazyListState
 ) {
 
     val density = LocalDensity.current.density
     val onePixel = 1f / density
+
+    val isExpanded by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset < 100 // Adjust this threshold
+        }
+    }
+
+    val height by animateDpAsState(if (isExpanded) 164.dp else 104.dp, label = "topbar_height")
 
 
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(188.dp)
+            .height(height)
             .background(MaterialTheme.colorScheme.background)
             .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()) // ✅ Adds padding for status bar
     ) {
@@ -119,13 +133,18 @@ fun VibeTopAppBar(
             Spacer(Modifier.weight(1f)) // ✅ Ensures separator is at the bottom
 
 
-            MiniTopBar(navController) { filterType ->
-                navController.navigate("home_screen/$filterType") {
-                    popUpTo("home_screen/all") { inclusive = true }
+            if (isExpanded) {
+
+                MiniTopBar(navController) { filterType ->
+                    navController.navigate("home_screen/$filterType") {
+                        popUpTo("home_screen/all") { inclusive = true }
+                    }
                 }
+
+                Spacer(Modifier.weight(0.5f)) // ✅ Ensures separator is at the bottom
+
             }
 
-            Spacer(Modifier.weight(0.5f)) // ✅ Ensures separator is at the bottom
 
             Box(
                 modifier = Modifier
@@ -135,11 +154,7 @@ fun VibeTopAppBar(
             )
         }
 
-
-
     }
-
-
 
 }
 

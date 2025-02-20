@@ -96,7 +96,7 @@ fun VibeApp() {
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { TopBar(navController, isDrawerOpen) },
+            topBar = { TopBar(navController, isDrawerOpen, listState) },
             bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel, languageViewModel) }
 
         ) { innerPadding ->
