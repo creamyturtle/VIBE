@@ -6,14 +6,21 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 
 @Composable
-fun BottomBar(navController: NavController, isLoggedIn: Boolean, eventsViewModel: EventsViewModel, authViewModel: AuthViewModel) {
+fun BottomBar(
+    navController: NavController,
+    isLoggedIn: Boolean,
+    eventsViewModel: EventsViewModel,
+    authViewModel: AuthViewModel,
+    languageViewModel: LanguageViewModel
+) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
     when {
         currentDestination?.startsWith("home_screen") == true -> {
-            VibeBottomAppBarNew(navController, isLoggedIn, authViewModel)
+            VibeBottomAppBarNew(navController, isLoggedIn, authViewModel, languageViewModel)
         }
         currentDestination?.startsWith("map_screen") == true -> {
             MapBottomAppBar(navController) { filterType ->

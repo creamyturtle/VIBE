@@ -33,17 +33,31 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import android.view.View
 
-private val DarkColorScheme = darkColorScheme(
-    background = md_theme_dark_background,
-    surface = md_theme_dark_surface,
-    surfaceVariant = md_theme_dark_surfaceVariant,
-)
 
 private val LightColorScheme = lightColorScheme(
     background = md_theme_light_background,
     surface = md_theme_light_surface,
     surfaceVariant = md_theme_light_surfaceVariant,
+    onBackground = md_theme_light_onBackground,
+    onSurface = md_theme_light_onSurface,
+    primary = md_theme_light_primary,
+    onPrimary = md_theme_light_onPrimary,
+    outline = md_theme_light_outline
 )
+
+
+private val DarkColorScheme = darkColorScheme(
+    background = md_theme_dark_background,
+    surface = md_theme_dark_surface,
+    surfaceVariant = md_theme_dark_surfaceVariant,
+    onBackground = md_theme_dark_onBackground,
+    onSurface = md_theme_dark_onSurface,
+    primary = md_theme_dark_primary,
+    onPrimary = md_theme_dark_onPrimary,
+    outline = md_theme_dark_outline
+)
+
+
 
 @Composable
 fun VibeTheme(

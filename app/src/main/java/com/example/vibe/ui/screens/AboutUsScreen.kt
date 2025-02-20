@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,14 +47,14 @@ fun AboutUsScreen(
                 onClick = onBack,
                 modifier = Modifier
                     .padding(8.dp, 40.dp, 0.dp, 0.dp)
-                    .background(color = Color.White, shape = CircleShape)
-                    .border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
+                    .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
+                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
                     .size(32.dp)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(20.dp)
                 )
             }

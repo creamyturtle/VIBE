@@ -76,7 +76,6 @@ fun RightSideDrawer(
     isLoggedIn: Boolean,
     authViewModel: AuthViewModel,
     context: Context,
-    selectedLanguage: MutableState<String>,
     languageViewModel: LanguageViewModel
 ) {
     val density = LocalDensity.current

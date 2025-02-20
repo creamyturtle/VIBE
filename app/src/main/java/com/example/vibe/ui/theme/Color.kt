@@ -18,17 +18,22 @@ package com.example.vibe.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-/*
-val md_theme_light_background = Color(0xFFFCFDF6)
-val md_theme_light_surface = Color(0xFFFCFDF6)
-val md_theme_light_surfaceVariant = Color(0xFFDEE5D8)
 
- */
 val md_theme_light_background = Color.White
 val md_theme_light_surface = Color.White
-val md_theme_light_surfaceVariant = Color.White
+val md_theme_light_surfaceVariant = Color(0xFFF5F5F5) // Slightly gray for contrast
+val md_theme_light_onBackground = Color.Black
+val md_theme_light_onSurface = Color.Black
+val md_theme_light_primary = Color(0xFFFE1943) // Your app's red color
+val md_theme_light_onPrimary = Color.White
+val md_theme_light_outline = Color(0xFFD3D3D3)
 
+val md_theme_dark_background = Color(0xFF121212) // Pure dark mode background
+val md_theme_dark_surface = Color(0xFF1E1E1E) // Darker gray for contrast
+val md_theme_dark_surfaceVariant = Color(0xFF2E2E2E) // Slightly lighter gray
+val md_theme_dark_onBackground = Color.White
+val md_theme_dark_onSurface = Color.White
+val md_theme_dark_primary = Color(0xFFFE1943) // Same red for consistency
+val md_theme_dark_onPrimary = Color.White
+val md_theme_dark_outline = Color(0xFF6D6D6D)
 
-val md_theme_dark_background = Color(0xFF1A1C19)
-val md_theme_dark_surface = Color(0xFF1A1C19)
-val md_theme_dark_surfaceVariant = Color(0xFF424940)

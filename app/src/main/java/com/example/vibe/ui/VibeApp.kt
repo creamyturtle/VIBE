@@ -69,22 +69,27 @@ fun VibeApp() {
         factory = UserViewModelFactory(appContainer.userApi, appContainer.sessionManager, context)
     )
 
-
     val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
-
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     val isDrawerOpen = remember { mutableStateOf(false) }
 
     val systemLanguage = Locale.getDefault().language // Detect system language
-    val selectedLanguage = remember {
-        mutableStateOf(if (systemLanguage == "es") "ES" else "EN") // Default based on system
-    }
 
     val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(context, appContainer.sessionManager))
 
+    val savedLanguage = appContainer.sessionManager.getLanguage()
 
+    if (savedLanguage == "ES") {
+        languageViewModel.setLanguage(context, "ES")
+    } else if (savedLanguage == "EN") {
+        languageViewModel.setLanguage(context, "EN")
+    } else if (systemLanguage == "es") {
+        languageViewModel.setLanguage(context, "ES") // Default to Spanish if system is Spanish
+    } else {
+        languageViewModel.setLanguage(context, "EN") // Default to English otherwise
+    }
 
 
 
@@ -92,7 +97,7 @@ fun VibeApp() {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = { TopBar(navController, isDrawerOpen) },
-            bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel) }
+            bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel, languageViewModel) }
 
         ) { innerPadding ->
 
@@ -112,7 +117,7 @@ fun VibeApp() {
 
 
         }
-        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, selectedLanguage, languageViewModel)
+        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, languageViewModel)
     }
 
 
