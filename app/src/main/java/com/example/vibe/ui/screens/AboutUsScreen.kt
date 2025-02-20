@@ -47,7 +47,7 @@ fun AboutUsScreen(
                 onClick = onBack,
                 modifier = Modifier
                     .padding(8.dp, 40.dp, 0.dp, 0.dp)
-                    .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
+                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
                     .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
                     .size(32.dp)
             ) {
