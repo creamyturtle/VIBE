@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun VibeTopAppBar(
+fun VibeBasicTopBar(
     navController: NavController,
     isDrawerOpen: MutableState<Boolean>
 ) {
@@ -46,7 +46,7 @@ fun VibeTopAppBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(188.dp)
+            .height(104.dp)
             .background(MaterialTheme.colorScheme.background)
             .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()) // ✅ Adds padding for status bar
     ) {
@@ -98,7 +98,7 @@ fun VibeTopAppBar(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(),
-                        //.background(Color.Blue),
+                    //.background(Color.Blue),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.End
                 ) {
@@ -118,15 +118,6 @@ fun VibeTopAppBar(
 
             Spacer(Modifier.weight(1f)) // ✅ Ensures separator is at the bottom
 
-
-            MiniTopBar(navController) { filterType ->
-                navController.navigate("home_screen/$filterType") {
-                    popUpTo("home_screen/all") { inclusive = true }
-                }
-            }
-
-            Spacer(Modifier.weight(0.5f)) // ✅ Ensures separator is at the bottom
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -142,5 +133,3 @@ fun VibeTopAppBar(
 
 
 }
-
-

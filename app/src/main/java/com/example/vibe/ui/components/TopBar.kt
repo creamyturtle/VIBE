@@ -9,12 +9,25 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun TopBar(navController: NavController, isDrawerOpen: MutableState<Boolean>) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    val noTopBarScreens = setOf("login", "signup", "reservation_screen", "host_event") // Add base route
+    when {
+        // Screens that should have a basic top bar
+        currentDestination in setOf("about_us", "faq", "terms_and_conditions", "privacy_policy") ||
+                currentDestination?.startsWith("map_screen") == true -> {
+            VibeBasicTopBar(navController, isDrawerOpen)
+        }
 
-    if (currentDestination !in noTopBarScreens &&
-        currentDestination?.startsWith("event_details") == false &&
-        currentDestination?.startsWith("reservation_screen") == false) { // Check prefix for dynamic routes
-        VibeTopAppBar(navController, isDrawerOpen)
+        // Screens that should have no top bar at all
+        currentDestination in setOf("login", "signup", "reservation_screen", "host_event") ||
+                currentDestination?.startsWith("event_details") == true ||
+                currentDestination?.startsWith("reservation_screen") == true -> {
+            // Do nothing (No Top Bar)
+        }
+
+        // Default case: Show the main top bar
+        else -> {
+            VibeTopAppBar(navController, isDrawerOpen)
+        }
     }
 }
+
 

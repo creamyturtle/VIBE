@@ -29,8 +29,8 @@ Future Updates
 8. Host control panel
 9. Information pages - DONE
 10. Caching / Prediction
-11. Language translations (en/es)
-12. Fancy homepage dropdown menu
-13. Dark mode
+11. Language translations (en/es) - working
+12. Fancy homepage dropdown menu - DONE
+13. Dark mode - DONE
 14. Homepage filters
 15. User Profile editable
