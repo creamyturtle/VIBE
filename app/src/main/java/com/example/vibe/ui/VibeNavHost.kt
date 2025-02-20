@@ -64,10 +64,12 @@ fun VibeNavHost(
 
             // Fetch events based on the filter type
             LaunchedEffect(filterType) {
-                if (filterType == "all") {
-                    eventsViewModel.getEvents() // Fetch all events
-                } else {
-                    eventsViewModel.getEventsByType(filterType) // Fetch filtered events
+                if (filterType != eventsViewModel.lastFilter) {
+                    if (filterType == "all") {
+                        eventsViewModel.getEvents() // Fetch all events
+                    } else {
+                        eventsViewModel.getEventsByType(filterType) // Fetch filtered events
+                    }
                 }
             }
 

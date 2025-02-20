@@ -61,10 +61,6 @@ fun VibeTopAppBar(
 
     var selectedFilter by rememberSaveable { mutableStateOf("all") }
 
-    // ✅ Reset Scroll When Changing Filters
-    LaunchedEffect(selectedFilter) {
-        listState.scrollToItem(0)
-    }
 
 
 

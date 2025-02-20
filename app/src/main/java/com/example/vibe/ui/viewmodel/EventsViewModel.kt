@@ -19,6 +19,7 @@ package com.example.vibe.ui.viewmodel
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -54,6 +55,8 @@ sealed interface EventsUiState {
  */
 class EventsViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
 
+    val listState = LazyListState()
+
     val isUploading = MutableStateFlow(false)
 
     var eventsUiState: EventsUiState by mutableStateOf(EventsUiState.Loading)
@@ -81,7 +84,7 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         }
     }
 
-    private var lastFilter = ""
+    var lastFilter: String = "all"
 
     fun getEventsByType(type: String) {
 

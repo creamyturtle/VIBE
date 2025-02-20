@@ -50,7 +50,7 @@ import java.util.Locale
 @Composable
 fun VibeApp() {
 
-    val listState = rememberLazyListState()
+    //val listState = rememberLazyListState()
 
     val navController = rememberNavController()
 
@@ -69,7 +69,12 @@ fun VibeApp() {
         factory = UserViewModelFactory(appContainer.userApi, appContainer.sessionManager, context)
     )
 
+
     val eventsViewModel: EventsViewModel = viewModel(factory = EventsViewModel.Factory)
+
+    val listState = eventsViewModel.listState
+
+
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
@@ -90,6 +95,8 @@ fun VibeApp() {
     } else {
         languageViewModel.setLanguage(context, "EN") // Default to English otherwise
     }
+
+
 
 
 
