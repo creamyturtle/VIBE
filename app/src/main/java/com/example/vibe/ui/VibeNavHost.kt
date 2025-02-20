@@ -66,10 +66,14 @@ fun VibeNavHost(
             LaunchedEffect(filterType) {
                 if (filterType != eventsViewModel.lastFilter) {
                     if (filterType == "all") {
-                        eventsViewModel.getEvents() // Fetch all events
+                        eventsViewModel.lastFilter = "all" // ✅ Reset lastFilter so filters work again
+                        eventsViewModel.getEvents()
                     } else {
-                        eventsViewModel.getEventsByType(filterType) // Fetch filtered events
+                        eventsViewModel.getEventsByType(filterType)
                     }
+
+                    // ✅ Reset scroll position only when switching filters
+                    listState.animateScrollToItem(0)
                 }
             }
 
