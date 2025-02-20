@@ -25,7 +25,7 @@ fun EventBottomNavItem(
     filterName: String,
     icon: ImageVector,
     label: String,
-    selectedFilter: String?,
+    selectedFilter: String,
     navController: NavController, // ✅ Add NavController to check current route
     onClick: () -> Unit
 ) {

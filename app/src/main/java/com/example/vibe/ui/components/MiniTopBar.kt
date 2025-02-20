@@ -23,7 +23,7 @@ fun MiniTopBar(
     onFilterSelected: (String) -> Unit
 ) {
 
-    //var selectedFilter2 by rememberSaveable { mutableStateOf<String?>("all") }
+    //var selectedFilter by rememberSaveable { mutableStateOf<String?>("all") }
 
     Row(
         modifier = Modifier
@@ -40,8 +40,8 @@ fun MiniTopBar(
             selectedFilter,
             navController
         ) {
-            //selectedFilter2 = "all"
-            onFilterSelected("All Events")
+            //selectedFilter
+            onFilterSelected("all")
         }
 
         EventBottomNavItem(
@@ -51,7 +51,7 @@ fun MiniTopBar(
             selectedFilter,
             navController
         ) {
-            //selectedFilter2 = "House"
+            //selectedFilter = "House"
             onFilterSelected("House")
         }
 
@@ -63,7 +63,7 @@ fun MiniTopBar(
             selectedFilter,
             navController
         ) {
-            //selectedFilter2 = "Finca"
+            //selectedFilter = "Finca"
             onFilterSelected("Finca")
         }
 
@@ -74,7 +74,7 @@ fun MiniTopBar(
             selectedFilter,
             navController
         ) {
-            //selectedFilter2 = "Pool"
+            //selectedFilter = "Pool"
             onFilterSelected("Pool")
         }
 
@@ -85,7 +85,7 @@ fun MiniTopBar(
             selectedFilter,
             navController
         ) {
-            //selectedFilter2 = "Activity"
+            //selectedFilter = "Activity"
             onFilterSelected("Activity")
         }
 

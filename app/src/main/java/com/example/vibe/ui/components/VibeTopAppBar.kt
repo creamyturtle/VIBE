@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -59,6 +60,11 @@ fun VibeTopAppBar(
     val height by animateDpAsState(if (isExpanded) 164.dp else 104.dp, label = "topbar_height")
 
     var selectedFilter by rememberSaveable { mutableStateOf("all") }
+
+    // ✅ Reset Scroll When Changing Filters
+    LaunchedEffect(selectedFilter) {
+        listState.scrollToItem(0)
+    }
 
 
 
@@ -141,9 +147,13 @@ fun VibeTopAppBar(
             if (isExpanded) {
 
                 MiniTopBar(navController, selectedFilter) { filterType ->
-                    selectedFilter = filterType
-                    navController.navigate("home_screen/$filterType") {
-                        popUpTo("home_screen/all") { inclusive = true }
+                    if (filterType != selectedFilter) {
+                        selectedFilter = filterType
+
+                        navController.navigate("home_screen/$filterType") {
+                            popUpTo("home_screen") { inclusive = false }
+                        }
+
                     }
                 }
 

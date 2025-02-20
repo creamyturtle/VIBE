@@ -49,6 +49,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -230,6 +231,8 @@ private fun EventsListScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onEventClick: (String) -> Unit
 ) {
+
+
     LazyColumn(
         state = listState,
         modifier = modifier,
