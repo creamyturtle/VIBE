@@ -49,7 +49,7 @@ fun VibeTopAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(104.dp)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()) // ✅ Adds padding for status bar
     ) {
         Column(
@@ -77,7 +77,7 @@ fun VibeTopAppBar(
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 28.sp,
                             fontStyle = FontStyle.Italic,
-                            color = Color(0xFFFE1943),
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(24.dp, 0.dp, 0.dp, 0.dp)
                         )
 
@@ -87,6 +87,7 @@ fun VibeTopAppBar(
                         text = "Your official party connection",
                         fontStyle = FontStyle.Italic,
                         fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
                         style = TextStyle(fontSize = 12.sp, lineHeight = 12.sp),
                         modifier = Modifier
                             //.background(Color.Green)

@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -73,7 +74,7 @@ fun VibeBottomAppBarNew(
                 modifier = Modifier
                     //.offset(y = offsetY)
                     .height(104.dp),
-                containerColor = Color.White,
+                containerColor = MaterialTheme.colorScheme.background,
                 contentColor = Color.Gray,
                 contentPadding = PaddingValues(0.dp)
             ) {

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun BottomNavItem(
@@ -29,7 +30,7 @@ fun BottomNavItem(
 ) {
     val isSelected = currentRoute?.startsWith(baseRoute) == true
     val iconColor by animateColorAsState(
-        targetValue = if (isSelected) Color.Black else Color.Gray,
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Gray,
         animationSpec = tween(300)
     )
 

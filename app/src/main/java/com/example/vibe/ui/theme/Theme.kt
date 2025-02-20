@@ -42,7 +42,8 @@ private val LightColorScheme = lightColorScheme(
     onSurface = md_theme_light_onSurface,
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
-    outline = md_theme_light_outline
+    outline = md_theme_light_outline,
+    inverseSurface = md_theme_light_inverseSurface
 )
 
 
@@ -54,7 +55,8 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = md_theme_dark_onSurface,
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
-    outline = md_theme_dark_outline
+    outline = md_theme_dark_outline,
+    inverseSurface = md_theme_dark_inverseSurface
 )
 
 

@@ -36,6 +36,7 @@ import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -123,7 +124,7 @@ fun RightSideDrawer(
                 .fillMaxHeight()
                 .width(280.dp)
                 .offset { IntOffset(animationState.value.roundToInt(), 0) }
-                .background(Color.White, shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
+                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
                 .align(Alignment.CenterEnd)
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures(
@@ -247,7 +248,7 @@ fun UserProfileSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(12.dp)) // Light gray background
+            .background(MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(12.dp)) // Light gray background
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -259,7 +260,7 @@ fun UserProfileSection() {
             modifier = Modifier
                 .size(70.dp)
                 .clip(CircleShape)
-                .background(Color.Gray),
+                .background(Color.DarkGray),
             contentAlignment = Alignment.Center
         ) {
             if (userImage != null) {
@@ -283,11 +284,11 @@ fun UserProfileSection() {
         // Username
         Text(text = username, fontSize = 18.sp, fontWeight = FontWeight.Bold)
 
-        // Karma
+        // Parties Hosted
         Text(
             text = "$pHosted Parties Hosted",
             fontSize = 14.sp,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.inverseSurface
         )
     }
 }
@@ -304,7 +305,7 @@ fun DrawerMenuItem(icon: ImageVector, text: String, hasSubmenu: Boolean = false,
     ) {
         Icon(imageVector = icon, contentDescription = text, tint = Color(0xFFFE1943), modifier = Modifier.size(24.dp))
         Spacer(Modifier.width(16.dp))
-        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onBackground)
 
         if (hasSubmenu) {
             Spacer(Modifier.weight(1f))

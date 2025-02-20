@@ -276,7 +276,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
             .padding(6.dp)
             .clickable { onClick() }
             .clip(RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
         Column {
             Box(
@@ -342,7 +342,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Light,
                 fontSize = 20.sp
