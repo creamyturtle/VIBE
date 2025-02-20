@@ -1,6 +1,7 @@
 package com.example.vibe.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,8 +14,10 @@ import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.vibe.R
 
 @Composable
 fun MiniTopBar(
@@ -28,65 +31,79 @@ fun MiniTopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.Top
     ) {
 
-        EventBottomNavItem(
-            "all",
-            Icons.Default.Public,
-            "All Events",
-            selectedFilter,
-            navController
-        ) {
-            //selectedFilter
-            onFilterSelected("all")
+        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+            EventBottomNavItem(
+                "all",
+                Icons.Default.Public,
+                stringResource(R.string.all_events),
+                selectedFilter,
+                navController
+            ) {
+                //selectedFilter
+                onFilterSelected("all")
+            }
         }
 
-        EventBottomNavItem(
-            "House",
-            Icons.Default.Home,
-            "House Parties",
-            selectedFilter,
-            navController
-        ) {
-            //selectedFilter = "House"
-            onFilterSelected("House")
+        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+            EventBottomNavItem(
+                "House",
+                Icons.Default.Home,
+                stringResource(R.string.house_parties),
+                selectedFilter,
+                navController
+            ) {
+                //selectedFilter = "House"
+                onFilterSelected("House")
+            }
         }
 
+        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-        EventBottomNavItem(
-            "Finca",
-            Icons.Default.Agriculture,
-            "Finca Parties",
-            selectedFilter,
-            navController
-        ) {
-            //selectedFilter = "Finca"
-            onFilterSelected("Finca")
+            EventBottomNavItem(
+                "Finca",
+                Icons.Default.Agriculture,
+                stringResource(R.string.finca_parties),
+                selectedFilter,
+                navController
+            ) {
+                //selectedFilter = "Finca"
+                onFilterSelected("Finca")
+            }
         }
 
-        EventBottomNavItem(
-            "Pool",
-            Icons.Default.Pool,
-            "Pool Parties",
-            selectedFilter,
-            navController
-        ) {
-            //selectedFilter = "Pool"
-            onFilterSelected("Pool")
+        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+            EventBottomNavItem(
+                "Pool",
+                Icons.Default.Pool,
+                stringResource(R.string.pool_parties),
+                selectedFilter,
+                navController
+            ) {
+                //selectedFilter = "Pool"
+                onFilterSelected("Pool")
+            }
         }
 
-        EventBottomNavItem(
-            "Activity",
-            Icons.AutoMirrored.Filled.DirectionsBike,
-            "Activities",
-            selectedFilter,
-            navController
-        ) {
-            //selectedFilter = "Activity"
-            onFilterSelected("Activity")
+        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+            EventBottomNavItem(
+                "Activity",
+                Icons.AutoMirrored.Filled.DirectionsBike,
+                stringResource(R.string.activities),
+                selectedFilter,
+                navController
+            ) {
+                //selectedFilter = "Activity"
+                onFilterSelected("Activity")
+            }
         }
 
 

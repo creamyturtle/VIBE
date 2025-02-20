@@ -33,4 +33,11 @@
     <string name="profile">Perfil</string>
     <string name="host">Publicar</string>
 
+    <!-- Map Menu Items -->
+    <string name="all_events">Todo</string>
+    <string name="house_parties">Casas</string>
+    <string name="finca_parties">Fincas</string>
+    <string name="pool_parties">Piscinas</string>
+    <string name="activities">Actividades</string>
+
 </resources>
