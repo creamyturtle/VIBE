@@ -206,6 +206,8 @@ fun RightSideDrawer(
 
                 } else {
 
+                    Spacer(Modifier.height(16.dp))
+
                     DrawerMenuItem(icon = Icons.Outlined.AccountCircle, text = stringResource(R.string.create_account)) {
                         isOpen.value = false
                         navController.navigate("signup")
@@ -215,6 +217,35 @@ fun RightSideDrawer(
                         isOpen.value = false
                         navController.navigate("login")
                     }
+
+                    Spacer(Modifier.height(32.dp))
+
+                    // Submenu: Information
+                    var submenuExpanded by remember { mutableStateOf(false) }
+                    DrawerMenuItem(icon = Icons.Outlined.Info, text = stringResource(R.string.information), hasSubmenu = true, isExpanded = submenuExpanded) {
+                        submenuExpanded = !submenuExpanded
+                    }
+                    if (submenuExpanded) {
+                        DrawerSubMenuItem(text = stringResource(R.string.about), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("about_us") })
+                        DrawerSubMenuItem(text = stringResource(R.string.faq), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("faq") })
+                        DrawerSubMenuItem(text = stringResource(R.string.terms_conditions), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("terms_and_conditions") })
+                        DrawerSubMenuItem(text = stringResource(R.string.privacy_policy), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("privacy_policy") })
+                    }
+
+                    DrawerMenuItem(icon = Icons.Outlined.CalendarMonth, text = stringResource(R.string.calendar)) {
+                        isOpen.value = false
+                        navController.navigate("calendar")
+                    }
+
+                    DrawerMenuItem(icon = Icons.Outlined.Map, text = stringResource(R.string.map)) {
+                        isOpen.value = false
+                        navController.navigate("map_screen/all")
+                    }
+
+
+
+
+
 
 
                 }

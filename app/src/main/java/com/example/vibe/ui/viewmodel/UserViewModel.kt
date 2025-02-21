@@ -47,7 +47,13 @@ class UserViewModel(
 
                 if (response.isSuccessful && response.body()?.status == "success") {
                     Log.d("UserViewModel", "✅ API Response: ${response.body()}") // ✅ Log success
-                    _userData.postValue(response.body()?.user)
+                    val user = response.body()?.user
+                    _userData.postValue(user)
+
+                    // ✅ Save user to DataStore
+                    if (user != null) {
+                        UserPreferences.saveUser(context, user)
+                    }
                 } else {
                     val errorResponse = response.errorBody()?.string()
                     Log.e("UserViewModel", "❌ API Error: $errorResponse")

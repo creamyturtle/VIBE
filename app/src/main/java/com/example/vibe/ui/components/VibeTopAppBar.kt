@@ -52,7 +52,7 @@ fun VibeTopAppBar(
 
     val isExpanded by remember {
         derivedStateOf {
-            listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset < 100 // Adjust this threshold
+            listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset < 150 // Adjust this threshold
         }
     }
 

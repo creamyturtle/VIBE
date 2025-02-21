@@ -26,12 +26,14 @@ import com.example.vibe.ui.screens.PrivacyPolicyScreen
 import com.example.vibe.ui.screens.ReservationScreen
 import com.example.vibe.ui.screens.SignupScreen
 import com.example.vibe.ui.screens.TermsAndConditionsScreen
+import com.example.vibe.ui.screens.UserProfileScreen
 import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
+import com.example.vibe.utils.SessionManager
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -222,6 +224,18 @@ fun VibeNavHost(
             )
 
         }
+
+
+        composable(route = "user_profile") {
+
+            UserProfileScreen(userViewModel, SessionManager(context), navController) {
+                navController.navigate("login") {
+                    popUpTo("user_profile") { inclusive = true } // Clear back stack
+                }
+            }
+
+        }
+
 
 
 

@@ -96,13 +96,24 @@ fun VibeBottomAppBarNew(
 
                     Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                        BottomNavItem(
-                            navController,
-                            "host_event",
-                            currentRoute,
-                            Icons.Default.Public,
-                            stringResource(R.string.host)
-                        )
+                        if (isLoggedIn) {
+                            BottomNavItem(
+                                navController,
+                                "host_event",
+                                currentRoute,
+                                Icons.Default.Public,
+                                stringResource(R.string.host)
+                            )
+                        } else {
+                            BottomNavItem(
+                                navController,
+                                "login",
+                                currentRoute,
+                                Icons.Default.Public,
+                                stringResource(R.string.host)
+                            )
+                        }
+
                     }
 
                     Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
@@ -118,13 +129,24 @@ fun VibeBottomAppBarNew(
 
                     Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                        BottomNavItem(
-                            navController,
-                            "user_profile",
-                            currentRoute,
-                            Icons.Default.AccountCircle,
-                            stringResource(R.string.profile)
-                        )
+                        if (isLoggedIn) {
+                            BottomNavItem(
+                                navController,
+                                "user_profile",
+                                currentRoute,
+                                Icons.Default.AccountCircle,
+                                stringResource(R.string.profile)
+                            )
+                        } else {
+                            BottomNavItem(
+                                navController,
+                                "login",
+                                currentRoute,
+                                Icons.Default.AccountCircle,
+                                stringResource(R.string.profile)
+                            )
+                        }
+
                     }
 
                     Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
