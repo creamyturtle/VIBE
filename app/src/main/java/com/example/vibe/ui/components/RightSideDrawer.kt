@@ -64,7 +64,6 @@ import androidx.navigation.NavController
 import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
-import com.example.vibe.utils.SessionManager
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
