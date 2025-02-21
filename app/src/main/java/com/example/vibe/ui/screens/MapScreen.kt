@@ -57,6 +57,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.ui.components.EventDetailsCard
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -259,100 +260,5 @@ fun MapScreen(
     }
 }
 
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun EventDetailsCard(event: Event, onClose: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
-            //.shadow(8.dp)
-            .padding(16.dp, 4.dp, 16.dp, 16.dp)
-
-    ) {
-        Column () {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = event.partyname, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.secondaryContainer, fontSize = 18.sp)
-                IconButton(onClick = onClose) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
-                }
-            }
-
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-
-                AsyncImage(
-                    model = event.fullImgSrc,
-                    contentDescription = event.partyname,
-                    modifier = Modifier
-                        //.height(200.dp)
-                        .size(120.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop,
-                    placeholder = painterResource(R.drawable.loading_img),
-                    error = painterResource(R.drawable.defaultimg)
-                )
-
-                Spacer(Modifier.width(12.dp))
-
-
-                Column() {
-                    Text(
-                        text = "📍 ${event.location}",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        style = TextStyle(
-                            textAlign = TextAlign.Start,
-                            lineHeight = 20.sp,
-                            textIndent = TextIndent(firstLine = 0.sp, restLine = 22.sp)
-                        )
-                    )
-
-                    Spacer(Modifier.height(8.dp))
-
-                    Text(
-                        text = "🎉 ${event.partyMod}",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        style = TextStyle(
-                            textAlign = TextAlign.Start,
-                            lineHeight = 20.sp,
-                            textIndent = TextIndent(firstLine = 0.sp, restLine = 22.sp)
-                        )
-                    )
-
-                    Spacer(Modifier.height(8.dp))
-
-                    Text(
-                        text = "📅 ${event.formattedDate}",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        style = TextStyle(
-                            textAlign = TextAlign.Start,
-                            lineHeight = 20.sp,
-                            textIndent = TextIndent(firstLine = 0.sp, restLine = 22.sp)
-                        )
-                    )
-                }
-
-
-            }
-
-
-
-        }
-    }
-}
 
 

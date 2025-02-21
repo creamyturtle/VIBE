@@ -259,7 +259,8 @@ fun VibeNavHost(
             when (val state = eventsViewModel.eventsUiState) {
                 is EventsUiState.Success -> {
                     EventCalendarScreen(
-                        events = state.events, // ✅ Pass only events list
+                        events = state.events,
+                        navController = navController,
                         onBack = { navController.navigateUp() }
                     )
                 }

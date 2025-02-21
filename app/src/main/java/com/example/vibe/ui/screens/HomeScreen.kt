@@ -194,7 +194,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
             .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(Modifier.height(104.dp))
+        Spacer(Modifier.height(164.dp))
 
         repeat(5) {
             ShimmerEventCard()
