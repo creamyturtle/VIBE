@@ -191,13 +191,13 @@ fun UserProfileContent(
         Spacer(modifier = Modifier.height(0.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             if (!user.facebook.isNullOrEmpty()) {
-                SocialMediaButton("Facebook", R.drawable.facebook, "https://www.facebook.com/${user.facebook}")
+                SocialMediaButton("Facebook", R.drawable.facebook, "https://www.facebook.com/${user.facebook}", Modifier.weight(1f))
             }
             if (!user.whatsapp.isNullOrEmpty()) {
-                SocialMediaButton("WhatsApp", R.drawable.whatsapp, "https://wa.me/${user.whatsapp}")
+                SocialMediaButton("WhatsApp", R.drawable.whatsapp, "https://wa.me/${user.whatsapp}", Modifier.weight(1f))
             }
             if (!user.instagram.isNullOrEmpty()) {
-                SocialMediaButton("Instagram", R.drawable.instagram, "https://www.instagram.com/${user.instagram}")
+                SocialMediaButton("Instagram", R.drawable.instagram, "https://www.instagram.com/${user.instagram}", Modifier.weight(1f))
             }
         }
 
@@ -249,12 +249,12 @@ fun InfoRow(icon: ImageVector, label: String, value: String) {
 
 
 @Composable
-fun SocialMediaButton(platform: String, icon: Int, url: String) {
+fun SocialMediaButton(platform: String, icon: Int, url: String, modifier: Modifier) {
     val context = LocalContext.current
 
     Button(
         onClick = { openUrl(url, context) },
-        //modifier = Modifier.weight(1f),
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Image(painter = painterResource(icon), contentDescription = "$platform Icon", modifier = Modifier.size(18.dp))
