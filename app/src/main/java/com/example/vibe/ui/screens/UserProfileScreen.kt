@@ -3,11 +3,13 @@ package com.example.vibe.ui.screens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,11 +18,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Cake
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,20 +44,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
+import com.example.vibe.R
 import com.example.vibe.data.MoreUserData
-import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import com.example.vibe.utils.SessionManager
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UserProfileScreen(
     userViewModel: UserViewModel,
@@ -82,6 +94,7 @@ fun UserProfileScreen(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UserProfileContent(
     user: MoreUserData,
@@ -151,51 +164,117 @@ fun UserProfileContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Age: ${user.age}")
-        Text(text = "Gender: ${user.gender}")
-        Text(text = "Bio: ${user.bio ?: "No bio available"}")
+        // ✅ User Details (Styled with Cards)
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.elevatedCardElevation(4.dp),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
+        ) {
+            Column(modifier = Modifier.padding(20.dp)) {
+                InfoRow(Icons.Default.CalendarToday, "Joined", user.formattedCreatedAt)
+                InfoRow(Icons.Default.Cake, "Age", "${user.age}")
+                InfoRow(Icons.Default.Person, "Gender", user.gender)
+                InfoRow(Icons.Default.Info, "Bio", user.bio ?: "No bio available")
+            }
+        }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // ✅ Social Media Links (with Icons)
+        Text(
+            text = "Connect with ${user.name}",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 16.dp) // ✅ Adds 16.dp padding on both left & right
+        )
+
+        Spacer(modifier = Modifier.height(0.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             if (!user.facebook.isNullOrEmpty()) {
-                SocialMediaButton("Facebook", user.facebook, context)
+                SocialMediaButton("Facebook", R.drawable.facebook, "https://www.facebook.com/${user.facebook}")
             }
             if (!user.whatsapp.isNullOrEmpty()) {
-                SocialMediaButton("WhatsApp", user.whatsapp, context)
+                SocialMediaButton("WhatsApp", R.drawable.whatsapp, "https://wa.me/${user.whatsapp}")
             }
-            if (user.instagram.isNotEmpty()) {
-                SocialMediaButton("Instagram", user.instagram, context)
+            if (!user.instagram.isNullOrEmpty()) {
+                SocialMediaButton("Instagram", R.drawable.instagram, "https://www.instagram.com/${user.instagram}")
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(
-            onClick = {
-                sessionManager.clearToken() // Clear token
-                onLogout() // Navigate to login
-            },
-            colors = ButtonDefaults.buttonColors(Color.Red)
-        ) {
-            Text("Logout", color = Color.White)
-        }
+
     }
 }
 
 
 @Composable
-fun SocialMediaButton(platform: String, url: String, context: Context) {
-    Button(
-        onClick = { openUrl(url, context) },
-        modifier = Modifier.padding(4.dp)
+fun InfoRow(icon: ImageVector, label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(text = platform)
+        // ✅ Ensures label stays at the TOP
+        Row(
+            modifier = Modifier.width(108.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                modifier = Modifier.size(20.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "$label:",
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                modifier = Modifier.align(Alignment.Top) // Ensures it's aligned with first line
+            )
+        }
+
+        // ✅ Bio text starts at the same height as the label
+        Text(
+            text = value,
+            fontSize = 14.sp,
+            modifier = Modifier.weight(1f) // Expands so text flows properly
+        )
     }
 }
 
 
-fun openUrl(url: String, context: Context) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    ContextCompat.startActivity(context, intent, null)
+
+
+@Composable
+fun SocialMediaButton(platform: String, icon: Int, url: String) {
+    val context = LocalContext.current
+
+    Button(
+        onClick = { openUrl(url, context) },
+        //modifier = Modifier.weight(1f),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Image(painter = painterResource(icon), contentDescription = "$platform Icon", modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(platform, fontSize = 14.sp)
+    }
 }
+
+
+
+
+fun openUrl(url: String, context: Context) {
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Ensure it works in Compose
+        ContextCompat.startActivity(context, intent, null)
+    } catch (e: Exception) {
+        Toast.makeText(context, "Unable to open link", Toast.LENGTH_SHORT).show()
+    }
+}
+
 
 
