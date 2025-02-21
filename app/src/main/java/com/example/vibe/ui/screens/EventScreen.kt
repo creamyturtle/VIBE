@@ -266,7 +266,7 @@ fun EventDetailsScreen(
                         .fillMaxWidth() // Makes the Box take the full width of the parent
                         .padding(24.dp, 16.dp, 60.dp, 16.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.outline, // Light grey background
+                            color = MaterialTheme.colorScheme.surfaceVariant, // Light grey background
                             shape = RoundedCornerShape(12.dp)
                         )
                         .padding(16.dp) // Padding inside the Box to provide space around the content
@@ -282,14 +282,14 @@ fun EventDetailsScreen(
                         Text(
                             text = "${event.openslots} Open Slots",
                             style = MaterialTheme.typography.titleSmall,
-                            color = Color.DarkGray,
+                            color = MaterialTheme.colorScheme.secondaryContainer,
                             modifier = Modifier.padding(bottom = 4.dp) // Space below the text
                         )
 
                         Text(
                             text = "${event.formattedDate} @ ${event.formattedTime}",
                             style = MaterialTheme.typography.titleSmall,
-                            color = Color.DarkGray
+                            color = MaterialTheme.colorScheme.secondaryContainer,
                         )
                     }
                 }

@@ -191,15 +191,15 @@ fun UserProfileContent(
         )
 
         Spacer(modifier = Modifier.height(0.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             if (!user.facebook.isNullOrEmpty()) {
-                SocialMediaButton("Facebook", R.drawable.facebook, "https://www.facebook.com/${user.facebook}", Modifier.weight(1f))
+                SocialMediaButton("Facebook : ${user.facebook}", R.drawable.facebook, "https://www.facebook.com/${user.facebook}", Modifier.fillMaxWidth())
             }
             if (!user.whatsapp.isNullOrEmpty()) {
-                SocialMediaButton("WhatsApp", R.drawable.whatsapp, "https://wa.me/${user.whatsapp}", Modifier.weight(1f))
+                SocialMediaButton("WhatsApp : ${user.whatsapp}", R.drawable.whatsapp, "https://wa.me/${user.whatsapp}", Modifier.fillMaxWidth())
             }
             if (!user.instagram.isNullOrEmpty()) {
-                SocialMediaButton("Instagram", R.drawable.instagram, "https://www.instagram.com/${user.instagram}", Modifier.weight(1f))
+                SocialMediaButton("Instagram : @${user.instagram}", R.drawable.instagram, "https://www.instagram.com/${user.instagram}", Modifier.fillMaxWidth())
             }
         }
 
@@ -220,7 +220,7 @@ fun InfoRow(icon: ImageVector, label: String, value: String) {
     ) {
         // ✅ Ensures label stays at the TOP
         Row(
-            modifier = Modifier.width(108.dp),
+            modifier = Modifier.width(100.dp),
             verticalAlignment = Alignment.Top
         ) {
             Icon(
@@ -257,11 +257,11 @@ fun SocialMediaButton(platform: String, icon: Int, url: String, modifier: Modifi
     Button(
         onClick = { openUrl(url, context) },
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Image(painter = painterResource(icon), contentDescription = "$platform Icon", modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(6.dp))
-        Text(platform, fontSize = 14.sp)
+        Text(platform, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 

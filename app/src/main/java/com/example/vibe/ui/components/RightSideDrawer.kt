@@ -275,7 +275,7 @@ fun UserProfileSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(12.dp)) // Light gray background
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(12.dp)) // Light gray background
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -287,7 +287,7 @@ fun UserProfileSection() {
             modifier = Modifier
                 .size(70.dp)
                 .clip(CircleShape)
-                .background(Color.DarkGray),
+                .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
             if (userImage != null) {
@@ -315,7 +315,7 @@ fun UserProfileSection() {
         Text(
             text = "$pHosted Parties Hosted",
             fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.inverseSurface
+            color = MaterialTheme.colorScheme.secondaryContainer
         )
     }
 }

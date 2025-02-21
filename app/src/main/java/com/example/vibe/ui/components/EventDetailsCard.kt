@@ -44,7 +44,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp))
             //.shadow(8.dp)
             .padding(16.dp, 4.dp, 16.dp, 16.dp)
 

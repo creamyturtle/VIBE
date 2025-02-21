@@ -19,8 +19,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
@@ -29,6 +31,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -46,6 +49,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.EventDetailsCard
@@ -78,28 +82,34 @@ fun EventCalendarScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(
+                rememberScrollState())
             .padding(horizontal = 16.dp), // ✅ Add padding for better spacing
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.height(78.dp))
 
-        IconButton(
-            onClick = onBack,
+        Row(
             modifier = Modifier
-                .padding(8.dp, 40.dp, 0.dp, 0.dp)
-                .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
-                .size(32.dp)
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 40.dp, bottom = 8.dp), // ✅ Left-aligned with padding
+            horizontalArrangement = Arrangement.Start // ✅ Align to the left
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.size(20.dp)
-            )
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
+                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                    .size(32.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         }
-
-        Spacer(Modifier.height(16.dp))
 
         // ✅ Month Title
         Text(
@@ -185,6 +195,9 @@ fun EventCalendarScreen(
 
 
         }
+
+        Spacer(Modifier.height(120.dp))
+
     }
 }
 
@@ -278,6 +291,7 @@ fun CalendarDay(
     }
 }
 
+
 @Composable
 fun EventSelectionPopup(
     events: List<Event>,
@@ -286,21 +300,32 @@ fun EventSelectionPopup(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Events on ${events.first().date}") },
+        title = {
+            Text(
+                text = "Events on ${events.first().date}",
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        },
         text = {
-            Column {
-                events.forEach { event ->
-                    Button(
-                        onClick = {
-                            onEventSelected(event) // ✅ Select event
-                            onDismiss() // ✅ Close the dialog immediately
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = getColorByPartyType(event.partytype)
-                        ),
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                    ) {
-                        Text(event.partyname, color = Color.White)
+            Surface(
+                color = MaterialTheme.colorScheme.surface, // ✅ Ensures the background is white
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    events.forEach { event ->
+                        Button(
+                            onClick = {
+                                onEventSelected(event)
+                                onDismiss()
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = getColorByPartyType(event.partytype)
+                            ),
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                        ) {
+                            Text(event.partyname, color = Color.White)
+                        }
                     }
                 }
             }
@@ -309,9 +334,11 @@ fun EventSelectionPopup(
             TextButton(onClick = onDismiss) {
                 Text("Close")
             }
-        }
+        },
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     )
 }
+
 
 
 fun getColorByPartyType(partyType: String?): Color {
