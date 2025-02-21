@@ -16,10 +16,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
+import com.example.vibe.ui.screens.ErrorScreen
+import com.example.vibe.ui.screens.EventCalendarScreen
 import com.example.vibe.ui.screens.EventCreationForm
 import com.example.vibe.ui.screens.EventDetailsScreen
 import com.example.vibe.ui.screens.FAQScreen
 import com.example.vibe.ui.screens.HomeScreen
+import com.example.vibe.ui.screens.LoadingScreen
 import com.example.vibe.ui.screens.LoginScreen
 import com.example.vibe.ui.screens.MapScreen
 import com.example.vibe.ui.screens.PrivacyPolicyScreen
@@ -29,6 +32,7 @@ import com.example.vibe.ui.screens.TermsAndConditionsScreen
 import com.example.vibe.ui.screens.UserProfileScreen
 import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.AuthViewModel
+import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
@@ -235,6 +239,37 @@ fun VibeNavHost(
             }
 
         }
+
+
+        composable(route = "calendar") { backStackEntry ->
+
+            val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+
+            LaunchedEffect(filterType) {
+                if (filterType != eventsViewModel.lastFilter) {
+                    if (filterType == "all") {
+                        eventsViewModel.lastFilter = "all"
+                        eventsViewModel.getEvents()
+                    } else {
+                        eventsViewModel.getEventsByType(filterType)
+                    }
+                }
+            }
+
+            when (val state = eventsViewModel.eventsUiState) {
+                is EventsUiState.Success -> {
+                    EventCalendarScreen(
+                        events = state.events, // ✅ Pass only events list
+                        onBack = { navController.navigateUp() }
+                    )
+                }
+                is EventsUiState.Loading -> LoadingScreen()
+                else -> ErrorScreen(retryAction = { eventsViewModel.getEvents() })
+            }
+        }
+
+
+
 
 
 
