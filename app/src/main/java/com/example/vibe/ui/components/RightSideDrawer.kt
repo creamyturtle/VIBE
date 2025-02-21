@@ -155,7 +155,7 @@ fun RightSideDrawer(
 
                     DrawerMenuItem(icon = Icons.Outlined.Dashboard, text = stringResource(R.string.dashboard)) {
                         isOpen.value = false
-                        navController.navigate("dashboard")
+                        navController.navigate("control_panel")
                     }
 
                     DrawerMenuItem(icon = Icons.Outlined.Event, text = stringResource(R.string.host_event)) {

@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
+import com.example.vibe.ui.screens.ControlPanelScreen
 import com.example.vibe.ui.screens.ErrorScreen
 import com.example.vibe.ui.screens.EventCalendarScreen
 import com.example.vibe.ui.screens.EventCreationForm
@@ -267,6 +268,15 @@ fun VibeNavHost(
                 is EventsUiState.Loading -> LoadingScreen()
                 else -> ErrorScreen(retryAction = { eventsViewModel.getEvents() })
             }
+        }
+
+
+        composable(route = "control_panel") {
+
+            ControlPanelScreen(
+                onBack = { navController.navigateUp() }
+            )
+
         }
 
 

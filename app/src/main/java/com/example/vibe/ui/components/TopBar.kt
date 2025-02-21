@@ -12,7 +12,7 @@ fun TopBar(navController: NavController, isDrawerOpen: MutableState<Boolean>, li
 
     when {
         // Screens that should have a basic top bar
-        currentDestination in setOf("about_us", "faq", "terms_and_conditions", "privacy_policy", "user_profile", "calendar") ||
+        currentDestination in setOf("about_us", "faq", "terms_and_conditions", "privacy_policy", "user_profile", "calendar", "control_panel") ||
                 currentDestination?.startsWith("map_screen") == true -> {
             VibeBasicTopBar(navController, isDrawerOpen)
         }
