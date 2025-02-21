@@ -32,5 +32,7 @@ Future Updates
 11. Language translations (en/es) - working
 12. Fancy homepage dropdown menu - DONE
 13. Dark mode - DONE
-14. Homepage filters
+14. Homepage filters - DONE
 15. User Profile editable
+16. Approve RSVPs System
+17. Check-In Guests System
