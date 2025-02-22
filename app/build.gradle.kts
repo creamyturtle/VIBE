@@ -103,6 +103,8 @@ dependencies {
     implementation("com.kizitonwose.calendar:view:2.0.4")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
 
+    implementation("com.google.zxing:core:3.4.1")
+
     implementation("androidx.compose.material:material:1.5.1")
     implementation("androidx.compose.ui:ui-tooling:1.5.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose")

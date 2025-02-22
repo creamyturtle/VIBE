@@ -33,6 +33,10 @@ class AuthViewModel(
     private val _isLoggedIn = MutableStateFlow(sessionManager.isLoggedIn()) // ✅ Uses SessionManager
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
 
+    fun getToken() {
+        sessionManager.getToken()
+    }
+
     fun updateEmail(newEmail: String) {
         email = newEmail
     }

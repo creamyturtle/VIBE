@@ -1,31 +1,47 @@
 package com.example.vibe.ui.screens
 
+import android.service.autofill.OnClickAction
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
 import com.example.vibe.R
 
 
 @Composable
 fun ControlPanelScreen(
+    navController: NavController,
     onBack: () -> Unit
 ) {
     Box( // ✅ Use Box to allow absolute positioning
@@ -55,7 +71,7 @@ fun ControlPanelScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Main Action Buttons
-            ActionButtonsGrid()
+            ActionButtonsGrid(navController)
 
             Spacer(Modifier.height(280.dp)) // Keep some space at the bottom
         }
@@ -137,23 +153,24 @@ fun DashboardCard(title: String, count: String) {
 
 
 @Composable
-fun ActionButtonsGrid() {
+fun ActionButtonsGrid(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        ActionButton("View Events Attending", Color(0xFFBB86FC))
-        ActionButton("Manage Hosted Events", Color(0xFF03DAC5))
-        ActionButton("Approve Reservations", Color(0xFFFFC107))
-        ActionButton("Check-in Guests", Color(0xFF6200EE))
-        ActionButton("Edit Profile", Color(0xFFE91E63))
+        ActionButton("View Events Attending", Color(0xFFBB86FC)) { navController.navigate("events_attending")}
+        ActionButton("Manage Hosted Events", Color(0xFF03DAC5)) { navController.navigate("events_attending")}
+        ActionButton("Approve Reservations", Color(0xFFFFC107)) { navController.navigate("events_attending")}
+        ActionButton("Check-in Guests", Color(0xFF6200EE)) { navController.navigate("events_attending")}
+        ActionButton("Edit Profile", Color(0xFFE91E63)) { navController.navigate("events_attending")}
     }
 }
 
+
 @Composable
-fun ActionButton(text: String, color: Color) {
+fun ActionButton(text: String, color: Color, onClick: () -> Unit) {
     Button(
-        onClick = { /* Handle action */ },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = RoundedCornerShape(8.dp), // ✅ Adjust this value for squarer corners
         modifier = Modifier
@@ -164,9 +181,11 @@ fun ActionButton(text: String, color: Color) {
     }
 }
 
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun PreviewControlPanel() {
     ControlPanelScreen(onBack = {  })
 }
+
+ */

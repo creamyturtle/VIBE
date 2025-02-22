@@ -21,6 +21,7 @@ import com.example.vibe.ui.screens.ErrorScreen
 import com.example.vibe.ui.screens.EventCalendarScreen
 import com.example.vibe.ui.screens.EventCreationForm
 import com.example.vibe.ui.screens.EventDetailsScreen
+import com.example.vibe.ui.screens.EventsAttendingScreen
 import com.example.vibe.ui.screens.FAQScreen
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoadingScreen
@@ -274,8 +275,37 @@ fun VibeNavHost(
         composable(route = "control_panel") {
 
             ControlPanelScreen(
+                navController = navController,
                 onBack = { navController.navigateUp() }
             )
+
+        }
+
+
+        composable(route = "events_attending") { backStackEntry ->
+
+
+
+
+
+            val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+
+
+            LaunchedEffect(filterType) {
+
+                    eventsViewModel.getEvents() // Fetch all events
+
+            }
+
+            //val token = authViewModel.getToken()
+
+            EventsAttendingScreen(
+                eventsUiState = eventsViewModel.eventsUiState,
+                navController = navController,
+                //token = token,
+                onBack = { navController.navigateUp() }
+            )
+
 
         }
 
