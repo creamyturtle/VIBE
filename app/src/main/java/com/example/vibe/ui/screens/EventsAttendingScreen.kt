@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,13 +21,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -74,14 +80,36 @@ fun EventsAttendingScreen(
             .padding(top = 104.dp) // Ensure it doesn't overlap with the TopBar
     ) {
         // ✅ Title at the top
-        Text(
-            text = "Events Attending",
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp)
-        )
+
+        Row() {
+
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .padding(24.dp, 8.dp, 16.dp, 8.dp)
+                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
+                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                    .size(32.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            Text(
+                text = "Events Attending",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+
+        }
+
 
         when (eventsUiState) {
             is EventsUiState.SuccessAttending -> {
@@ -102,6 +130,7 @@ fun EventsAttendingScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp)
                     ) {
+
                         items(events) { event ->
 
                             Log.d("UI", "🔹 Rendering event: ${event.partyname}")
