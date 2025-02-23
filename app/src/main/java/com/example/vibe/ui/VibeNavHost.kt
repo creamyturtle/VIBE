@@ -302,16 +302,6 @@ fun VibeNavHost(
         composable(route = "events_attending") { backStackEntry ->
 
 
-
-
-
-            //val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
-
-
-            //LaunchedEffect() {
-
-            //}
-
             LaunchedEffect(Unit) {
                 Log.d("UI", "📢 Calling ViewModel.getAttending()")
                 eventsViewModel.getAttending()
@@ -323,7 +313,9 @@ fun VibeNavHost(
                 eventsUiState = eventsViewModel.eventsUiState,
                 navController = navController,
                 retryAction = eventsViewModel::getAttending,
-                //token = token,
+                onCancelReservation = { tableName ->
+                    eventsViewModel.cancelReservation(tableName)
+                },
                 onBack = { navController.navigateUp() }
             )
 

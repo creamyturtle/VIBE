@@ -19,6 +19,8 @@ package com.example.vibe.network
 
 import com.example.vibe.data.ApiResponse
 import com.example.vibe.data.AttendingResponse
+import com.example.vibe.data.CancelResResponse
+import com.example.vibe.data.CancelReservationRequest
 import com.example.vibe.data.LoginRequest
 import com.example.vibe.data.LoginResponse
 import com.example.vibe.data.SignupRequest
@@ -114,6 +116,12 @@ interface EventsApiService {
 
     @GET("eventsAttendingApp.php")
     suspend fun getAttending(): AttendingResponse
+
+
+    @POST("cancelReservationApp.php")
+    suspend fun cancelReservation(
+        @Body request: CancelReservationRequest
+    ): CancelResResponse
 
 
 

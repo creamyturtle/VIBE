@@ -31,6 +31,7 @@ interface EventsRepository {
     suspend fun submitEvent(event: Event): ApiResponse
     suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse
     suspend fun getAttending(): List<EventAttending>
+    suspend fun cancelReservation(tableName: String): CancelResResponse
 
 }
 
@@ -89,6 +90,19 @@ class DefaultEventsRepository(
         } catch (e: Exception) {
             Log.e("Repository", "Error fetching data: ${e.message}", e)
             emptyList()
+        }
+    }
+
+
+
+    override suspend fun cancelReservation(tableName: String): CancelResResponse {
+        return try {
+            val response = eventsApiService.cancelReservation(CancelReservationRequest(tableName))
+            Log.d("Repository", "Fetched data: $response")
+            response
+        } catch (e: Exception) {
+            Log.e("Repository", "Error fetching data: ${e.message}", e)
+            CancelResResponse(success = false, message = e.message ?: "Unknown error")
         }
     }
 

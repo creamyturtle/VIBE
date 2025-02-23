@@ -131,6 +131,36 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
 
 
 
+    val isLoading = MutableStateFlow(false)
+    val cancelSuccess = MutableStateFlow<String?>(null)
+    val cancelError = MutableStateFlow<String?>(null)
+
+    fun cancelReservation(tableName: String) {
+        viewModelScope.launch {
+            isLoading.value = true
+            try {
+                val response = eventsRepository.cancelReservation(tableName)
+                if (response.success) {
+                    Log.d("ViewModel", "✅ Reservation cancelled successfully: ${response.message}")
+                    cancelSuccess.value = response.message ?: "Reservation cancelled successfully"
+                    getAttending() // 🔄 Refresh the list after cancellation
+                } else {
+                    Log.e("ViewModel", "❌ Failed to cancel reservation: ${response.message}")
+                    cancelError.value = response.message ?: "Failed to cancel reservation"
+                }
+            } catch (e: Exception) {
+                Log.e("ViewModel", "❌ API error: ${e.message}")
+                cancelError.value = e.message ?: "Unknown error"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
+
+
+
+
 
 
     fun selectEvent(eventId: String) {
