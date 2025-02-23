@@ -3,6 +3,7 @@ package com.example.vibe.data
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.LocalTime
@@ -21,11 +22,18 @@ data class EventAttending(
     val date: String,
     val time: String,
     val location: String,
+    val locationlong: String,
     val openslots: Int,
+    val totalslots: Int,
     val rsvpapproved: Int,
     val qrcode: String,
-    val tablename: String
+    val tablename: String,
+
+    @SerialName("imageurl1") val imgSrc: String? = null
 ) {
+
+    val fullImgSrc: String
+        get() = "https://www.vibesocial.org/$imgSrc"
 
     val formattedDate: String
         @RequiresApi(Build.VERSION_CODES.O)

@@ -1,13 +1,16 @@
 package com.example.vibe.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,11 +49,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.vibe.R
 import com.example.vibe.data.EventAttending
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.utils.generateQRCode
@@ -212,13 +221,38 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
                 modifier = Modifier.fillMaxWidth()
             ) {
 
+                AsyncImage(
+                    model = event.fullImgSrc,
+                    contentDescription = event.partyname,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.loading_img),
+                    error = painterResource(R.drawable.defaultimg)
+                )
+
+                Spacer(Modifier.height(32.dp))
+
+
+
+                Text(text = "Address:", fontWeight = FontWeight.Bold)
+
+                Spacer(Modifier.height(4.dp))
+
+
+                //Text(text = event.locationlong)
+                OpenInMaps(event.locationlong)
+
+                Spacer(Modifier.height(32.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Location:", fontWeight = FontWeight.Bold)
-                    Text(text = event.location)
+                    Text(text = "People Attending:", fontWeight = FontWeight.Bold)
+                    Text(text = "${event.totalslots.toInt() - event.openslots.toInt()}")
                 }
 
                 Spacer(Modifier.height(8.dp))
@@ -325,5 +359,21 @@ fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
         },
         modifier = Modifier.clip(RoundedCornerShape(16.dp)),
         containerColor = MaterialTheme.colorScheme.surface
+    )
+}
+
+@Composable
+fun OpenInMaps(location: String) {
+    val context = LocalContext.current
+
+    Text(
+        text = location,
+        modifier = Modifier.clickable {
+            val uri = Uri.encode(location)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$uri"))
+            intent.setPackage("com.google.android.apps.maps")
+            context.startActivity(intent)
+        },
+        color = Color.Blue
     )
 }
