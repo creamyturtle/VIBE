@@ -1,6 +1,5 @@
 package com.example.vibe.data
 
-import com.example.vibe.model.Event
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
