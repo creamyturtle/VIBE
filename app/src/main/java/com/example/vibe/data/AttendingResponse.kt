@@ -17,7 +17,7 @@ data class EventAttending(
     val location: String,
     val openslots: Int,
     val rsvpapproved: Int,
-    val qrcode: String?,
+    val qrcode: String,
     val tablename: String
 )
 

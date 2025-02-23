@@ -5,37 +5,21 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -43,8 +27,6 @@ import com.example.vibe.data.EventAttending
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.utils.generateQRCode
 import kotlinx.coroutines.launch
-
-
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -61,7 +43,6 @@ fun EventsAttendingScreen(
     when (eventsUiState) {
         is EventsUiState.SuccessAttending -> {
             val events = eventsUiState.events
-
             val coroutineScope = rememberCoroutineScope()
 
             Log.d("UI", "✅ Received ${events.size} events in UI")
@@ -69,7 +50,7 @@ fun EventsAttendingScreen(
             if (events.isEmpty()) {
                 Log.e("UI", "❌ No events to display in LazyColumn")
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No events found.", color = Color.Gray)
+                    Text("No events found.", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else {
                 LazyColumn(
@@ -77,11 +58,11 @@ fun EventsAttendingScreen(
                     contentPadding = PaddingValues(24.dp)
                 ) {
                     items(events) { event ->
-                        Log.d("UI", "🔹 Rendering event: ${event.partyname}") // ✅ Log each event
+                        Log.d("UI", "🔹 Rendering event: ${event.partyname}")
                         EventCard(
                             event = event,
                             onViewQrCode = { qrcode ->
-                                Log.d("UI", "🔍 Showing QR Code for: $qrcode") // ✅ Debugging log
+                                Log.d("UI", "🔍 Showing QR Code for: $qrcode")
                                 selectedQrCode = qrcode
                                 showQrModal = true
                             },
@@ -99,13 +80,13 @@ fun EventsAttendingScreen(
         is EventsUiState.Error -> {
             Log.e("UI", "❌ UI in error state - failed to load events")
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Failed to load events", color = Color.Red)
+                Text("Failed to load events", color = MaterialTheme.colorScheme.error)
             }
         }
         else -> {
             Log.d("UI", "⏳ UI in loading state - waiting for data")
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         }
     }
@@ -119,52 +100,48 @@ fun EventsAttendingScreen(
     }
 }
 
-
 @Composable
 fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelReservation: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = 4.dp
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = event.partyname, style = MaterialTheme.typography.h6)
+            Text(text = event.partyname, style = MaterialTheme.typography.titleMedium)
             Text(text = "${event.date} @ ${event.time}")
             Text(text = "Location: ${event.location}")
             Text(text = "Open Slots: ${event.openslots}")
-            Text(text = "RSVP Approved: ${event.rsvpapproved}")
-            Text(text = "Raw QR Code: ${event.qrcode}")
+            Text(
+                text = buildAnnotatedString {
+                    append("RSVP Status: ") // This part remains black
+                    withStyle(SpanStyle(color = if (event.rsvpapproved == 1) Color.Green else Color.Red)) {
+                        append(if (event.rsvpapproved == 1) "Approved" else "Pending") // This part changes color
+                    }
+                }
+            )
 
 
 
             Spacer(modifier = Modifier.height(8.dp))
 
-
-            //commented out temporarily until I improve Event data class
-
-            /*
-            if (event.rsvpapproved == 1 && event.qrcode != null) {
-                Button(onClick = { onViewQrCode(event.qrcode) }) {
-                    Text("View QR Code")
+            if (event.rsvpapproved == 1 && event.qrcode.isNotEmpty()) {
+                Button(
+                    onClick = { onViewQrCode(event.qrcode) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text("View QR Code", color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
 
-             */
-
-
-            //test code
-            Button(onClick = { onViewQrCode(event.partyname) }) {
-                Text("View QR Code")
-            }
-
-
-
-
             Button(
                 onClick = onCancelReservation,
-                modifier = Modifier.padding(top = 8.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
-                Text("Cancel Reservation", color = MaterialTheme.colors.onError)
+                Text("Cancel Reservation", color = MaterialTheme.colorScheme.onError)
             }
         }
     }
@@ -174,21 +151,23 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
 fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Your QR Code") },
+        title = {
+            Text("Your QR Code", style = MaterialTheme.typography.titleLarge)
+        },
         text = {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (!qrcodeData.isNullOrEmpty()) {
-                    val qrBitmap: Bitmap? = generateQRCode(qrcodeData, 400, 400) // Bigger QR Code
+                    val qrBitmap: Bitmap? = generateQRCode(qrcodeData, 400, 400)
                     qrBitmap?.let {
                         Image(
                             bitmap = it.asImageBitmap(),
                             contentDescription = "QR Code",
                             modifier = Modifier
-                                .size(200.dp) // Adjust size
-                                .clip(RoundedCornerShape(12.dp)) // Rounded corners
+                                .size(220.dp)
+                                .clip(RoundedCornerShape(12.dp))
                                 .background(Color.White)
                                 .padding(8.dp)
                         )
@@ -196,7 +175,7 @@ fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
                 } else {
                     Text(
                         text = "No QR Code available",
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp)
@@ -208,15 +187,12 @@ fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
             Button(
                 onClick = onDismiss,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    disabledContentColor = Color.White
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("Close", color = Color.White, fontSize = 16.sp)
+                Text("Close", color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)
             }
         },
-        modifier = Modifier.clip(RoundedCornerShape(16.dp)) // Make dialog corners rounded
+        modifier = Modifier.clip(RoundedCornerShape(16.dp))
     )
 }
 
