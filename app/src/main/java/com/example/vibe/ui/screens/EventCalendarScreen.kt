@@ -25,12 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.automirrored.outlined.DirectionsBike
-import androidx.compose.material.icons.filled.DirectionsRun
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Nature
-import androidx.compose.material.icons.filled.Water
 import androidx.compose.material.icons.outlined.Agriculture
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Pool
@@ -70,7 +65,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)
