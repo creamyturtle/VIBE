@@ -206,7 +206,6 @@ fun RightSideDrawer(
                         navController.navigate("map_screen/all")
                     }
 
-                    Spacer(Modifier.height(16.dp))
 
                     DrawerMenuItem(icon = Icons.AutoMirrored.Outlined.ExitToApp, text = stringResource(R.string.logout)) {
                         isOpen.value = false
@@ -257,7 +256,7 @@ fun RightSideDrawer(
                 }
 
 
-                Spacer(Modifier.height(48.dp))
+                Spacer(Modifier.height(32.dp))
 
                 DarkModeToggle(
                     isDarkMode = isDarkMode,

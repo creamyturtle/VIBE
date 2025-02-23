@@ -35,6 +35,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -226,14 +227,14 @@ fun ReservationScreen(
                     modifier = Modifier
                         .align(Alignment.Start) // Aligns to the left of the screen
                         .padding(16.dp) // Adds spacing from the edges
-                        .background(color = Color.White, shape = CircleShape)
+                        //.background(color = Color.White, shape = CircleShape)
                         //.border(width = 1.dp, color = Color.LightGray, shape = CircleShape)
                         .size(40.dp) // Slightly larger size for easier clicking
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
 
@@ -267,7 +268,7 @@ fun PleaseLogin(
             text = "Returning User",
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(Modifier.height(32.dp))
@@ -291,7 +292,7 @@ fun PleaseLogin(
             text = "New User",
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(Modifier.height(32.dp))

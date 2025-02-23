@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -59,13 +60,13 @@ fun LoginScreen(
             onClick = onBack,
             modifier = Modifier
                 .align(Alignment.Start)
-                .background(color = Color.White, shape = CircleShape)
+                //.background(color = Color.White, shape = CircleShape)
                 .size(40.dp)
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
 
