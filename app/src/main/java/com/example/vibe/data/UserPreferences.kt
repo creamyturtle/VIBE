@@ -23,6 +23,10 @@ object UserPreferences {
     private val USER_CREATED_AT_KEY = stringPreferencesKey("user_created_at")
     private val USER_IS_VERIFIED_KEY = booleanPreferencesKey("user_is_verified")
 
+    private val USER_DARK_MODE_KEY = booleanPreferencesKey("user_dark_mode")
+
+
+
     /** ✅ Save User Data */
     suspend fun saveUser(context: Context, userData: MoreUserData) {
         context.dataStore.edit { preferences ->
@@ -68,4 +72,22 @@ object UserPreferences {
     suspend fun clearUser(context: Context) {
         context.dataStore.edit { it.clear() }
     }
+
+
+
+
+    /** ✅ Save Dark Mode Preference */
+    suspend fun saveDarkMode(context: Context, isDarkMode: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[USER_DARK_MODE_KEY] = isDarkMode
+        }
+    }
+
+    /** ✅ Get Dark Mode Preference as a Flow */
+    fun getDarkModeFlow(context: Context): Flow<Boolean> {
+        return context.dataStore.data.map { preferences ->
+            preferences[USER_DARK_MODE_KEY] ?: false // Default to Light Mode
+        }
+    }
+
 }

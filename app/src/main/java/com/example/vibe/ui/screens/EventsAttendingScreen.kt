@@ -124,7 +124,15 @@ fun EventsAttendingScreen(
                             )
                             Spacer(modifier = Modifier.height(32.dp))
                         }
+
+                        // ✅ Adds a spacer at the bottom for extra padding when scrolling
+                        item {
+                            Spacer(modifier = Modifier.height(120.dp)) // Adjust height as needed
+                        }
+
                     }
+
+
                 }
             }
 
@@ -142,6 +150,8 @@ fun EventsAttendingScreen(
                 }
             }
         }
+
+
     }
 
     // ✅ Display QR Code Dialog when showQrModal is true

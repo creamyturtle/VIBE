@@ -3,10 +3,13 @@ package com.example.vibe.ui.components
 import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,8 +29,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -35,12 +40,14 @@ import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,6 +71,7 @@ import androidx.navigation.NavController
 import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
+import com.example.vibe.ui.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -75,7 +83,8 @@ fun RightSideDrawer(
     isLoggedIn: Boolean,
     authViewModel: AuthViewModel,
     context: Context,
-    languageViewModel: LanguageViewModel
+    languageViewModel: LanguageViewModel,
+    viewModel: SettingsViewModel
 ) {
     val density = LocalDensity.current
     val drawerWidth = with(density) { 280.dp.toPx() } // Drawer width in pixels
@@ -85,6 +94,8 @@ fun RightSideDrawer(
     var shouldRender by remember { mutableStateOf(false) }
 
     val selectedLanguage by languageViewModel.language
+
+    val isDarkMode by viewModel.isDarkMode.collectAsState()
 
 
     LaunchedEffect(isOpen.value) {
@@ -243,13 +254,17 @@ fun RightSideDrawer(
                     }
 
 
-
-
-
-
-
                 }
 
+
+                Spacer(Modifier.height(48.dp))
+
+                DarkModeToggle(
+                    isDarkMode = isDarkMode,
+                    onThemeChange = { newTheme ->
+                        viewModel.toggleDarkMode(newTheme)
+                    }
+                )
 
 
             }
@@ -322,17 +337,34 @@ fun UserProfileSection() {
 
 
 @Composable
-fun DrawerMenuItem(icon: ImageVector, text: String, hasSubmenu: Boolean = false, isExpanded: Boolean = false, onClick: () -> Unit) {
+fun DrawerMenuItem(
+    icon: ImageVector,
+    text: String,
+    hasSubmenu: Boolean = false,
+    isExpanded: Boolean = false,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clip(RoundedCornerShape(12.dp)) // ✅ Rounded corners
+            .clickable(onClick = onClick) // ✅ Material3 handles ripple automatically
             .padding(vertical = 12.dp, horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(imageVector = icon, contentDescription = text, tint = Color(0xFFFE1943), modifier = Modifier.size(24.dp))
+        Icon(
+            imageVector = icon,
+            contentDescription = text,
+            tint = Color(0xFFFE1943),
+            modifier = Modifier.size(24.dp)
+        )
         Spacer(Modifier.width(16.dp))
-        Text(text, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.secondaryContainer)
+        Text(
+            text,
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.secondary
+        )
 
         if (hasSubmenu) {
             Spacer(Modifier.weight(1f))
@@ -347,18 +379,30 @@ fun DrawerMenuItem(icon: ImageVector, text: String, hasSubmenu: Boolean = false,
 
 
 
+
 @Composable
 fun DrawerSubMenuItem(text: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clip(RoundedCornerShape(12.dp)) // ✅ Rounded corners
+            .clickable(onClick = onClick) // ✅ Material3 handles ripple automatically
             .padding(vertical = 8.dp, horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color.Gray)
+        Text(
+            text,
+            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            fontWeight = FontWeight.Medium,
+            color = Color.Gray
+        )
     }
 }
+
+
+
+
+
 
 
 @Composable
@@ -427,6 +471,80 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
     }
 }
 
+
+
+
+
+@Composable
+fun DarkModeToggle(
+    isDarkMode: Boolean,
+    onThemeChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(28.dp, 8.dp, 28.dp, 8.dp)
+            .background(MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(20.dp)),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val darkModeEnabled = isDarkMode
+
+        // Light Mode Option
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(if (!darkModeEnabled) Color(0xFFFE1943) else Color.Transparent)
+                .clickable { onThemeChange(false) }
+                .padding(4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Light",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (!darkModeEnabled) Color.White else MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Default.LightMode,
+                    contentDescription = "Light Mode",
+                    modifier = Modifier.size(24.dp),
+                    tint = if (!darkModeEnabled) Color.White else MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+
+        // Dark Mode Option
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(if (darkModeEnabled) Color(0xFFFE1943) else Color.Transparent)
+                .clickable { onThemeChange(true) }
+                .padding(4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Dark",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (darkModeEnabled) Color.White else MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Default.DarkMode,
+                    contentDescription = "Dark Mode",
+                    modifier = Modifier.size(24.dp),
+                    tint = if (darkModeEnabled) Color.White else MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+    }
+}
 
 
 

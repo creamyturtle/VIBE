@@ -380,7 +380,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
 
 
 
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun LoadingScreenPreview() {
@@ -400,6 +400,8 @@ fun ErrorScreenPreview() {
         ErrorScreen({}, Modifier.fillMaxSize())
     }
 }
+
+ */
 
 
 /*

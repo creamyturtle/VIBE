@@ -41,13 +41,14 @@ import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
+import com.example.vibe.ui.viewmodel.SettingsViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun VibeApp() {
+fun VibeApp(settingsViewModel: SettingsViewModel) {
 
     //val listState = rememberLazyListState()
 
@@ -123,7 +124,7 @@ fun VibeApp() {
 
 
         }
-        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, languageViewModel)
+        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, languageViewModel, settingsViewModel)
     }
 
 

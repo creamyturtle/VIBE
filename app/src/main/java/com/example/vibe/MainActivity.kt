@@ -24,9 +24,13 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vibe.ui.VibeApp
 import com.example.vibe.ui.theme.VibeTheme
+import com.example.vibe.ui.viewmodel.SettingsViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -34,13 +38,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            VibeTheme {
+
+            val settingsViewModel: SettingsViewModel = viewModel()
+            val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
+
+
+            VibeTheme(darkTheme = isDarkMode) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    VibeApp()
+                    VibeApp(settingsViewModel)
                 }
             }
         }

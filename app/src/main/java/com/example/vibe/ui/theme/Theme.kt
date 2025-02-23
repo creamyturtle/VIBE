@@ -62,13 +62,10 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 
-
 @Composable
 fun VibeTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    // Dynamic color in this app is turned off for learning purposes
-    dynamicColor: Boolean = false,
+    darkTheme: Boolean, // 🔥 Now controlled by ViewModel instead of system theme
+    dynamicColor: Boolean = false, // Dynamic color disabled for consistency
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -76,10 +73,10 @@ fun VibeTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -93,6 +90,7 @@ fun VibeTheme(
         content = content
     )
 }
+
 
 /**
  * Sets up edge-to-edge for the window of this [view]. The system icon colors are set to either
