@@ -181,7 +181,7 @@ fun RightSideDrawer(
 
                     DrawerMenuItem(icon = Icons.Outlined.AccountCircle, text = stringResource(R.string.user_profile)) {
                         isOpen.value = false
-                        navController.navigate("profile")
+                        navController.navigate("user_profile")
                     }
 
                     // Submenu: Information
