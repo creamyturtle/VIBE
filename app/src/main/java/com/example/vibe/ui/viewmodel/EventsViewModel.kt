@@ -29,10 +29,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vibe.VibeApplication
+import com.example.vibe.data.EventAttending
 import com.example.vibe.data.EventsRepository
 import com.example.vibe.model.Event
 import com.example.vibe.utils.uriToMultipartBody
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -46,6 +48,8 @@ import java.io.IOException
  */
 sealed interface EventsUiState {
     data class Success(val events: List<Event>) : EventsUiState
+    data class SuccessAttending(val events: List<EventAttending>) : EventsUiState
+
     object Error : EventsUiState
     object Loading : EventsUiState
 }
@@ -100,6 +104,35 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
             }
         }
     }
+
+
+
+    fun getAttending() {
+        viewModelScope.launch {
+            Log.d("ViewModel", "⏳ Fetching attending events...")
+
+            eventsUiState = EventsUiState.Loading
+
+            eventsUiState = try {
+                val events = eventsRepository.getAttending()
+                if (events.isEmpty()) {
+                    Log.e("ViewModel", "❌ No attending events found")
+                    EventsUiState.Error
+                } else {
+                    Log.d("ViewModel", "✅ Successfully fetched ${events.size} attending events")
+                    EventsUiState.SuccessAttending(events) // ✅ Ensure this doesn't conflict with Success
+                }
+            } catch (e: IOException) {
+                Log.e("ViewModel", "❌ API request failed: ${e.message}")
+                EventsUiState.Error
+            }
+        }
+    }
+
+
+
+
+
 
     fun selectEvent(eventId: String) {
         val events = (eventsUiState as? EventsUiState.Success)?.events

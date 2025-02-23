@@ -18,6 +18,8 @@ package com.example.vibe.network
 
 
 import com.example.vibe.data.ApiResponse
+import com.example.vibe.data.AttendingResponse
+import com.example.vibe.data.EventAttending
 import com.example.vibe.data.LoginRequest
 import com.example.vibe.data.LoginResponse
 import com.example.vibe.data.SignupRequest
@@ -45,6 +47,11 @@ interface SignupApi {
     @POST("registerApp.php") // ✅ Must match your backend API endpoint
     suspend fun signup(@Body request: SignupRequest): Response<SignupResponse> // ✅ Ensure it returns Response<T>
 }
+
+
+
+
+
 
 
 interface EventsApiService {
@@ -102,6 +109,12 @@ interface EventsApiService {
         @Body event: Event
     ): ApiResponse
 
+
+
+
+
+    @GET("eventsAttendingApp.php")
+    suspend fun getAttending(): AttendingResponse
 
 
 

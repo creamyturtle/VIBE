@@ -2,6 +2,7 @@ package com.example.vibe.ui.screens
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.vibe.data.EventAttending
 import com.example.vibe.model.Event
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
@@ -28,31 +30,14 @@ import kotlinx.coroutines.launch
 fun EventsAttendingScreen(
     eventsUiState: EventsUiState,
     navController: NavController,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier,
     //token: String,
     onBack: () -> Unit
 ) {
 
-
     when (eventsUiState) {
-        is EventsUiState.Loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                androidx.compose.material3.CircularProgressIndicator()
-            }
-        }
-
-        is EventsUiState.Error -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                androidx.compose.material3.Text(text = "Failed to load events", color = Color.Red)
-            }
-        }
-
-        is EventsUiState.Success -> {
+        is EventsUiState.SuccessAttending -> {
             val events = eventsUiState.events
 
             val coroutineScope = rememberCoroutineScope()
@@ -60,30 +45,20 @@ fun EventsAttendingScreen(
             var selectedQrCode by remember { mutableStateOf<String?>(null) }
             var showQrModal by remember { mutableStateOf(false) }
 
+            Log.d("UI", "✅ Received ${events.size} events in UI")
 
-            //already fetched in navhost
-
-            //LaunchedEffect(Unit) {
-            //    viewModel.fetchEvents(token)
-            //}
-
-
-
-            Scaffold(
-                topBar = {
-                    TopAppBar(title = { Text("Events You're Attending") })
+            if (events.isEmpty()) {
+                Log.e("UI", "❌ No events to display in LazyColumn")
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No events found.", color = Color.Gray)
                 }
-            ) {
-
-
-
+            } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize().padding(top = 68.dp),
                     contentPadding = PaddingValues(16.dp)
                 ) {
-
-
                     items(events) { event ->
+                        Log.d("UI", "🔹 Rendering event: ${event.partyname}") // ✅ Log each event
                         EventCard(
                             event = event,
                             onViewQrCode = { qrcode ->
@@ -92,30 +67,37 @@ fun EventsAttendingScreen(
                             },
                             onCancelReservation = {
                                 coroutineScope.launch {
-                                    // TODO: Call API to cancel reservation
+                                    Log.d("UI", "❌ User clicked cancel for: ${event.partyname}")
                                 }
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
-
-                if (showQrModal) {
-                    selectedQrCode?.let { qrcodeData ->
-                        QRCodeDialog(qrcodeData) { showQrModal = false }
-                    }
-                }
             }
-
-
+        }
+        is EventsUiState.Error -> {
+            Log.e("UI", "❌ UI in error state - failed to load events")
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Failed to load events", color = Color.Red)
+            }
+        }
+        else -> {
+            Log.d("UI", "⏳ UI in loading state - waiting for data")
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
         }
     }
+
+
+
 
 
 }
 
 @Composable
-fun EventCard(event: Event, onViewQrCode: (String) -> Unit, onCancelReservation: () -> Unit) {
+fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelReservation: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = 4.dp

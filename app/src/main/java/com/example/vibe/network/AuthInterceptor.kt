@@ -8,16 +8,17 @@ import okhttp3.Response
 class AuthInterceptor(private val sessionManager: SessionManager) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = sessionManager.getToken()
+
+        Log.d("AuthInterceptor", "🔍 Retrieved Token: $token") // Log the token
+
         val request = chain.request().newBuilder()
 
-        Log.d("AuthInterceptor", "Retrieved Token: $token")
-
         if (!token.isNullOrEmpty()) {
-            request.addHeader("Authorization", "Bearer $token") // ✅ Attach JWT token
+            Log.d("AuthInterceptor", "✅ Adding Authorization header: Bearer $token")
+            request.addHeader("Authorization", "Bearer $token")
+        } else {
+            Log.e("AuthInterceptor", "❌ Token is missing! Authentication will fail.")
         }
-
-        // ✅ Log the headers before sending the request
-        Log.d("AuthInterceptor", "Headers: ${request.build().headers}")
 
         return chain.proceed(request.build())
     }

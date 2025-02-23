@@ -53,6 +53,7 @@ data class Event(
     val issmokingallow: String? = "0",
     val hostid: String? = null,
 
+
     @SerialName("videourl")
     val videourl: String = "",
     @SerialName("imageurl1") val imgSrc: String? = null,

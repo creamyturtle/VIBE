@@ -111,4 +111,6 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val eventsRepository: EventsRepository by lazy {
         DefaultEventsRepository(retrofitService)
     }
+
+
 }

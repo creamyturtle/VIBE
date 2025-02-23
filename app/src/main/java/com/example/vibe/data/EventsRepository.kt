@@ -30,6 +30,8 @@ interface EventsRepository {
     suspend fun getEventsByType(type: String): List<Event>
     suspend fun submitEvent(event: Event): ApiResponse
     suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse
+    suspend fun getAttending(): List<EventAttending>
+
 }
 
 
@@ -40,6 +42,8 @@ interface EventsRepository {
 class DefaultEventsRepository(
     private val eventsApiService: EventsApiService
 ) : EventsRepository {
+
+
     /** Retrieves list of events from underlying data source */
     override suspend fun getEvents(): List<Event> {
         return try {
@@ -75,6 +79,20 @@ class DefaultEventsRepository(
             ApiResponse(success = false, message = e.message ?: "Unknown error")
         }
     }
+
+
+    override suspend fun getAttending(): List<EventAttending> {
+        return try {
+            val response = eventsApiService.getAttending() // ✅ Now returns AttendingResponse
+            Log.d("Repository", "Fetched data: $response")
+            response.events ?: emptyList() // ✅ Ensure it doesn't return null
+        } catch (e: Exception) {
+            Log.e("Repository", "Error fetching data: ${e.message}", e)
+            emptyList()
+        }
+    }
+
+
 
 
 

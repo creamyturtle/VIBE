@@ -2,12 +2,16 @@ package com.example.vibe.ui
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -67,35 +71,47 @@ fun VibeNavHost(
             route = "home_screen/{filterType}",
             arguments = listOf(navArgument("filterType") { type = NavType.StringType })
         ) { backStackEntry ->
-
             val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+            val navBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(initial = null)
 
-            // Fetch events based on the filter type
-            LaunchedEffect(filterType) {
-                if (filterType != eventsViewModel.lastFilter) {
+            // ✅ 1. Fetch events when navigating back to Home
+            DisposableEffect(navBackStackEntry) {
+                if (navBackStackEntry?.destination?.route?.startsWith("home_screen") == true) {
+                    Log.d("UI", "📢 Returning to Home: Fetching events (filter: $filterType)")
                     if (filterType == "all") {
-                        eventsViewModel.lastFilter = "all" // ✅ Reset lastFilter so filters work again
                         eventsViewModel.getEvents()
                     } else {
                         eventsViewModel.getEventsByType(filterType)
                     }
-
-                    // ✅ Reset scroll position only when switching filters
-                    listState.animateScrollToItem(0)
                 }
+                onDispose { }
+            }
+
+            // ✅ 2. Fetch events on filter change + reset scroll only when switching filters
+            LaunchedEffect(filterType) {
+                Log.d("UI", "📢 Filter changed: Fetching new events and resetting scroll")
+
+                if (filterType == "all") {
+                    eventsViewModel.getEvents()
+                } else {
+                    eventsViewModel.getEventsByType(filterType)
+                }
+
+                // ✅ Reset scroll position to the top when switching filters
+                listState.animateScrollToItem(0)
             }
 
             HomeScreen(
-                listState = listState,
+                listState = listState, // ✅ Retains scroll position unless a filter changes
                 eventsUiState = eventsViewModel.eventsUiState,
                 contentPadding = innerPadding,
                 retryAction = eventsViewModel::getEvents,
-                onEventClick = { eventId ->
-                    navController.navigate("event_details/$eventId")
-                },
+                onEventClick = { eventId -> navController.navigate("event_details/$eventId") },
                 navController = navController
             )
         }
+
+
 
 
         composable(
@@ -117,6 +133,7 @@ fun VibeNavHost(
             MapScreen(
                 eventsUiState = eventsViewModel.eventsUiState,
                 geocodeAddress = { context, address -> geocodeAddress(context, address) },
+                retryAction = eventsViewModel::getEvents,
                 navController = navController
             )
         }
@@ -288,13 +305,16 @@ fun VibeNavHost(
 
 
 
-            val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+            //val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
 
-            LaunchedEffect(filterType) {
+            //LaunchedEffect() {
 
-                    eventsViewModel.getEvents() // Fetch all events
+            //}
 
+            LaunchedEffect(Unit) {
+                Log.d("UI", "📢 Calling ViewModel.getAttending()")
+                eventsViewModel.getAttending()
             }
 
             //val token = authViewModel.getToken()
@@ -302,6 +322,7 @@ fun VibeNavHost(
             EventsAttendingScreen(
                 eventsUiState = eventsViewModel.eventsUiState,
                 navController = navController,
+                retryAction = eventsViewModel::getAttending,
                 //token = token,
                 onBack = { navController.navigateUp() }
             )

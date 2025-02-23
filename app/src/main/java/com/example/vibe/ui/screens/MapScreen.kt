@@ -60,6 +60,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun MapScreen(
     eventsUiState: EventsUiState,
     geocodeAddress: suspend (Context, String) -> LatLng?,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier,
     navController: NavController
 ) {
     val context = LocalContext.current
@@ -242,6 +244,8 @@ fun MapScreen(
 
 
         }
+
+        else -> ErrorScreen(retryAction, modifier)
     }
 }
 
