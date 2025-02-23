@@ -86,10 +86,14 @@ fun VibeTopAppBar(
                 ) {
                     FancyAnimatedButton(
                         onClick = {
-                            navController.navigate("home_screen/all")
+                            if (selectedFilter != "all") {
+                                selectedFilter = "all"
+                                navController.navigate("home_screen/all") {
+                                    popUpTo("home_screen") { inclusive = false }
+                                }
+                            }
                         }
                     ) {
-
                         Text(
                             text = "VIBE",
                             fontWeight = FontWeight.ExtraBold,
@@ -98,8 +102,8 @@ fun VibeTopAppBar(
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(24.dp, 0.dp, 0.dp, 0.dp)
                         )
-
                     }
+
 
                     Text(
                         text = "Your official party connection",

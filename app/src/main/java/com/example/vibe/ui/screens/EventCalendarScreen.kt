@@ -25,6 +25,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.DirectionsBike
+import androidx.compose.material.icons.automirrored.outlined.DirectionsBike
+import androidx.compose.material.icons.filled.DirectionsRun
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Nature
+import androidx.compose.material.icons.filled.Water
+import androidx.compose.material.icons.outlined.Agriculture
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Pool
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,10 +54,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.vibe.model.Event
@@ -221,7 +232,7 @@ fun MonthCalendar(
     ) {
         // ✅ Weekday Labels
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat").forEach {
@@ -247,7 +258,7 @@ fun MonthCalendar(
                         } else {
                             val date = month.atDay(currentDay)
                             val hasEvent = events.any { it.date == date.toString() }
-                            CalendarDay(date, hasEvent, date == today, Modifier.weight(1f), onClick = onDayClick)
+                            CalendarDay(date, hasEvent, Modifier.weight(1f), onClick = onDayClick)
                             currentDay++
                         }
                     }
@@ -265,7 +276,6 @@ fun MonthCalendar(
 fun CalendarDay(
     date: LocalDate,
     hasEvent: Boolean,
-    isToday: Boolean,
     modifier: Modifier = Modifier,
     onClick: (LocalDate) -> Unit // ✅ Click event
 ) {
@@ -273,25 +283,22 @@ fun CalendarDay(
         modifier = modifier
             .aspectRatio(1f)
             .border(1.dp, Color.LightGray)
-            .clickable { onClick(date) } // ✅ Make the day clickable
+            .clickable { onClick(date) }
             .background(
-                when {
-                    isToday -> Color.Blue
-                    hasEvent -> Color.Red
-                    else -> Color.Transparent
-                }
+                if (hasEvent) Color(0xFFFE1943) else Color.Transparent // ✅ Remove Blue background for today
             ),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = date.dayOfMonth.toString(),
-            color = if (isToday) Color.White else Color.Black,
-            fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
+            color = Color.Black, // ✅ Always use black text
+            fontWeight = FontWeight.Normal // ✅ Remove bold styling for today
         )
     }
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EventSelectionPopup(
     events: List<Event>,
@@ -301,15 +308,30 @@ fun EventSelectionPopup(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(
-                text = "Events on ${events.first().date}",
-                color = MaterialTheme.colorScheme.onSurface
-            )
+
+            Column() {
+
+                Text(
+                    text = "Events for",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp // ✅ Smaller text
+                )
+
+                Text(
+                    text = events.first().formattedDate,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp // ✅ Smaller text
+                )
+
+            }
+
         },
         text = {
             Surface(
                 color = MaterialTheme.colorScheme.surface, // ✅ Ensures the background is white
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -320,11 +342,29 @@ fun EventSelectionPopup(
                                 onDismiss()
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = getColorByPartyType(event.partytype)
+                                containerColor = Color(0xFF3F51B5)
                             ),
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp)
+                                .height(56.dp)
                         ) {
-                            Text(event.partyname, color = Color.White)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Icon(
+                                    imageVector = getPartyTypeIcon(event.partytype),
+                                    contentDescription = event.partytype,
+                                    tint = Color.White,
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .padding(end = 12.dp)
+                                )
+                                Text(event.partyname, color = Color.White)
+                            }
                         }
                     }
                 }
@@ -335,19 +375,21 @@ fun EventSelectionPopup(
                 Text("Close")
             }
         },
-        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+        containerColor = MaterialTheme.colorScheme.surface
     )
 }
 
 
-
-fun getColorByPartyType(partyType: String?): Color {
+@Composable
+fun getPartyTypeIcon(partyType: String?): ImageVector {
     return when (partyType) {
-        "House" -> Color.Magenta
-        "Pool" -> Color.Blue
-        "Finca" -> Color.Green
-        else -> Color.Red
+        "House" -> Icons.Outlined.Home
+        "Pool" -> Icons.Outlined.Pool // Replace with an actual Pool icon if available
+        "Finca" -> Icons.Outlined.Agriculture // Replace with a more fitting farm icon if needed
+        else -> Icons.AutoMirrored.Outlined.DirectionsBike // Default to an "Activity" icon
     }
 }
+
 
 
