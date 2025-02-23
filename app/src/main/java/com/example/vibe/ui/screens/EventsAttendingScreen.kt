@@ -164,7 +164,7 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
 
-            Text(text = event.partyname, style = MaterialTheme.typography.titleLarge)
+            Text(text = event.partyname, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
             Text(text = "${event.formattedDate} @ ${event.formattedTime}", color = MaterialTheme.colorScheme.secondaryContainer)
 
             Spacer(Modifier.height(24.dp))
