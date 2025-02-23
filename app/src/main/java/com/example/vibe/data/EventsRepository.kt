@@ -19,6 +19,8 @@ package com.example.vibe.data
 import android.util.Log
 import com.example.vibe.model.Event
 import com.example.vibe.network.EventsApiService
+import com.example.vibe.utils.SessionManager
+import com.google.android.libraries.places.api.model.kotlin.autoCompleteSessionToken
 import okhttp3.MultipartBody
 
 /**
@@ -32,6 +34,7 @@ interface EventsRepository {
     suspend fun uploadMedia(file: MultipartBody.Part): UploadResponse
     suspend fun getAttending(): List<EventAttending>
     suspend fun cancelReservation(tableName: String): CancelResResponse
+    suspend fun getEventsByID(): List<Event>
 
 }
 
@@ -48,7 +51,7 @@ class DefaultEventsRepository(
     /** Retrieves list of events from underlying data source */
     override suspend fun getEvents(): List<Event> {
         return try {
-            val data = eventsApiService.getAll(apiToken = secretToken, table = "parties")
+            val data = eventsApiService.getAll(table = "parties")
             Log.d("Repository", "Fetched data: $data") // Log data
             data
         } catch (e: Exception) {
@@ -60,10 +63,10 @@ class DefaultEventsRepository(
     override suspend fun getEventsByType(type: String): List<Event> {
         return try {
             when (type) {
-                "House" -> eventsApiService.getHouses(apiToken = secretToken, table = "parties")
-                "Pool" -> eventsApiService.getPools(apiToken = secretToken, table = "parties")
-                "Finca" -> eventsApiService.getFincas(apiToken = secretToken, table = "parties")
-                "Activity" -> eventsApiService.getActivities(apiToken = secretToken, table = "parties")
+                "House" -> eventsApiService.getHouses(table = "parties")
+                "Pool" -> eventsApiService.getPools(table = "parties")
+                "Finca" -> eventsApiService.getFincas(table = "parties")
+                "Activity" -> eventsApiService.getActivities(table = "parties")
                 else -> getEvents() // Default to all events
             }
         } catch (e: Exception) {
@@ -71,6 +74,19 @@ class DefaultEventsRepository(
             emptyList()
         }
     }
+
+
+    override suspend fun getEventsByID(): List<Event> {
+        return try {
+            val data = eventsApiService.getByID(table = "parties")
+            Log.d("Repository", "Fetched data: $data") // Log data
+            data
+        } catch (e: Exception) {
+            Log.e("Repository", "Error fetching data: ${e.message}", e)
+            emptyList() // Return an empty list in case of error
+        }
+    }
+
 
     override suspend fun submitEvent(event: Event): ApiResponse {
         return try {

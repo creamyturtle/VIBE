@@ -1,12 +1,9 @@
 package com.example.vibe.ui.screens
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,24 +32,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vibe.data.EventAttending
+import com.example.vibe.model.Event
 import com.example.vibe.ui.viewmodel.EventsUiState
-import com.example.vibe.utils.generateQRCode
 import kotlinx.coroutines.launch
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun EventsAttendingScreen(
+fun ManageHostedScreen(
     eventsUiState: EventsUiState,
     navController: NavController,
     retryAction: () -> Unit,
@@ -84,7 +74,7 @@ fun EventsAttendingScreen(
         )
 
         when (eventsUiState) {
-            is EventsUiState.SuccessAttending -> {
+            is EventsUiState.Success -> {
 
 
                 val events = eventsUiState.events
@@ -106,7 +96,7 @@ fun EventsAttendingScreen(
 
                             Log.d("UI", "🔹 Rendering event: ${event.partyname}")
 
-                            EventCard(
+                            HostedCard(
                                 event = event,
                                 onViewQrCode = { qrcode ->
                                     Log.d("UI", "🔍 Showing QR Code for: $qrcode")
@@ -116,7 +106,7 @@ fun EventsAttendingScreen(
                                 onCancelReservation = {
                                     coroutineScope.launch {
 
-                                        onCancelReservation(event.tablename)
+
 
                                         Log.d("UI", "❌ User clicked cancel for: ${event.partyname}")
                                     }
@@ -165,7 +155,7 @@ fun EventsAttendingScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelReservation: () -> Unit) {
+fun HostedCard(event: Event, onViewQrCode: (String) -> Unit, onCancelReservation: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -210,8 +200,8 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
                 ) {
                     Text(text = "RSVP Status:", fontWeight = FontWeight.Bold)
                     Text(
-                        text = if (event.rsvpapproved == 1) "Approved" else "Pending",
-                        color = if (event.rsvpapproved == 1) Color.Green else MaterialTheme.colorScheme.primary
+                        text = "Approved",
+                        color = Color.Green
                     )
                 }
             }
@@ -221,19 +211,7 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            if (event.rsvpapproved == 1 && event.qrcode.isNotEmpty()) {
-                Button(
-                    onClick = { onViewQrCode(event.qrcode) },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3F51B5)),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text("View QR Code", color = Color.White)
-                }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-            }
 
 
 
@@ -247,54 +225,4 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
             }
         }
     }
-}
-
-@Composable
-fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text("Your QR Code", style = MaterialTheme.typography.titleLarge)
-        },
-        text = {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (!qrcodeData.isNullOrEmpty()) {
-                    val qrBitmap: Bitmap? = generateQRCode(qrcodeData, 400, 400)
-                    qrBitmap?.let {
-                        Image(
-                            bitmap = it.asImageBitmap(),
-                            contentDescription = "QR Code",
-                            modifier = Modifier
-                                .size(220.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color.White)
-                                .padding(8.dp)
-                        )
-                    }
-                } else {
-                    Text(
-                        text = "No QR Code available",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Text("Close", color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)
-            }
-        },
-        modifier = Modifier.clip(RoundedCornerShape(16.dp)),
-        containerColor = MaterialTheme.colorScheme.surface
-    )
 }

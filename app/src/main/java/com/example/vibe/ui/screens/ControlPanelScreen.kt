@@ -157,7 +157,7 @@ fun ActionButtonsGrid(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         ActionButton("View Events Attending", Color(0xFFBB86FC)) { navController.navigate("events_attending")}
-        ActionButton("Manage Hosted Events", Color(0xFF03DAC5)) { navController.navigate("events_attending")}
+        ActionButton("Manage Hosted Events", Color(0xFF03DAC5)) { navController.navigate("manage_hosted")}
         ActionButton("Approve Reservations", Color(0xFFFFC107)) { navController.navigate("events_attending")}
         ActionButton("Check-in Guests", Color(0xFF6200EE)) { navController.navigate("events_attending")}
         ActionButton("Edit Profile", Color(0xFFE91E63)) { navController.navigate("events_attending")}

@@ -30,6 +30,7 @@ import com.example.vibe.ui.screens.FAQScreen
 import com.example.vibe.ui.screens.HomeScreen
 import com.example.vibe.ui.screens.LoadingScreen
 import com.example.vibe.ui.screens.LoginScreen
+import com.example.vibe.ui.screens.ManageHostedScreen
 import com.example.vibe.ui.screens.MapScreen
 import com.example.vibe.ui.screens.PrivacyPolicyScreen
 import com.example.vibe.ui.screens.ReservationScreen
@@ -315,6 +316,28 @@ fun VibeNavHost(
                 retryAction = eventsViewModel::getAttending,
                 onCancelReservation = { tableName ->
                     eventsViewModel.cancelReservation(tableName)
+                },
+                onBack = { navController.navigateUp() }
+            )
+
+
+        }
+
+        composable(route = "manage_hosted") { backStackEntry ->
+
+
+            LaunchedEffect(Unit) {
+                Log.d("UI", "📢 Calling ViewModel.getAttending()")
+                eventsViewModel.getByID()
+            }
+
+            //val token = authViewModel.getToken()
+
+            ManageHostedScreen(
+                eventsUiState = eventsViewModel.eventsUiState,
+                navController = navController,
+                retryAction = eventsViewModel::getAttending,
+                onCancelReservation = {
                 },
                 onBack = { navController.navigateUp() }
             )

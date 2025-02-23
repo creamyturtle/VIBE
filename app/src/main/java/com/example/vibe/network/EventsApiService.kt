@@ -61,7 +61,7 @@ interface EventsApiService {
     @GET("api/{table}/get")
     suspend fun getAll(
         @Path("table") table: String,
-        @Query("api_token") apiToken: String
+        //@Query("api_token") apiToken: String
     ): List<Event>
 
 
@@ -69,28 +69,36 @@ interface EventsApiService {
     @GET("api/{table}/getHouses")
     suspend fun getHouses(
         @Path("table") table: String,
-        @Query("api_token") apiToken: String
+        //@Query("api_token") apiToken: String
     ): List<Event>
 
     // Fetch all rows
     @GET("api/{table}/getPools")
     suspend fun getPools(
         @Path("table") table: String,
-        @Query("api_token") apiToken: String
+        //@Query("api_token") apiToken: String
     ): List<Event>
 
     // Fetch all rows
     @GET("api/{table}/getFincas")
     suspend fun getFincas(
         @Path("table") table: String,
-        @Query("api_token") apiToken: String
+        //@Query("api_token") apiToken: String
     ): List<Event>
 
     // Fetch all rows
     @GET("api/{table}/getActivities")
     suspend fun getActivities(
         @Path("table") table: String,
-        @Query("api_token") apiToken: String
+        //@Query("api_token") apiToken: String
+    ): List<Event>
+
+
+
+    // Fetch all rows
+    @GET("api/{table}/getbyid")
+    suspend fun getByID(
+        @Path("table") table: String,
     ): List<Event>
 
 

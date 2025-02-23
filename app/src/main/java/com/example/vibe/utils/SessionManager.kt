@@ -43,6 +43,8 @@ class SessionManager(context: Context) {
         }
     }
 
+
+
     /**
      * ✅ Helper function to decode JWT Base64 safely
      * - Handles missing padding

@@ -104,6 +104,19 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         }
     }
 
+    fun getByID() {
+        viewModelScope.launch {
+            eventsUiState = EventsUiState.Loading
+            eventsUiState = try {
+                EventsUiState.Success(eventsRepository.getEventsByID())
+            } catch (e: IOException) {
+                EventsUiState.Error
+            } catch (e: HttpException) {
+                EventsUiState.Error
+            }
+        }
+    }
+
 
 
     fun getAttending() {
