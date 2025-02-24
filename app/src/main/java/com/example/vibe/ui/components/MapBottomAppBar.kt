@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -44,8 +45,10 @@ fun MapBottomAppBar(
 
     var selectedFilter by remember { mutableStateOf<String?>("all") }
 
+    val selectedLanguage by languageViewModel.language.collectAsState()
 
-    key(languageViewModel.language.value) {
+
+    key(selectedLanguage) {
 
         Column {
             // Separator bar (1px light grey)

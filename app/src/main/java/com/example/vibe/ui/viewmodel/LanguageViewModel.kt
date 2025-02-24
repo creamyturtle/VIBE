@@ -7,23 +7,29 @@ import com.example.vibe.utils.SessionManager
 import com.example.vibe.utils.setAppLocale
 import androidx.lifecycle.viewModelScope
 import androidx.compose.runtime.State
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
 class LanguageViewModel(private val context: Context, private val sessionManager: SessionManager) : ViewModel() {
 
-    private val _language = mutableStateOf(sessionManager.getLanguage() ?: "EN")
-    val language: State<String> = _language // ✅ This needs the correct import
+    private val _language = MutableStateFlow(sessionManager.getLanguage()?.uppercase(Locale.ROOT) ?: "EN")
+    val language: StateFlow<String> = _language.asStateFlow() // ✅ Use StateFlow
 
     fun setLanguage(context: Context, langCode: String) {
-        _language.value = langCode
-        sessionManager.saveLanguage(langCode)
+        val normalizedLang = langCode.uppercase(Locale.ROOT)
+        _language.value = normalizedLang
+        sessionManager.saveLanguage(normalizedLang)
 
         viewModelScope.launch {
-            setAppLocale(context, langCode)
+            setAppLocale(context, normalizedLang)
         }
     }
 }
+
 
 
 

@@ -21,6 +21,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -38,22 +39,24 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             val settingsViewModel: SettingsViewModel = viewModel()
-            val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
+            // ✅ Detect system dark mode in a @Composable function
+            val systemDarkTheme = isSystemInDarkTheme()
+
+            // ✅ Fetch user-selected or system theme from ViewModel
+            val isDarkMode by settingsViewModel.getDarkModeState(systemDarkTheme).collectAsState()
 
             VibeTheme(darkTheme = isDarkMode) {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    VibeApp(settingsViewModel)
+                    VibeApp(settingsViewModel, isDarkMode)
                 }
             }
         }
-
     }
+
 
 }

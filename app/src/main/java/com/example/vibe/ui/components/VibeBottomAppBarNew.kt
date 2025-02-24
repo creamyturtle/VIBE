@@ -21,6 +21,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +60,9 @@ fun VibeBottomAppBarNew(
 
     val context = LocalContext.current
 
-    key(languageViewModel.language.value) {
+    val selectedLanguage by languageViewModel.language.collectAsState()
+
+    key(selectedLanguage) {
 
         Column {
             // Separator bar (1px light grey)

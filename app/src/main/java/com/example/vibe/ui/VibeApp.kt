@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +49,7 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun VibeApp(settingsViewModel: SettingsViewModel) {
+fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
 
     //val listState = rememberLazyListState()
 
@@ -80,21 +81,21 @@ fun VibeApp(settingsViewModel: SettingsViewModel) {
 
     val isDrawerOpen = remember { mutableStateOf(false) }
 
-    val systemLanguage = Locale.getDefault().language // Detect system language
 
+    val systemLanguage = Locale.getDefault().language.uppercase(Locale.ROOT) // ✅ Ensure uppercase
     val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(context, appContainer.sessionManager))
 
-    val savedLanguage = appContainer.sessionManager.getLanguage()
+    val savedLanguage = appContainer.sessionManager.getLanguage()?.uppercase(Locale.ROOT)
+    val initialLanguage = savedLanguage ?: if (systemLanguage == "ES") "ES" else "EN"
 
-    if (savedLanguage == "ES") {
-        languageViewModel.setLanguage(context, "ES")
-    } else if (savedLanguage == "EN") {
-        languageViewModel.setLanguage(context, "EN")
-    } else if (systemLanguage == "es") {
-        languageViewModel.setLanguage(context, "ES") // Default to Spanish if system is Spanish
-    } else {
-        languageViewModel.setLanguage(context, "EN") // Default to English otherwise
+    LaunchedEffect(initialLanguage) {
+        languageViewModel.setLanguage(context, initialLanguage)
     }
+
+    val selectedLanguage by languageViewModel.language.collectAsState()
+
+
+
 
 
 
@@ -124,7 +125,7 @@ fun VibeApp(settingsViewModel: SettingsViewModel) {
 
 
         }
-        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, languageViewModel, settingsViewModel)
+        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, languageViewModel, settingsViewModel, isDarkMode, selectedLanguage)
     }
 
 

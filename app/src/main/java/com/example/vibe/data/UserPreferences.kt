@@ -77,17 +77,22 @@ object UserPreferences {
 
 
     /** ✅ Save Dark Mode Preference */
-    suspend fun saveDarkMode(context: Context, isDarkMode: Boolean) {
+    suspend fun saveDarkMode(context: Context, isDarkMode: Boolean?) {
         context.dataStore.edit { preferences ->
-            preferences[USER_DARK_MODE_KEY] = isDarkMode
+            if (isDarkMode == null) {
+                preferences.remove(USER_DARK_MODE_KEY) // ✅ Remove user override, follow system theme
+            } else {
+                preferences[USER_DARK_MODE_KEY] = isDarkMode
+            }
         }
     }
 
-    /** ✅ Get Dark Mode Preference as a Flow */
-    fun getDarkModeFlow(context: Context): Flow<Boolean> {
+    /** ✅ Get Dark Mode Preference as a Flow (nullable) */
+    fun getDarkModeFlow(context: Context): Flow<Boolean?> {
         return context.dataStore.data.map { preferences ->
-            preferences[USER_DARK_MODE_KEY] ?: false // Default to Light Mode
+            preferences[USER_DARK_MODE_KEY] // Can be null (follow system theme)
         }
     }
+
 
 }

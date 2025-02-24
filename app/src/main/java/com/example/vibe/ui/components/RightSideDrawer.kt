@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -73,6 +75,8 @@ import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.Language
+import java.util.Locale
 import kotlin.math.roundToInt
 
 
@@ -84,7 +88,9 @@ fun RightSideDrawer(
     authViewModel: AuthViewModel,
     context: Context,
     languageViewModel: LanguageViewModel,
-    viewModel: SettingsViewModel
+    settingsViewModel: SettingsViewModel,
+    isDarkMode: Boolean,
+    selectedLanguage: String
 ) {
     val density = LocalDensity.current
     val drawerWidth = with(density) { 280.dp.toPx() } // Drawer width in pixels
@@ -93,9 +99,10 @@ fun RightSideDrawer(
     val scope = rememberCoroutineScope()
     var shouldRender by remember { mutableStateOf(false) }
 
-    val selectedLanguage by languageViewModel.language
 
-    val isDarkMode by viewModel.isDarkMode.collectAsState()
+
+    //val selectedLanguage by languageViewModel.language
+
 
 
     LaunchedEffect(isOpen.value) {
@@ -152,9 +159,15 @@ fun RightSideDrawer(
             Column {
                 Spacer(Modifier.height(60.dp))
 
-                LanguageToggle(selectedLanguage = selectedLanguage, onLanguageChange = { lang ->
-                    languageViewModel.setLanguage(context, lang)
-                })
+                LanguageToggle(
+                    selectedLanguage = selectedLanguage, // ✅ This should be working correctly now
+                    onLanguageChange = { lang ->
+                        languageViewModel.setLanguage(context, lang) // ✅ Ensure it updates the app language
+                    }
+                )
+
+
+
 
                 Spacer(Modifier.height(16.dp))
 
@@ -261,9 +274,10 @@ fun RightSideDrawer(
                 DarkModeToggle(
                     isDarkMode = isDarkMode,
                     onThemeChange = { newTheme ->
-                        viewModel.toggleDarkMode(newTheme)
+                        settingsViewModel.toggleDarkMode(newTheme)
                     }
                 )
+
 
 
             }
@@ -400,10 +414,6 @@ fun DrawerSubMenuItem(text: String, onClick: () -> Unit) {
 
 
 
-
-
-
-
 @Composable
 fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit) {
     Row(
@@ -414,7 +424,7 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val isEnglish = selectedLanguage == "EN"
+        val isEnglish = selectedLanguage.uppercase(Locale.ROOT) == "EN" // ✅ Always compare uppercase
 
         // English Option
         Box(
@@ -422,8 +432,8 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
                 .weight(1f)
                 .clip(RoundedCornerShape(16.dp))
                 .background(if (isEnglish) Color(0xFFFE1943) else Color.Transparent)
-                .clickable { onLanguageChange("EN") }
-                .padding(4.dp),
+                .clickable { onLanguageChange("EN") } // ✅ Pass uppercase
+                .padding(6.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -448,8 +458,8 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
                 .weight(1f)
                 .clip(RoundedCornerShape(16.dp))
                 .background(if (!isEnglish) Color(0xFFFE1943) else Color.Transparent)
-                .clickable { onLanguageChange("ES") }
-                .padding(4.dp),
+                .clickable { onLanguageChange("ES") } // ✅ Pass uppercase
+                .padding(6.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -474,10 +484,11 @@ fun LanguageToggle(selectedLanguage: String, onLanguageChange: (String) -> Unit)
 
 
 
+
 @Composable
 fun DarkModeToggle(
-    isDarkMode: Boolean,
-    onThemeChange: (Boolean) -> Unit
+    isDarkMode: Boolean?,
+    onThemeChange: (Boolean?) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -487,16 +498,16 @@ fun DarkModeToggle(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val darkModeEnabled = isDarkMode
+        val darkModeEnabled = isDarkMode == true
 
-        // Light Mode Option
+        // 🌞 Light Mode Option
         Box(
             modifier = Modifier
                 .weight(1f)
                 .clip(RoundedCornerShape(16.dp))
                 .background(if (!darkModeEnabled) Color(0xFFFE1943) else Color.Transparent)
                 .clickable { onThemeChange(false) }
-                .padding(4.dp),
+                .padding(6.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -516,14 +527,14 @@ fun DarkModeToggle(
             }
         }
 
-        // Dark Mode Option
+        // 🌙 Dark Mode Option
         Box(
             modifier = Modifier
                 .weight(1f)
                 .clip(RoundedCornerShape(16.dp))
                 .background(if (darkModeEnabled) Color(0xFFFE1943) else Color.Transparent)
                 .clickable { onThemeChange(true) }
-                .padding(4.dp),
+                .padding(6.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -542,8 +553,11 @@ fun DarkModeToggle(
                 )
             }
         }
+
+
     }
 }
+
 
 
 
