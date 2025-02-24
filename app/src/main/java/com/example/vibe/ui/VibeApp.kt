@@ -104,7 +104,7 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { TopBar(navController, isDrawerOpen, listState) },
+            topBar = { TopBar(navController, isDrawerOpen, listState, languageViewModel) },
             bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel, languageViewModel) }
 
         ) { innerPadding ->

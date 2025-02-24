@@ -38,13 +38,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 
 
 @Composable
 fun VibeTopAppBar(
     navController: NavController,
     isDrawerOpen: MutableState<Boolean>,
-    listState: LazyListState
+    listState: LazyListState,
+    languageViewModel: LanguageViewModel
 ) {
 
     val density = LocalDensity.current.density
@@ -145,7 +147,7 @@ fun VibeTopAppBar(
 
             if (isExpanded) {
 
-                MiniTopBar(navController, selectedFilter) { filterType ->
+                MiniTopBar(navController, selectedFilter, languageViewModel) { filterType ->
                     if (filterType != selectedFilter) {
                         selectedFilter = filterType
 
