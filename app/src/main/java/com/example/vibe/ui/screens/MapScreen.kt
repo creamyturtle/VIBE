@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,7 +55,7 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-
+import com.google.maps.android.compose.rememberMarkerState
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -66,8 +68,9 @@ fun MapScreen(
 ) {
     val context = LocalContext.current
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
+    val isDarkTheme = isSystemInDarkTheme()
 
-    val isDarkTheme = isSystemInDarkTheme() // ✅ Detect dark mode
+    // Map style
     val mapProperties by remember {
         mutableStateOf(
             MapProperties(
@@ -80,83 +83,64 @@ fun MapScreen(
         )
     }
 
-
-
     when (eventsUiState) {
         is EventsUiState.Loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
+
         is EventsUiState.Error -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(text = "Failed to load events", color = Color.Red)
             }
         }
+
         is EventsUiState.Success -> {
             val events = eventsUiState.events
 
-            // Cache for geocoded results
+            // Cache geocoded locations
             val geocodedLocations = remember { mutableStateMapOf<String, LatLng>() }
 
-
-            // Get the initial camera position
-            val initialPosition = geocodedLocations.values.firstOrNull() ?: LatLng(6.2442, -75.5812)
-
+            // Camera position (DOES NOT RECREATE)
             val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(initialPosition, 13f)
+                position = CameraPosition.fromLatLngZoom(LatLng(6.2442, -75.5812), 13f)
             }
 
-            // Perform geocoding for all event locations
+            // Perform geocoding asynchronously only when events update
             LaunchedEffect(events) {
                 events.forEach { event ->
                     if (event.location.isNotEmpty() && !geocodedLocations.containsKey(event.location)) {
-                        val coordinates = geocodeAddress(context, event.location) // Pass both Context and address
+                        val coordinates = geocodeAddress(context, event.location)
                         coordinates?.let { geocodedLocations[event.location] = it }
                     }
                 }
             }
 
-            Box(
-                modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 104.dp, bottom = 104.dp)
-            ) {
+            Box(modifier = Modifier.fillMaxSize().padding(top = 104.dp, bottom = 104.dp)) {
 
-
-                Box(modifier = Modifier.fillMaxSize()) {
-                    GoogleMap(
-                        properties = mapProperties,
-                        cameraPositionState = cameraPositionState,
-                        modifier = Modifier
-                            .fillMaxSize()
-
-                    ) {
-
+                // ✅ Keep GoogleMap stable (prevents full reloading)
+                GoogleMap(
+                    properties = mapProperties,
+                    cameraPositionState = cameraPositionState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    // ✅ Key ensures markers update ONLY when events change
+                    key(events) {
                         events.forEach { event ->
-
-                            //val icon = bitmapDescriptorFromComposable { MarkerBubble(event.partyname) }
                             val coordinates = geocodedLocations[event.location]
-
                             coordinates?.let { location ->
-
                                 val markerColor = when (event.partyMod) {
                                     "House Party" -> BitmapDescriptorFactory.HUE_BLUE
                                     "Pool Party" -> BitmapDescriptorFactory.HUE_AZURE
                                     "Finca Party" -> BitmapDescriptorFactory.HUE_VIOLET
-                                    else -> BitmapDescriptorFactory.HUE_RED // Default
+                                    else -> BitmapDescriptorFactory.HUE_RED
                                 }
 
                                 Marker(
-                                    state = MarkerState(position = location),
+                                    state = rememberMarkerState(position = location),
                                     title = event.partyname,
-                                    icon = BitmapDescriptorFactory.defaultMarker(markerColor), // Set color dynamically
+                                    icon = BitmapDescriptorFactory.defaultMarker(markerColor),
                                     onClick = {
                                         selectedEvent = event
                                         true
@@ -165,11 +149,9 @@ fun MapScreen(
                             }
                         }
                     }
-
-
-
                 }
 
+                // ✅ Back Button
                 IconButton(
                     onClick = { navController.navigateUp() },
                     modifier = Modifier
@@ -179,58 +161,25 @@ fun MapScreen(
                         .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
                         .size(32.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize() // Fill the `IconButton` area
-                            .padding(0.dp) // Adjust the internal padding here
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(20.dp)
-                        )
-                    }
-
-
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
-
 
                 // ✅ Show event details when a marker is clicked
                 selectedEvent?.let { event ->
-
-                    var isPressed by remember { mutableStateOf(false) }
-
-                    // ✅ Animate scale effect
-                    val scale by animateFloatAsState(
-                        targetValue = if (isPressed) 0.95f else 1f, // Shrink when pressed
-                        animationSpec = tween(durationMillis = 100) // Smooth quick animation
-                    )
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp, 0.dp, 60.dp, 12.dp)
                             .align(Alignment.BottomCenter)
-                            .graphicsLayer(
-                                scaleX = scale,
-                                scaleY = scale
-                            ) // ✅ Apply scale effect to the Box too!
                             .background(Color.White, shape = RoundedCornerShape(16.dp))
                             .shadow(10.dp, shape = RoundedCornerShape(16.dp))
                             .clip(RoundedCornerShape(16.dp))
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onPress = {
-                                        isPressed = true
-                                        tryAwaitRelease() // ✅ Wait for user to release
-                                        isPressed = false
-                                        navController.navigate("event_details/${event.id}") // ✅ Navigate AFTER release
-                                    }
-                                )
-                            }
+                            .clickable { navController.navigate("event_details/${event.id}") }
                     ) {
                         EventDetailsCard(
                             event,
@@ -238,16 +187,11 @@ fun MapScreen(
                         )
                     }
                 }
-
-
             }
-
-
         }
 
         else -> ErrorScreen(retryAction, modifier)
     }
 }
-
 
 

@@ -45,7 +45,6 @@ import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.SettingsViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import java.util.Locale
-import androidx.compose.runtime.key
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -83,8 +82,9 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
     val isDrawerOpen = remember { mutableStateOf(false) }
 
 
+
     val systemLanguage = Locale.getDefault().language.uppercase(Locale.ROOT) // ✅ Ensure uppercase
-    val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(context, appContainer.sessionManager))
+    val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(appContainer.sessionManager))
 
     val savedLanguage = appContainer.sessionManager.getLanguage()?.uppercase(Locale.ROOT)
     val initialLanguage = savedLanguage ?: if (systemLanguage == "ES") "ES" else "EN"
@@ -94,11 +94,6 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
     }
 
     val selectedLanguage by languageViewModel.language.collectAsState()
-
-
-
-
-
 
 
 

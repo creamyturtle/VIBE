@@ -10,7 +10,6 @@ import com.example.vibe.data.SignupRequest
 import com.example.vibe.network.SignupApi
 import kotlinx.coroutines.launch
 
-
 class SignupViewModel(private val signupApi: SignupApi) : ViewModel() {
 
     var name by mutableStateOf("")
@@ -22,35 +21,39 @@ class SignupViewModel(private val signupApi: SignupApi) : ViewModel() {
     var isLoading by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
 
+    fun validateFields(): String? {
+        if (name.isBlank()) return "Name is required"
+        if (email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) return "Enter a valid email address"
+        if (password.length < 8) return "Password must be at least 8 characters long"
+        val ageInt = age.toIntOrNull()
+        if (ageInt == null || ageInt < 18 || ageInt > 120) return "Enter a valid age (18-120)"
+        if (instagram.isBlank()) return "Instagram handle is required"
+
+        return null // All fields are valid
+    }
+
     fun signup(onSuccess: () -> Unit) {
+        val validationMessage = validateFields()
+        if (validationMessage != null) {
+            errorMessage = validationMessage
+            return
+        }
+
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
-
-            val ageInt = age.toIntOrNull()
-            if (ageInt == null || ageInt < 18 || ageInt > 120) {
-                errorMessage = "Invalid age."
-                isLoading = false
-                return@launch
-            }
-
-            if (password.length < 8) {
-                errorMessage = "Password must be at least 8 characters long."
-                isLoading = false
-                return@launch
-            }
 
             val request = SignupRequest(
                 name = name,
                 email = email,
                 password = password,
-                age = ageInt,
+                age = age.toInt(),
                 sexismale = gender == "Male",
                 instagram = instagram
             )
 
             try {
-                val response = signupApi.signup(request) // ✅ Call API directly
+                val response = signupApi.signup(request)
                 isLoading = false
 
                 if (response.isSuccessful) {
@@ -70,5 +73,4 @@ class SignupViewModel(private val signupApi: SignupApi) : ViewModel() {
             }
         }
     }
-
 }

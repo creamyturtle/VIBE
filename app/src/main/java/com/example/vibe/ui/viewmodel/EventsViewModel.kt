@@ -35,6 +35,8 @@ import com.example.vibe.model.Event
 import com.example.vibe.utils.uriToMultipartBody
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
@@ -74,6 +76,13 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         }
     }
 
+
+
+
+
+
+
+
     fun getEvents() {
         viewModelScope.launch {
             eventsUiState = EventsUiState.Loading
@@ -91,7 +100,7 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
 
     fun getEventsByType(type: String) {
 
-        if (lastFilter == type) return // ✅ Prevent duplicate API calls
+        //if (lastFilter == type) return // ✅ Prevent duplicate API calls
         lastFilter = type
 
         viewModelScope.launch {

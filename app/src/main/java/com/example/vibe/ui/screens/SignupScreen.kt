@@ -1,6 +1,7 @@
 package com.example.vibe.ui.screens
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -26,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,17 +49,26 @@ fun SignupScreen(
     signupApi: SignupApi,
     onSignupSuccess: () -> Unit
 ) {
+    val context = LocalContext.current
     val viewModel = remember { SignupViewModel(signupApi) }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) } // ✅ Only for Snackbar
+        snackbarHost = { SnackbarHost(snackbarHostState) { snackbarData ->
+            Snackbar(
+                snackbarData = snackbarData,
+                containerColor = MaterialTheme.colorScheme.surfaceVariant, // Uses default theme-based color
+                contentColor = MaterialTheme.colorScheme.onSurface, // Ensures readable text color
+                actionColor = MaterialTheme.colorScheme.primary // Keeps the action button visible
+            )
+            }
+        }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp), // ✅ Removed `paddingValues`
+                .padding(16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -139,7 +152,7 @@ fun SignupScreen(
             StyledTextField(
                 value = viewModel.instagram,
                 onValueChange = { viewModel.instagram = it },
-                label = "Instagram"
+                label = "Instagram Username"
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -153,18 +166,23 @@ fun SignupScreen(
                 text = "Sign Up",
                 isLoading = viewModel.isLoading,
                 onClick = {
-                    viewModel.signup {
-                        coroutineScope.launch {
-                            val snackbarResult = snackbarHostState.showSnackbar(
-                                message = "Signup successful! Please check your email for confirmation.",
-                                actionLabel = "OK",
-                                duration = SnackbarDuration.Indefinite
-                            )
+                    val validationMessage = viewModel.validateFields()
+                    if (validationMessage != null) {
+                        Toast.makeText(context, validationMessage, Toast.LENGTH_SHORT).show()
+                    } else {
+                        viewModel.signup {
+                            coroutineScope.launch {
+                                val snackbarResult = snackbarHostState.showSnackbar(
+                                    message = "Signup successful! Please check your email for confirmation.",
+                                    actionLabel = "OK",
+                                    duration = SnackbarDuration.Indefinite
+                                )
 
-                            if (snackbarResult == SnackbarResult.ActionPerformed) {
-                                onSignupSuccess()
-                                navController.navigate("login") {
-                                    popUpTo("signup") { inclusive = true }
+                                if (snackbarResult == SnackbarResult.ActionPerformed) {
+                                    onSignupSuccess()
+                                    navController.navigate("home_screen/all") {
+                                        popUpTo("signup") { inclusive = true }
+                                    }
                                 }
                             }
                         }
@@ -176,4 +194,5 @@ fun SignupScreen(
         }
     }
 }
+
 

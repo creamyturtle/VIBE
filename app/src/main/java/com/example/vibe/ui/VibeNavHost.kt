@@ -73,20 +73,7 @@ fun VibeNavHost(
             arguments = listOf(navArgument("filterType") { type = NavType.StringType })
         ) { backStackEntry ->
             val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
-            val navBackStackEntry by navController.currentBackStackEntryFlow.collectAsState(initial = null)
 
-            // ✅ 1. Fetch events when navigating back to Home
-            DisposableEffect(navBackStackEntry) {
-                if (navBackStackEntry?.destination?.route?.startsWith("home_screen") == true) {
-                    Log.d("UI", "📢 Returning to Home: Fetching events (filter: $filterType)")
-                    if (filterType == "all") {
-                        eventsViewModel.getEvents()
-                    } else {
-                        eventsViewModel.getEventsByType(filterType)
-                    }
-                }
-                onDispose { }
-            }
 
             // ✅ 2. Fetch events on filter change + reset scroll only when switching filters
             LaunchedEffect(filterType) {
