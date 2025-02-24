@@ -51,7 +51,7 @@ class DefaultEventsRepository(
     /** Retrieves list of events from underlying data source */
     override suspend fun getEvents(): List<Event> {
         return try {
-            val data = eventsApiService.getAll(table = "parties")
+            val data = eventsApiService.getAll(table = "parties", apiToken = secretToken)
             Log.d("Repository", "Fetched data: $data") // Log data
             data
         } catch (e: Exception) {
@@ -63,10 +63,10 @@ class DefaultEventsRepository(
     override suspend fun getEventsByType(type: String): List<Event> {
         return try {
             when (type) {
-                "House" -> eventsApiService.getHouses(table = "parties")
-                "Pool" -> eventsApiService.getPools(table = "parties")
-                "Finca" -> eventsApiService.getFincas(table = "parties")
-                "Activity" -> eventsApiService.getActivities(table = "parties")
+                "House" -> eventsApiService.getHouses(table = "parties", apiToken = secretToken)
+                "Pool" -> eventsApiService.getPools(table = "parties", apiToken = secretToken)
+                "Finca" -> eventsApiService.getFincas(table = "parties", apiToken = secretToken)
+                "Activity" -> eventsApiService.getActivities(table = "parties", apiToken = secretToken)
                 else -> getEvents() // Default to all events
             }
         } catch (e: Exception) {
@@ -78,7 +78,7 @@ class DefaultEventsRepository(
 
     override suspend fun getEventsByID(): List<Event> {
         return try {
-            val data = eventsApiService.getByID(table = "parties")
+            val data = eventsApiService.getByID(table = "parties", apiToken = secretToken)
             Log.d("Repository", "Fetched data: $data") // Log data
             data
         } catch (e: Exception) {
