@@ -78,6 +78,7 @@ import kotlinx.coroutines.launch
 import org.intellij.lang.annotations.Language
 import java.util.Locale
 import kotlin.math.roundToInt
+import androidx.compose.runtime.key
 
 
 @Composable
@@ -138,7 +139,10 @@ fun RightSideDrawer(
                 .fillMaxHeight()
                 .width(280.dp)
                 .offset { IntOffset(animationState.value.roundToInt(), 0) }
-                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp))
+                .background(
+                    MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)
+                )
                 .align(Alignment.CenterEnd)
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures(
@@ -162,7 +166,10 @@ fun RightSideDrawer(
                 LanguageToggle(
                     selectedLanguage = selectedLanguage, // ✅ This should be working correctly now
                     onLanguageChange = { lang ->
-                        languageViewModel.setLanguage(context, lang) // ✅ Ensure it updates the app language
+                        languageViewModel.setLanguage(
+                            context,
+                            lang
+                        ) // ✅ Ensure it updates the app language
                     }
                 )
 
@@ -177,39 +184,79 @@ fun RightSideDrawer(
                     // **🔹 Menu Items**
                     Spacer(Modifier.height(16.dp))
 
-                    DrawerMenuItem(icon = Icons.Outlined.Dashboard, text = stringResource(R.string.dashboard)) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.Dashboard,
+                        text = stringResource(R.string.dashboard)
+                    ) {
                         isOpen.value = false
                         navController.navigate("control_panel")
                     }
 
-                    DrawerMenuItem(icon = Icons.Outlined.Event, text = stringResource(R.string.host_event)) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.Event,
+                        text = stringResource(R.string.host_event)
+                    ) {
                         isOpen.value = false
                         navController.navigate("host_event")
                     }
 
-                    DrawerMenuItem(icon = Icons.Outlined.Bookmarks, stringResource(R.string.saved_events)) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.Bookmarks,
+                        stringResource(R.string.saved_events)
+                    ) {
                         isOpen.value = false
                         navController.navigate("saved_events")
                     }
 
-                    DrawerMenuItem(icon = Icons.Outlined.AccountCircle, text = stringResource(R.string.user_profile)) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.AccountCircle,
+                        text = stringResource(R.string.user_profile)
+                    ) {
                         isOpen.value = false
                         navController.navigate("user_profile")
                     }
 
                     // Submenu: Information
                     var submenuExpanded by remember { mutableStateOf(false) }
-                    DrawerMenuItem(icon = Icons.Outlined.Info, text = stringResource(R.string.information), hasSubmenu = true, isExpanded = submenuExpanded) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.Info,
+                        text = stringResource(R.string.information),
+                        hasSubmenu = true,
+                        isExpanded = submenuExpanded
+                    ) {
                         submenuExpanded = !submenuExpanded
                     }
                     if (submenuExpanded) {
-                        DrawerSubMenuItem(text = stringResource(R.string.about), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("about_us") })
-                        DrawerSubMenuItem(text = stringResource(R.string.faq), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("faq") })
-                        DrawerSubMenuItem(text = stringResource(R.string.terms_conditions), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("terms_and_conditions") })
-                        DrawerSubMenuItem(text = stringResource(R.string.privacy_policy), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("privacy_policy") })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.about),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("about_us")
+                            })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.faq),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("faq")
+                            })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.terms_conditions),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("terms_and_conditions")
+                            })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.privacy_policy),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("privacy_policy")
+                            })
                     }
 
-                    DrawerMenuItem(icon = Icons.Outlined.CalendarMonth, text = stringResource(R.string.calendar)) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.CalendarMonth,
+                        text = stringResource(R.string.calendar)
+                    ) {
                         isOpen.value = false
                         navController.navigate("calendar")
                     }
@@ -220,10 +267,17 @@ fun RightSideDrawer(
                     }
 
 
-                    DrawerMenuItem(icon = Icons.AutoMirrored.Outlined.ExitToApp, text = stringResource(R.string.logout)) {
+                    DrawerMenuItem(
+                        icon = Icons.AutoMirrored.Outlined.ExitToApp,
+                        text = stringResource(R.string.logout)
+                    ) {
                         isOpen.value = false
                         authViewModel.logout(context) // ✅ Pass context for Toast
-                        navController.navigate("login") { popUpTo("home_screen/all") { inclusive = false }}
+                        navController.navigate("login") {
+                            popUpTo("home_screen/all") {
+                                inclusive = false
+                            }
+                        }
                     }
 
 
@@ -231,12 +285,18 @@ fun RightSideDrawer(
 
                     Spacer(Modifier.height(16.dp))
 
-                    DrawerMenuItem(icon = Icons.Outlined.AccountCircle, text = stringResource(R.string.create_account)) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.AccountCircle,
+                        text = stringResource(R.string.create_account)
+                    ) {
                         isOpen.value = false
                         navController.navigate("signup")
                     }
 
-                    DrawerMenuItem(icon = Icons.AutoMirrored.Outlined.Login, text = stringResource(R.string.login)) {
+                    DrawerMenuItem(
+                        icon = Icons.AutoMirrored.Outlined.Login,
+                        text = stringResource(R.string.login)
+                    ) {
                         isOpen.value = false
                         navController.navigate("login")
                     }
@@ -245,17 +305,45 @@ fun RightSideDrawer(
 
                     // Submenu: Information
                     var submenuExpanded by remember { mutableStateOf(false) }
-                    DrawerMenuItem(icon = Icons.Outlined.Info, text = stringResource(R.string.information), hasSubmenu = true, isExpanded = submenuExpanded) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.Info,
+                        text = stringResource(R.string.information),
+                        hasSubmenu = true,
+                        isExpanded = submenuExpanded
+                    ) {
                         submenuExpanded = !submenuExpanded
                     }
                     if (submenuExpanded) {
-                        DrawerSubMenuItem(text = stringResource(R.string.about), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("about_us") })
-                        DrawerSubMenuItem(text = stringResource(R.string.faq), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("faq") })
-                        DrawerSubMenuItem(text = stringResource(R.string.terms_conditions), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("terms_and_conditions") })
-                        DrawerSubMenuItem(text = stringResource(R.string.privacy_policy), onClick = { submenuExpanded = false; isOpen.value = false; navController.navigate("privacy_policy") })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.about),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("about_us")
+                            })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.faq),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("faq")
+                            })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.terms_conditions),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("terms_and_conditions")
+                            })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.privacy_policy),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("privacy_policy")
+                            })
                     }
 
-                    DrawerMenuItem(icon = Icons.Outlined.CalendarMonth, text = stringResource(R.string.calendar)) {
+                    DrawerMenuItem(
+                        icon = Icons.Outlined.CalendarMonth,
+                        text = stringResource(R.string.calendar)
+                    ) {
                         isOpen.value = false
                         navController.navigate("calendar")
                     }
@@ -271,12 +359,15 @@ fun RightSideDrawer(
 
                 Spacer(Modifier.height(32.dp))
 
-                DarkModeToggle(
-                    isDarkMode = isDarkMode,
-                    onThemeChange = { newTheme ->
-                        settingsViewModel.toggleDarkMode(newTheme)
-                    }
-                )
+                key(selectedLanguage) {
+
+                    DarkModeToggle(
+                        isDarkMode = isDarkMode,
+                        onThemeChange = { newTheme ->
+                            settingsViewModel.toggleDarkMode(newTheme)
+                        }
+                    )
+                }
 
 
 
@@ -512,7 +603,7 @@ fun DarkModeToggle(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Light",
+                    text = stringResource(R.string.light),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (!darkModeEnabled) Color.White else MaterialTheme.colorScheme.onBackground
@@ -539,7 +630,7 @@ fun DarkModeToggle(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Dark",
+                    text = stringResource(R.string.dark),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (darkModeEnabled) Color.White else MaterialTheme.colorScheme.onBackground

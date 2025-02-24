@@ -13,16 +13,16 @@ fun BottomBar(
     isLoggedIn: Boolean,
     eventsViewModel: EventsViewModel,
     authViewModel: AuthViewModel,
-    languageViewModel: LanguageViewModel
+    selectedLanguage: String
 ) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
     when {
         currentDestination?.startsWith("home_screen") == true -> {
-            VibeBottomAppBarNew(navController, isLoggedIn, authViewModel, languageViewModel)
+            VibeBottomAppBarNew(navController, isLoggedIn, authViewModel, selectedLanguage)
         }
         currentDestination?.startsWith("map_screen") == true -> {
-            MapBottomAppBar(navController, languageViewModel) { filterType ->
+            MapBottomAppBar(navController, selectedLanguage) { filterType ->
                 navController.navigate("map_screen/$filterType") {
                     popUpTo("map_screen/all") { inclusive = true }
                 }

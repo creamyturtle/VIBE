@@ -39,5 +39,7 @@
     <string name="finca_parties">Fincas</string>
     <string name="pool_parties">Piscinas</string>
     <string name="activities">Actividades</string>
+    <string name="light">Claro</string>
+    <string name="dark">Oscuro</string>
 
 </resources>

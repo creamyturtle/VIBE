@@ -27,15 +27,9 @@ import com.example.vibe.ui.viewmodel.LanguageViewModel
 fun MiniTopBar(
     navController: NavController,
     selectedFilter: String,
-    languageViewModel: LanguageViewModel,
     onFilterSelected: (String) -> Unit
 
 ) {
-
-
-    val selectedLanguage by languageViewModel.language.collectAsState()
-
-    key(selectedLanguage) {
 
 
         Row(
@@ -118,5 +112,5 @@ fun MiniTopBar(
 
 
         }
-    }
+
 }

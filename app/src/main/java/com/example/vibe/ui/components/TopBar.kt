@@ -6,13 +6,14 @@ import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vibe.ui.viewmodel.LanguageViewModel
+import org.intellij.lang.annotations.Language
 
 @Composable
 fun TopBar(
     navController: NavController,
     isDrawerOpen: MutableState<Boolean>,
     listState: LazyListState,
-    languageViewModel: LanguageViewModel
+    selectedLanguage: String
 ) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -32,7 +33,7 @@ fun TopBar(
 
         // Default case: Show the main top bar
         else -> {
-            VibeTopAppBar(navController, isDrawerOpen, listState, languageViewModel)
+            VibeTopAppBar(navController, isDrawerOpen, listState, selectedLanguage)
         }
     }
 }

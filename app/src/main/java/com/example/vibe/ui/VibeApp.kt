@@ -45,6 +45,7 @@ import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.SettingsViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import java.util.Locale
+import androidx.compose.runtime.key
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -104,8 +105,27 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { TopBar(navController, isDrawerOpen, listState, languageViewModel) },
-            bottomBar = { BottomBar(navController, isLoggedIn, eventsViewModel, authViewModel, languageViewModel) }
+            topBar = {
+
+                    TopBar(
+                        navController,
+                        isDrawerOpen,
+                        listState,
+                        selectedLanguage
+                    )
+
+                     },
+            bottomBar = {
+
+                    BottomBar(
+                        navController,
+                        isLoggedIn,
+                        eventsViewModel,
+                        authViewModel,
+                        selectedLanguage
+                    )
+
+            }
 
         ) { innerPadding ->
 

@@ -36,7 +36,7 @@ import com.example.vibe.ui.viewmodel.LanguageViewModel
 @Composable
 fun MapBottomAppBar(
     navController: NavController,
-    languageViewModel: LanguageViewModel,
+    selectedLanguage: String,
     onFilterSelected: (String) -> Unit
 ) {
 
@@ -45,7 +45,7 @@ fun MapBottomAppBar(
 
     var selectedFilter by remember { mutableStateOf<String?>("all") }
 
-    val selectedLanguage by languageViewModel.language.collectAsState()
+    //val selectedLanguage by languageViewModel.language.collectAsState()
 
 
     key(selectedLanguage) {
@@ -152,7 +152,8 @@ fun MapBottomAppBar(
 
 
         }
-
     }
+
+
 
 }

@@ -38,6 +38,7 @@ import androidx.navigation.NavController
 import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
+import org.intellij.lang.annotations.Language
 
 
 @Composable
@@ -45,7 +46,7 @@ fun VibeBottomAppBarNew(
     navController: NavController,
     isLoggedIn: Boolean,
     authViewModel: AuthViewModel,
-    languageViewModel: LanguageViewModel
+    selectedLanguage: String
 ) {
     var currentRoute by remember { mutableStateOf<String?>(null) }
 
@@ -60,7 +61,7 @@ fun VibeBottomAppBarNew(
 
     val context = LocalContext.current
 
-    val selectedLanguage by languageViewModel.language.collectAsState()
+    //val selectedLanguage by languageViewModel.language.collectAsState()
 
     key(selectedLanguage) {
 
@@ -187,6 +188,7 @@ fun VibeBottomAppBarNew(
             }
         }
     }
+
 }
 
 
