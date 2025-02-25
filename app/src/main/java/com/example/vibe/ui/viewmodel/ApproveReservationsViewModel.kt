@@ -20,6 +20,9 @@ class ApproveReservationsViewModel(private val apiService: RSVPApiService) : Vie
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    var successMessage by mutableStateOf<String?>(null)
+        private set
+
     init {
         fetchPendingRSVPs()
     }
@@ -30,22 +33,18 @@ class ApproveReservationsViewModel(private val apiService: RSVPApiService) : Vie
             errorMessage = null
             try {
                 val response = apiService.getPendingRSVPs()
-                Log.d("API_RESPONSE", "Response: ${response}")
-
                 if (response.success) {
                     rsvpList = response.rsvps!!
                 } else {
                     errorMessage = "Failed to fetch RSVPs."
                 }
             } catch (e: Exception) {
-                Log.e("API_ERROR", "Error fetching RSVPs: ${e.message}")
                 errorMessage = "Error: ${e.message}"
             } finally {
                 isLoading = false
             }
         }
     }
-
 
     fun approveRSVP(rsvp: RSVPItem) {
         viewModelScope.launch {
@@ -57,10 +56,11 @@ class ApproveReservationsViewModel(private val apiService: RSVPApiService) : Vie
                     partyId = rsvp.partyId
                 )
 
-                Log.d("RSVP_APPROVE_RESPONSE", "Response: $response") // ✅ Debug API response
+                Log.d("RSVP_APPROVE_RESPONSE", "Response: $response")
 
                 if (response.success) {
                     rsvpList = rsvpList.filter { it.id != rsvp.id }
+                    successMessage = "RSVP Approved Successfully 🎉" // ✅ Show toast message
                     Log.d("RSVP_APPROVE", "✅ RSVP approved successfully!")
                 } else {
                     errorMessage = "Approval failed. Server message: ${response.message}"
@@ -73,7 +73,9 @@ class ApproveReservationsViewModel(private val apiService: RSVPApiService) : Vie
         }
     }
 
-
-
-
+    // ✅ Helper function to clear success message after showing Toast
+    fun clearSuccessMessage() {
+        successMessage = null
+    }
 }
+

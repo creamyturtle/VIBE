@@ -1,5 +1,6 @@
 package com.example.vibe.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -54,21 +57,27 @@ fun ApproveReservationsScreen(
     approveReservationsViewModel: ApproveReservationsViewModel,
     onBack: () -> Unit
 ) {
+    val context = LocalContext.current
     val rsvpList = approveReservationsViewModel.rsvpList
     val isLoading = approveReservationsViewModel.isLoading
     val errorMessage = approveReservationsViewModel.errorMessage
     var showConfirmDialog by remember { mutableStateOf(false) }
     var selectedRSVP by remember { mutableStateOf<RSVPItem?>(null) }
 
+    // ✅ Show Toast when approval is successful
+    LaunchedEffect(approveReservationsViewModel.successMessage) {
+        approveReservationsViewModel.successMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            approveReservationsViewModel.clearSuccessMessage() // Clear message after showing
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 104.dp) // ✅ Pushes content down by 104.dp
+            .padding(top = 104.dp)
     ) {
-
-        Row() {
-
+        Row {
             IconButton(
                 onClick = onBack,
                 modifier = Modifier
@@ -93,9 +102,7 @@ fun ApproveReservationsScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             )
-
         }
-
 
         when {
             isLoading -> {
@@ -130,15 +137,12 @@ fun ApproveReservationsScreen(
                     }
 
                     item {
-                        Spacer(modifier = Modifier.height(120.dp)) // Adjust height as needed
+                        Spacer(modifier = Modifier.height(120.dp))
                     }
-
-
                 }
             }
         }
     }
-
 
     // Confirm Approval Dialog
     if (showConfirmDialog && selectedRSVP != null) {
@@ -162,6 +166,7 @@ fun ApproveReservationsScreen(
         )
     }
 }
+
 
 
 
