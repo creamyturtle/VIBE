@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
-import com.example.vibe.ui.viewmodel.LanguageViewModel
 
 @Composable
 fun BottomBar(

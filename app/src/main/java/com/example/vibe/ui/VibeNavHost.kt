@@ -15,7 +15,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.vibe.network.RSVPApiService
 import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
 import com.example.vibe.ui.screens.ApproveReservationsScreen

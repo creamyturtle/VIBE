@@ -27,8 +27,6 @@ import androidx.compose.material.icons.outlined.DisplaySettings
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
