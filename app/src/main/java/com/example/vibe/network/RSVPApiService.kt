@@ -44,6 +44,8 @@ data class RSVPItem(
     @SerialName("instagram") val instagram: String?,
     @SerialName("addguest1") val addguest1: String?,
     @SerialName("addguest2") val addguest2: String?,
+    @SerialName("addguest3") val addguest3: String?,
+    @SerialName("addguest4") val addguest4: String?,
     @SerialName("bringing") val bringing: String?,
     @SerialName("rsvpapproved") val rsvpApproved: Int,
     @SerialName("partyname") val partyName: String
