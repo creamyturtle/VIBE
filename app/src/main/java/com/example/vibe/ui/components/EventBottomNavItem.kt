@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun EventBottomNavItem(
+fun MiniTopBarNavItem(
     filterName: String,
     icon: ImageVector,
     label: String,
@@ -63,3 +63,4 @@ fun EventBottomNavItem(
         }
     }
 }
+

@@ -70,7 +70,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun EventsAttendingScreen(
     eventsUiState: EventsUiState,
-    navController: NavController,
     retryAction: () -> Unit,
     onCancelReservation: (String) -> Unit,
     modifier: Modifier = Modifier,

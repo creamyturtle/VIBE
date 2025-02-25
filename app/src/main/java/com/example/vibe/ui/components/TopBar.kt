@@ -19,13 +19,13 @@ fun TopBar(
 
     when {
         // Screens that should have a basic top bar
-        currentDestination in setOf("about_us", "faq", "terms_and_conditions", "privacy_policy", "user_profile", "calendar", "control_panel", "events_attending", "manage_hosted") ||
+        currentDestination in setOf("about_us", "faq", "terms_and_conditions", "privacy_policy", "user_profile", "calendar", "control_panel", "events_attending", "manage_hosted", "host_event") ||
                 currentDestination?.startsWith("map_screen") == true -> {
             VibeBasicTopBar(navController, isDrawerOpen)
         }
 
         // Screens that should have no top bar at all
-        currentDestination in setOf("login", "signup", "reservation_screen", "host_event") ||
+        currentDestination in setOf("login", "signup", "reservation_screen") ||
                 currentDestination?.startsWith("event_details") == true ||
                 currentDestination?.startsWith("reservation_screen") == true -> {
             // Do nothing (No Top Bar)

@@ -21,7 +21,6 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -35,10 +34,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.AuthViewModel
-import com.example.vibe.ui.viewmodel.LanguageViewModel
-import org.intellij.lang.annotations.Language
 
 
 @Composable
@@ -48,13 +46,8 @@ fun VibeBottomAppBarNew(
     authViewModel: AuthViewModel,
     selectedLanguage: String
 ) {
-    var currentRoute by remember { mutableStateOf<String?>(null) }
-
-    // ✅ Ensure NavController updates currentRoute correctly
-    LaunchedEffect(navController.currentBackStackEntry) {
-        currentRoute = navController.currentBackStackEntry?.destination?.route
-        Log.d("BottomBar", "Updated Current Route: $currentRoute") // ✅ Debugging
-    }
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     val density = LocalDensity.current.density
     val onePixel = 1f / density

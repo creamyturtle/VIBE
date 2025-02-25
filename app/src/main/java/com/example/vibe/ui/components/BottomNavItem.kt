@@ -28,6 +28,7 @@ fun BottomNavItem(
     label: String,
     onClick: (() -> Unit)? = null
 ) {
+
     val isSelected = currentRoute?.startsWith(baseRoute) == true
     val iconColor by animateColorAsState(
         targetValue = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Gray,

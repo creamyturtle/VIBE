@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -92,8 +93,9 @@ fun EventCalendarScreen(
             .padding(horizontal = 16.dp), // ✅ Add padding for better spacing
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(78.dp))
+        Spacer(Modifier.height(128.dp))
 
+        /*
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -115,6 +117,9 @@ fun EventCalendarScreen(
                 )
             }
         }
+
+         */
+
 
         // ✅ Month Title
         Text(
@@ -336,13 +341,15 @@ fun EventSelectionPopup(
                                 onDismiss()
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF3F51B5)
+                                containerColor = MaterialTheme.colorScheme.background
                             ),
                             shape = RoundedCornerShape(12.dp),
+                            border = BorderStroke(2.dp, Color(0xFFFE1943)),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp)
                                 .height(56.dp)
+
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -352,12 +359,12 @@ fun EventSelectionPopup(
                                 Icon(
                                     imageVector = getPartyTypeIcon(event.partytype),
                                     contentDescription = event.partytype,
-                                    tint = Color.White,
+                                    tint = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier
                                         .size(32.dp)
                                         .padding(end = 12.dp)
                                 )
-                                Text(event.partyname, color = Color.White)
+                                Text(event.partyname, color = MaterialTheme.colorScheme.onBackground)
                             }
                         }
                     }

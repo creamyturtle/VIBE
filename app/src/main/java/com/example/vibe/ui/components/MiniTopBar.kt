@@ -42,7 +42,7 @@ fun MiniTopBar(
 
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                EventBottomNavItem(
+                MiniTopBarNavItem(
                     "all",
                     Icons.Default.Public,
                     stringResource(R.string.all_events),
@@ -56,7 +56,7 @@ fun MiniTopBar(
 
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                EventBottomNavItem(
+                MiniTopBarNavItem(
                     "House",
                     Icons.Default.Home,
                     stringResource(R.string.house_parties),
@@ -70,7 +70,7 @@ fun MiniTopBar(
 
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                EventBottomNavItem(
+                MiniTopBarNavItem(
                     "Finca",
                     Icons.Default.Agriculture,
                     stringResource(R.string.finca_parties),
@@ -84,7 +84,7 @@ fun MiniTopBar(
 
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                EventBottomNavItem(
+                MiniTopBarNavItem(
                     "Pool",
                     Icons.Default.Pool,
                     stringResource(R.string.pool_parties),
@@ -98,7 +98,7 @@ fun MiniTopBar(
 
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                EventBottomNavItem(
+                MiniTopBarNavItem(
                     "Activity",
                     Icons.AutoMirrored.Filled.DirectionsBike,
                     stringResource(R.string.activities),
