@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -86,7 +87,7 @@ fun ApproveReservationsScreen(
             .fillMaxSize()
             .padding(top = 104.dp)
     ) {
-        Row {
+        Row() {
             IconButton(
                 onClick = onBack,
                 modifier = Modifier
@@ -132,8 +133,8 @@ fun ApproveReservationsScreen(
             else -> {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+                        .fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)
                 ) {
                     items(rsvpList) { rsvp ->
                         RSVPCard(
@@ -192,7 +193,7 @@ fun RSVPCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 12.dp),
+            .padding(vertical = 16.dp, horizontal = 12.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(4.dp)

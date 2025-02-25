@@ -118,7 +118,6 @@ fun ManageHostedScreen(
                 val events = eventsUiState.events
                 val coroutineScope = rememberCoroutineScope()
 
-                Log.d("UI", "✅ Received ${events.size} events in UI")
 
                 if (events.isEmpty()) {
                     Log.e("UI", "❌ No events to display in LazyColumn")

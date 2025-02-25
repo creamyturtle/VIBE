@@ -63,22 +63,20 @@ fun ControlPanelScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()) // ✅ Scroll only this part
-                .padding(24.dp),
+                .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(88.dp))
-
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(Modifier.height(128.dp))
 
             // User Profile Section
             ProfileSection()
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
             // Dashboard Overview
             DashboardSection()
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
 
 
@@ -98,7 +96,7 @@ fun ControlPanelScreen(
             elevation = FloatingActionButtonDefaults.elevation(0.dp), // ❗ Ensures no tonal elevation effect
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(0.dp, 0.dp, 32.dp, 72.dp)
+                .padding(0.dp, 0.dp, 32.dp, 88.dp)
                 .border(width = 2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
         ) {
             Row(
@@ -131,7 +129,9 @@ fun ControlPanelScreen(
 fun ProfileSection() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         Surface(
             shape = CircleShape,
@@ -155,7 +155,9 @@ fun ProfileSection() {
 @Composable
 fun DashboardSection() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         DashboardCard("Events Attending", "5")
@@ -195,22 +197,26 @@ fun ActionButtonsGrid(navController: NavController) {
         ListButton(icon = Icons.Outlined.Event, text = "View Events Attending") { navController.navigate("events_attending")}
         Divider(
             color = MaterialTheme.colorScheme.surfaceVariant,
-            thickness = 1.dp
+            thickness = 1.dp,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         ListButton(icon = Icons.Outlined.DisplaySettings, text = "Manage Hosted Events") { navController.navigate("manage_hosted")}
         Divider(
             color = MaterialTheme.colorScheme.surfaceVariant,
-            thickness = 1.dp
+            thickness = 1.dp,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         ListButton(icon = Icons.Outlined.ThumbUp, text = "Approve Reservations") { navController.navigate("approve_reservations")}
         Divider(
             color = MaterialTheme.colorScheme.surfaceVariant,
-            thickness = 1.dp
+            thickness = 1.dp,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         ListButton(icon = Icons.Outlined.Checklist, text = "Check-in Guests") { navController.navigate("events_attending")}
         Divider(
             color = MaterialTheme.colorScheme.surfaceVariant,
-            thickness = 1.dp
+            thickness = 1.dp,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         ListButton(icon = Icons.Outlined.PersonOutline, text = "Edit Profile") { navController.navigate("events_attending")}
     }
@@ -223,41 +229,50 @@ fun ActionButtonsGrid(navController: NavController) {
 @Composable
 fun ListButton(icon: ImageVector, text: String, onClick: () -> Unit) {
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Surface(
+        shape = RoundedCornerShape(12.dp), // Set rounded corners
+        color = Color.Transparent, // Keeps the default background transparent
         modifier = Modifier
+            .clip(RoundedCornerShape(12.dp)) // Ensures ripple effect follows the rounded corners
             .clickable(onClick = onClick)
-            .height(60.dp)
-    )
-    {
+            .padding(horizontal = 16.dp)
+    ) {
 
-        Icon(
-            imageVector = icon,
-            contentDescription = text,
-            tint = MaterialTheme.colorScheme.secondaryContainer,
-            modifier = Modifier.size(28.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .height(60.dp)
+
         )
+        {
 
-        Spacer(Modifier.width(16.dp))
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                tint = MaterialTheme.colorScheme.secondaryContainer,
+                modifier = Modifier.size(28.dp)
+            )
 
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.secondaryContainer,
-            style = TextStyle(fontSize = 20.sp, lineHeight = 20.sp)
-        )
+            Spacer(Modifier.width(16.dp))
 
-        Spacer(Modifier.weight(1f))
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                style = TextStyle(fontSize = 20.sp, lineHeight = 20.sp)
+            )
 
-        Icon(
-            imageVector = Icons.AutoMirrored.Outlined.ArrowForwardIos,
-            contentDescription = "Arrow",
-            tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(16.dp)
-        )
+            Spacer(Modifier.weight(1f))
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.ArrowForwardIos,
+                contentDescription = "Arrow",
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(16.dp)
+            )
 
 
-
+        }
     }
 
 }
