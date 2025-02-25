@@ -50,18 +50,30 @@ class ApproveReservationsViewModel(private val apiService: RSVPApiService) : Vie
     fun approveRSVP(rsvp: RSVPItem) {
         viewModelScope.launch {
             try {
+                Log.d("RSVP_APPROVE", "Attempting to approve: ID=${rsvp.id}, Party ID=${rsvp.partyId}")
+
                 val response = apiService.approveRSVP(
                     approveId = rsvp.id,
-                    tableName = "${rsvp.partyName}_${rsvp.id}"
+                    partyId = rsvp.partyId
                 )
+
+                Log.d("RSVP_APPROVE_RESPONSE", "Response: $response") // ✅ Debug API response
+
                 if (response.success) {
                     rsvpList = rsvpList.filter { it.id != rsvp.id }
+                    Log.d("RSVP_APPROVE", "✅ RSVP approved successfully!")
                 } else {
-                    errorMessage = "Approval failed."
+                    errorMessage = "Approval failed. Server message: ${response.message}"
+                    Log.e("RSVP_APPROVE", "❌ Approval failed: ${response.message}")
                 }
             } catch (e: Exception) {
                 errorMessage = "Error: ${e.message}"
+                Log.e("RSVP_APPROVE", "❌ Error approving RSVP: ${e.message}")
             }
         }
     }
+
+
+
+
 }

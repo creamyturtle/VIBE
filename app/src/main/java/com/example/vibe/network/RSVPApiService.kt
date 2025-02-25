@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -17,16 +18,23 @@ interface RSVPApiService {
         @Query("offset") offset: Int = 0
     ): RSVPResponse
 
-    @FormUrlEncoded
-    @POST("approveReservationsApp.php?action=approve")
+    @GET("approveReservationsApp.php?action=approve")
     suspend fun approveRSVP(
-        @Field("approve_id") approveId: Int,
-        @Field("table_name") tableName: String
+        @Query("approve_id") approveId: Int,
+        @Query("party_id") partyId: Int
     ): ApprovalResponse
+
+
+
+
+
+
+
 }
 
 // Data Models
 
+@Serializable
 data class ApprovalResponse(val success: Boolean, val message: String)
 
 @Serializable
@@ -48,5 +56,6 @@ data class RSVPItem(
     @SerialName("addguest4") val addguest4: String?,
     @SerialName("bringing") val bringing: String?,
     @SerialName("rsvpapproved") val rsvpApproved: Int,
-    @SerialName("partyname") val partyName: String
+    @SerialName("partyname") val partyName: String,
+    @SerialName("party_id") val partyId: Int
 )
