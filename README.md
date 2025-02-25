@@ -21,12 +21,12 @@ Future Updates
 
 1. Display party listings - DONE
 2. User registrations/logins - DONE
-3. User control panel
+3. User control panel - working
 4. UI redesign - DONE
 5. Event reservations - DONE
 6. Google Maps API integration - DONE
 7. Event host page w/ image & video uploads - DONE
-8. Host control panel
+8. Events Attending Page - DONE
 9. Information pages - DONE
 10. Caching / Prediction
 11. Language translations (en/es) - working
@@ -36,4 +36,5 @@ Future Updates
 15. User Profile editable
 16. Approve RSVPs System
 17. Check-In Guests System
-18. Event Calendar - working
+18. Event Calendar - DONE
+19. Manage Hosted Events - working
