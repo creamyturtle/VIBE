@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,7 +54,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -127,10 +126,10 @@ fun EventsAttendingScreen(
                 val events = eventsUiState.events
                 val coroutineScope = rememberCoroutineScope()
 
-                Log.d("UI", "✅ Received ${events.size} events in UI")
+
 
                 if (events.isEmpty()) {
-                    Log.e("UI", "❌ No events to display in LazyColumn")
+
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("No events found.", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
@@ -142,12 +141,12 @@ fun EventsAttendingScreen(
 
                         items(events) { event ->
 
-                            Log.d("UI", "🔹 Rendering event: ${event.partyname}")
+
 
                             EventCard(
                                 event = event,
                                 onViewQrCode = { qrcode ->
-                                    Log.d("UI", "🔍 Showing QR Code for: $qrcode")
+
                                     selectedQrCode = qrcode
                                     showQrModal = true
                                 },
@@ -156,7 +155,7 @@ fun EventsAttendingScreen(
 
                                         onCancelReservation(event.tablename)
 
-                                        Log.d("UI", "❌ User clicked cancel for: ${event.partyname}")
+
                                     }
                                 }
                             )
@@ -175,14 +174,18 @@ fun EventsAttendingScreen(
             }
 
             is EventsUiState.Error -> {
-                Log.e("UI", "❌ UI in error state - failed to load events")
+
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Failed to load events", color = MaterialTheme.colorScheme.error)
+
+                    Spacer(Modifier.height(32.dp))
+
+                    ErrorScreen(retryAction, modifier)
                 }
             }
 
             else -> {
-                Log.d("UI", "⏳ UI in loading state - waiting for data")
+
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
@@ -203,7 +206,13 @@ fun EventsAttendingScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelReservation: () -> Unit) {
+fun EventCard(
+    event: EventAttending,
+    onViewQrCode: (String) -> Unit,
+    onCancelReservation: () -> Unit
+) {
+    var showCancelConfirmation by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -211,16 +220,12 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-
             Text(text = event.partyname, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
             Text(text = "${event.formattedDate} @ ${event.formattedTime}", color = MaterialTheme.colorScheme.secondaryContainer)
 
             Spacer(Modifier.height(24.dp))
 
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
+            Column(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
                     model = event.fullImgSrc,
                     contentDescription = event.partyname,
@@ -235,14 +240,8 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
 
                 Spacer(Modifier.height(32.dp))
 
-
-
                 Text(text = "Address:", fontWeight = FontWeight.Bold)
-
                 Spacer(Modifier.height(4.dp))
-
-
-                //Text(text = event.locationlong)
                 OpenInMaps(event.locationlong)
 
                 Spacer(Modifier.height(32.dp))
@@ -279,9 +278,6 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
                 }
             }
 
-
-
-
             Spacer(modifier = Modifier.height(32.dp))
 
             if (event.rsvpapproved == 1 && event.qrcode.isNotEmpty()) {
@@ -293,16 +289,14 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
                 ) {
                     Text("View QR Code", color = Color.White)
                 }
-
                 Spacer(modifier = Modifier.height(8.dp))
-
             }
 
-
-
             Button(
-                onClick = onCancelReservation,
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                onClick = { showCancelConfirmation = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -310,7 +304,37 @@ fun EventCard(event: EventAttending, onViewQrCode: (String) -> Unit, onCancelRes
             }
         }
     }
+
+    // Confirmation Dialog
+    if (showCancelConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showCancelConfirmation = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    onCancelReservation()
+                    showCancelConfirmation = false
+                }) {
+                    Text("Yes, Cancel", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCancelConfirmation = false }) {
+                    Text("No", color = MaterialTheme.colorScheme.primary)
+                }
+            },
+            title = {
+                Text("Confirm Cancellation")
+            },
+            text = {
+                Text("Are you sure you want to cancel your reservation?")
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
 }
+
+
 
 @Composable
 fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {

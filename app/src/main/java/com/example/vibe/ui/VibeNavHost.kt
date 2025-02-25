@@ -299,7 +299,6 @@ fun VibeNavHost(
 
             EventsAttendingScreen(
                 eventsUiState = eventsViewModel.eventsUiState,
-                navController = navController,
                 retryAction = eventsViewModel::getAttending,
                 onCancelReservation = { tableName ->
                     eventsViewModel.cancelReservation(tableName)
