@@ -198,25 +198,25 @@ fun ActionButtonsGrid(navController: NavController) {
         ListButton(icon = Icons.Outlined.Event, text = "View Events Attending") { navController.navigate("events_attending")}
         Divider(
             // = Modifier.padding(vertical = 8.dp),
-            color = Color.LightGray,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
         ListButton(icon = Icons.Outlined.DisplaySettings, text = "Manage Hosted Events") { navController.navigate("manage_hosted")}
         Divider(
             //modifier = Modifier.padding(vertical = 8.dp),
-            color = Color.LightGray,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
         ListButton(icon = Icons.Outlined.ThumbUp, text = "Approve Reservations") { navController.navigate("events_attending")}
         Divider(
             //modifier = Modifier.padding(vertical = 8.dp),
-            color = Color.LightGray,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
         ListButton(icon = Icons.Outlined.Checklist, text = "Check-in Guests") { navController.navigate("events_attending")}
         Divider(
             //modifier = Modifier.padding(vertical = 8.dp),
-            color = Color.LightGray,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
         ListButton(icon = Icons.Outlined.PersonOutline, text = "Edit Profile") { navController.navigate("events_attending")}
@@ -259,7 +259,7 @@ fun ListButton(icon: ImageVector, text: String, onClick: () -> Unit) {
         Icon(
             imageVector = Icons.AutoMirrored.Outlined.ArrowForwardIos,
             contentDescription = "Arrow",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(16.dp)
         )
 
