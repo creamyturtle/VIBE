@@ -78,7 +78,7 @@ fun ControlPanelScreen(
             // Dashboard Overview
             DashboardSection()
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
 
 
@@ -190,30 +190,25 @@ fun DashboardCard(title: String, count: String) {
 @Composable
 fun ActionButtonsGrid(navController: NavController) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         ListButton(icon = Icons.Outlined.Event, text = "View Events Attending") { navController.navigate("events_attending")}
         Divider(
-            // = Modifier.padding(vertical = 8.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
         ListButton(icon = Icons.Outlined.DisplaySettings, text = "Manage Hosted Events") { navController.navigate("manage_hosted")}
         Divider(
-            //modifier = Modifier.padding(vertical = 8.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
         ListButton(icon = Icons.Outlined.ThumbUp, text = "Approve Reservations") { navController.navigate("approve_reservations")}
         Divider(
-            //modifier = Modifier.padding(vertical = 8.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
         ListButton(icon = Icons.Outlined.Checklist, text = "Check-in Guests") { navController.navigate("events_attending")}
         Divider(
-            //modifier = Modifier.padding(vertical = 8.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
@@ -231,8 +226,8 @@ fun ListButton(icon: ImageVector, text: String, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            //.padding(8.dp)
             .clickable(onClick = onClick)
+            .height(60.dp)
     )
     {
 

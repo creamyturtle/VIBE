@@ -2,11 +2,7 @@ package com.example.vibe.network
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface RSVPApiService {
@@ -57,5 +53,7 @@ data class RSVPItem(
     @SerialName("bringing") val bringing: String?,
     @SerialName("rsvpapproved") val rsvpApproved: Int,
     @SerialName("partyname") val partyName: String,
-    @SerialName("party_id") val partyId: Int
-)
+    @SerialName("party_id") val partyId: Int,
+    @SerialName("usersphoto") val usersphoto: String,
+
+    )

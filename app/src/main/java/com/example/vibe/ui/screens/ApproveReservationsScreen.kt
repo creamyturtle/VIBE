@@ -1,6 +1,8 @@
 package com.example.vibe.ui.screens
 
+import android.webkit.WebSettings.TextSize
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +26,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -42,11 +45,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.vibe.R
 import com.example.vibe.network.RSVPItem
 import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 
@@ -149,7 +158,7 @@ fun ApproveReservationsScreen(
         AlertDialog(
             onDismissRequest = { showConfirmDialog = false },
             title = { Text("Approve RSVP") },
-            text = { Text("Are you sure you want to approve this RSVP for ${selectedRSVP!!.name}?") },
+            text = { Text("Are you sure you want to approve this RSVP for ${selectedRSVP!!.name}?", fontSize = 16.sp) },
             confirmButton = {
                 TextButton(onClick = {
                     showConfirmDialog = false
@@ -162,7 +171,8 @@ fun ApproveReservationsScreen(
                 TextButton(onClick = { showConfirmDialog = false }) {
                     Text("Cancel")
                 }
-            }
+            },
+            containerColor = MaterialTheme.colorScheme.surface
         )
     }
 }
@@ -177,35 +187,98 @@ fun RSVPCard(
     rsvpItem: RSVPItem,
     onApproveClick: () -> Unit
 ) {
+
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp, horizontal = 12.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            Text(text = rsvpItem.partyName, style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(16.dp))
-            Text(text = "Guest: ${rsvpItem.name}")
-            Text(text = "Age: ${rsvpItem.age} | Gender: ${rsvpItem.gender}")
-            Text(text = "Instagram: ${rsvpItem.instagram}")
-            Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "Additional Guests:")
-            Text(text = "${rsvpItem.addguest1}")
-            Text(text = "${rsvpItem.addguest2}")
-            Text(text = "${rsvpItem.addguest3}")
-            Text(text = "${rsvpItem.addguest4}")
+            Spacer(Modifier.height(24.dp))
+
+            Text(text = rsvpItem.partyName, style = MaterialTheme.typography.titleMedium, fontSize = 20.sp)
+            Spacer(Modifier.height(16.dp))
+
+
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween) {
+
+                Column() {
+
+
+                    Text(text = "Guest: ${rsvpItem.name}", fontSize = 16.sp)
+                    Spacer(Modifier.height(8.dp))
+                    Text(text = "Age: ${rsvpItem.age} | Gender: ${rsvpItem.gender}", fontSize = 16.sp)
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(text = "Additional Guests:")
+
+                    if (rsvpItem.addguest1.isNullOrEmpty()) {
+                        Text(text = "None")
+                    } else {
+                        Text(text = "${rsvpItem.addguest1}")
+                        Text(text = "${rsvpItem.addguest2}")
+                        Text(text = "${rsvpItem.addguest3}")
+                        Text(text = "${rsvpItem.addguest4}")
+                    }
+
+
+
+
+                }
+
+                Column() {
+
+                    val baseUrl = "https://www.vibesocial.org/" // ✅ Base URL
+
+
+                    AsyncImage(
+                        model = baseUrl + rsvpItem.usersphoto, // ✅ Load the full image URL
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, Color.Gray, CircleShape),
+                        contentScale = ContentScale.Crop // ✅ Ensures proper cropping
+                    )
+
+                }
+
+
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            SocialMediaButton("Instagram : @${rsvpItem.instagram}", R.drawable.instagram, "https://www.instagram.com/${rsvpItem.instagram}", Modifier.fillMaxWidth())
+
+            Spacer(Modifier.height(24.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Bringing: ${rsvpItem.bringing ?: "None"}", fontWeight = FontWeight.Bold)
+
+                Column() {
+                    Text(text = "Bringing:", fontWeight = FontWeight.Bold)
+
+                    if (rsvpItem.bringing.isNullOrEmpty()) {
+                        Text(text = "Nothing")
+                    }
+
+                    Text(text = "${rsvpItem.bringing}")
+
+
+                }
+
+
+
                 Button(
                     onClick = onApproveClick,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),

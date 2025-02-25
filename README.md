@@ -34,7 +34,8 @@ Future Updates
 13. Dark mode - DONE
 14. Homepage filters - DONE
 15. User Profile editable
-16. Approve RSVPs System
+16. Approve RSVPs System - DONE
 17. Check-In Guests System
 18. Event Calendar - DONE
 19. Manage Hosted Events - working
+20. Bookmark Saved Events functionality
