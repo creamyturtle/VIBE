@@ -207,7 +207,7 @@ fun ActionButtonsGrid(navController: NavController) {
             color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp
         )
-        ListButton(icon = Icons.Outlined.ThumbUp, text = "Approve Reservations") { navController.navigate("events_attending")}
+        ListButton(icon = Icons.Outlined.ThumbUp, text = "Approve Reservations") { navController.navigate("approve_reservations")}
         Divider(
             //modifier = Modifier.padding(vertical = 8.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,

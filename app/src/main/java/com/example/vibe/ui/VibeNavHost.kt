@@ -15,8 +15,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.vibe.network.RSVPApiService
 import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
+import com.example.vibe.ui.screens.ApproveReservationsScreen
 import com.example.vibe.ui.screens.ControlPanelScreen
 import com.example.vibe.ui.screens.ErrorScreen
 import com.example.vibe.ui.screens.EventCalendarScreen
@@ -35,6 +37,7 @@ import com.example.vibe.ui.screens.SignupScreen
 import com.example.vibe.ui.screens.TermsAndConditionsScreen
 import com.example.vibe.ui.screens.UserProfileScreen
 import com.example.vibe.ui.screens.geocodeAddress
+import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
@@ -55,7 +58,8 @@ fun VibeNavHost(
     rsvpViewModel: RSVPViewModel,
     userViewModel: UserViewModel,
     context: Context,
-    languageViewModel: LanguageViewModel
+    languageViewModel: LanguageViewModel,
+    approveReservationsViewModel: ApproveReservationsViewModel
 ) {
 
     //val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
@@ -288,7 +292,6 @@ fun VibeNavHost(
 
 
             LaunchedEffect(Unit) {
-                Log.d("UI", "📢 Calling ViewModel.getAttending()")
                 eventsViewModel.getAttending()
             }
 
@@ -310,7 +313,6 @@ fun VibeNavHost(
 
 
             LaunchedEffect(Unit) {
-                Log.d("UI", "📢 Calling ViewModel.getAttending()")
                 eventsViewModel.getByID()
             }
 
@@ -322,6 +324,27 @@ fun VibeNavHost(
                 retryAction = eventsViewModel::getAttending,
                 onCancelReservation = {
                 },
+                onBack = { navController.navigateUp() }
+            )
+
+
+        }
+
+
+
+        composable(route = "approve_reservations") { backStackEntry ->
+
+
+            LaunchedEffect(Unit) {
+
+                approveReservationsViewModel.fetchPendingRSVPs()
+            }
+
+            //val token = authViewModel.getToken()
+
+            ApproveReservationsScreen(
+                navController = navController,
+                approveReservationsViewModel = approveReservationsViewModel,
                 onBack = { navController.navigateUp() }
             )
 

@@ -28,6 +28,7 @@ import retrofit2.Retrofit
 import android.content.Context
 import com.example.vibe.network.AuthInterceptor
 import com.example.vibe.network.RSVPApi
+import com.example.vibe.network.RSVPApiService
 import com.example.vibe.network.SignupApi
 import com.example.vibe.network.UserApi
 
@@ -42,6 +43,7 @@ interface AppContainer {
     val signupApi: SignupApi
     val rsvpApi: RSVPApi
     val userApi: UserApi
+    val rsvpApiService: RSVPApiService
 }
 
 
@@ -110,6 +112,11 @@ class DefaultAppContainer(context: Context) : AppContainer {
      */
     override val eventsRepository: EventsRepository by lazy {
         DefaultEventsRepository(retrofitService)
+    }
+
+    // ✅ Approve Reservations Api service
+    override val rsvpApiService: RSVPApiService by lazy {
+        retrofit.create(RSVPApiService::class.java)
     }
 
 

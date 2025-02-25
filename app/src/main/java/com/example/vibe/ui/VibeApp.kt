@@ -31,13 +31,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.vibe.data.AppContainer
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
 import com.example.vibe.data.LanguageViewModelFactory
 import com.example.vibe.data.UserViewModelFactory
+import com.example.vibe.network.RSVPApiService
 import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.RightSideDrawer
 import com.example.vibe.ui.components.TopBar
+import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
@@ -80,6 +83,11 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     val isDrawerOpen = remember { mutableStateOf(false) }
+
+
+
+
+    val approveReservationsViewModel = remember { ApproveReservationsViewModel(appContainer.rsvpApiService) }
 
 
 
@@ -135,7 +143,8 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
                 rsvpViewModel = rsvpViewModel,
                 userViewModel = userViewModel,
                 context = context,
-                languageViewModel = languageViewModel
+                languageViewModel = languageViewModel,
+                approveReservationsViewModel = approveReservationsViewModel
             )
 
 
