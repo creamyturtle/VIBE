@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -238,9 +239,14 @@ fun EventCard(
 
                 Spacer(Modifier.height(32.dp))
 
-                Text(text = "Address:", fontWeight = FontWeight.Bold)
+                Text(text = "Address:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                 Spacer(Modifier.height(4.dp))
+
+
+
                 OpenInMaps(event.locationlong)
+
+
 
                 Spacer(Modifier.height(32.dp))
 
@@ -248,7 +254,7 @@ fun EventCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "People Attending:", fontWeight = FontWeight.Bold)
+                    Text(text = "People Attending:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(text = "${event.totalslots.toInt() - event.openslots.toInt()}")
                 }
 
@@ -258,7 +264,7 @@ fun EventCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Open Slots:", fontWeight = FontWeight.Bold)
+                    Text(text = "Open Slots:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(text = event.openslots.toString())
                 }
 
@@ -268,7 +274,7 @@ fun EventCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "RSVP Status:", fontWeight = FontWeight.Bold)
+                    Text(text = "RSVP Status:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(
                         text = if (event.rsvpapproved == 1) "Approved" else "Pending",
                         color = if (event.rsvpapproved == 1) Color.Green else MaterialTheme.colorScheme.primary
@@ -387,15 +393,33 @@ fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
 @Composable
 fun OpenInMaps(location: String) {
     val context = LocalContext.current
+    val openMaps: () -> Unit = {
+        val uri = Uri.encode(location)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$uri"))
+        intent.setPackage("com.google.android.apps.maps")
+        context.startActivity(intent)
+    }
 
-    Text(
-        text = location,
-        modifier = Modifier.clickable {
-            val uri = Uri.encode(location)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$uri"))
-            intent.setPackage("com.google.android.apps.maps")
-            context.startActivity(intent)
-        },
-        color = Color.Blue
-    )
+    Row(
+        modifier = Modifier
+            .clickable { openMaps() }, // Clickable on the entire row
+            //.padding(8.dp),
+        verticalAlignment = Alignment.Top // Aligns text with the top of the image
+    ) {
+        Text(
+            text = location,
+            modifier = Modifier
+                .width(220.dp), // Space between text and image
+            color = MaterialTheme.colorScheme.secondaryContainer
+        )
+
+        Spacer(Modifier.weight(1f))
+
+        Image(
+            painter = painterResource(R.drawable.google_maps_tile),
+            contentDescription = "Google Maps",
+            modifier = Modifier
+                .size(100.dp) // Adjust size as needed
+        )
+    }
 }
