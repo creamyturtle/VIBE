@@ -1,8 +1,12 @@
 package com.example.vibe.network
 
+import com.example.vibe.data.ApiResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface RSVPApiService {
@@ -21,12 +25,26 @@ interface RSVPApiService {
     ): ApprovalResponse
 
 
+    @GET("approveReservationsApp.php?action=fetch")
+    suspend fun getApprovedRSVPs(
+        @Query("filter") filter: String = "approved", // ✅ Fetch only `rsvpapproved = 1`
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): RSVPResponse
 
 
-
+    @FormUrlEncoded
+    @POST("process_qr_App.php") // ✅ This should point to your PHP API
+    suspend fun processQRCode(
+        @Field("qrcode") qrcode: String,
+        @Field("table") table: String
+    ): ApiResponse
 
 
 }
+
+
+
 
 // Data Models
 
@@ -55,5 +73,8 @@ data class RSVPItem(
     @SerialName("partyname") val partyName: String,
     @SerialName("party_id") val partyId: Int,
     @SerialName("usersphoto") val usersphoto: String,
+    @SerialName("enteredparty") val enteredparty: Int,
+    @SerialName("qrcode") val qrcode: String
+
 
     )

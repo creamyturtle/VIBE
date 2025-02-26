@@ -39,6 +39,7 @@ import com.example.vibe.ui.screens.UserProfileScreen
 import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
+import com.example.vibe.ui.viewmodel.CheckInViewModel
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
@@ -61,7 +62,8 @@ fun VibeNavHost(
     context: Context,
     languageViewModel: LanguageViewModel,
     approveReservationsViewModel: ApproveReservationsViewModel,
-    qrViewModel: QRViewModel
+    qrViewModel: QRViewModel,
+    checkInViewModel: CheckInViewModel
 ) {
 
 
@@ -366,6 +368,7 @@ fun VibeNavHost(
             CheckInScreen(
                 navController = navController,
                 qrViewModel = qrViewModel,
+                checkInViewModel = checkInViewModel,
                 onBack = { navController.navigateUp() }
             )
 

@@ -40,6 +40,7 @@ import com.example.vibe.ui.components.RightSideDrawer
 import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
+import com.example.vibe.ui.viewmodel.CheckInViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.QRViewModel
@@ -78,17 +79,19 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
     val listState = eventsViewModel.listState
 
 
-
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     val isDrawerOpen = remember { mutableStateOf(false) }
 
 
-
-
     val approveReservationsViewModel = remember { ApproveReservationsViewModel(appContainer.rsvpApiService) }
 
-    val qrViewModel = remember { QRViewModel(appContainer)}
+
+
+    val qrViewModel = remember { QRViewModel(appContainer) }
+    val checkInViewModel = remember { CheckInViewModel(appContainer.rsvpApiService) }
+
+
 
 
 
@@ -146,7 +149,8 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
                 context = context,
                 languageViewModel = languageViewModel,
                 approveReservationsViewModel = approveReservationsViewModel,
-                qrViewModel = qrViewModel
+                qrViewModel = qrViewModel,
+                checkInViewModel = checkInViewModel
             )
 
 
