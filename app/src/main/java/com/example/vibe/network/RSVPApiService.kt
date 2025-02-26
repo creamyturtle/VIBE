@@ -75,6 +75,4 @@ data class RSVPItem(
     @SerialName("usersphoto") val usersphoto: String,
     @SerialName("enteredparty") val enteredparty: Int,
     @SerialName("qrcode") val qrcode: String
-
-
-    )
+)
