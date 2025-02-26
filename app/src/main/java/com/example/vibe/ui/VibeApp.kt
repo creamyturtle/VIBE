@@ -42,6 +42,7 @@ import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
+import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.SettingsViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
@@ -86,6 +87,8 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
 
 
     val approveReservationsViewModel = remember { ApproveReservationsViewModel(appContainer.rsvpApiService) }
+
+    val qrViewModel = remember { QRViewModel(appContainer)}
 
 
 
@@ -142,7 +145,8 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
                 userViewModel = userViewModel,
                 context = context,
                 languageViewModel = languageViewModel,
-                approveReservationsViewModel = approveReservationsViewModel
+                approveReservationsViewModel = approveReservationsViewModel,
+                qrViewModel = qrViewModel
             )
 
 

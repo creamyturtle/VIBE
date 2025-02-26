@@ -9,7 +9,7 @@
     <string name="google_maps_api_key">AIzaSyAYyjUmjtNPceyS9f0vYrPyeBc_bEXXnwk</string>
 
     <!-- Drawer Menu Items -->
-    <string name="dashboard">Tablero</string>
+    <string name="dashboard">Panel de Control</string>
     <string name="host_event">Organizar un Evento</string>
     <string name="saved_events">Eventos Guardados</string>
     <string name="user_profile">Perfil de Usuario</string>

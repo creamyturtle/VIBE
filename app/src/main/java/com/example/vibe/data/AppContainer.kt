@@ -44,6 +44,7 @@ interface AppContainer {
     val rsvpApi: RSVPApi
     val userApi: UserApi
     val rsvpApiService: RSVPApiService
+    val qrCodeApi: QRCodeApi
 }
 
 
@@ -118,6 +119,11 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val rsvpApiService: RSVPApiService by lazy {
         retrofit.create(RSVPApiService::class.java)
     }
+
+    override val qrCodeApi: QRCodeApi by lazy {
+        retrofit.create(QRCodeApi::class.java)
+    }
+
 
 
 }

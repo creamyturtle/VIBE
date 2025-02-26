@@ -212,7 +212,7 @@ fun ActionButtonsGrid(navController: NavController) {
             thickness = 1.dp,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        ListButton(icon = Icons.Outlined.Checklist, text = "Check-in Guests") { navController.navigate("events_attending")}
+        ListButton(icon = Icons.Outlined.Checklist, text = "Check-in Guests") { navController.navigate("check_in")}
         Divider(
             color = MaterialTheme.colorScheme.surfaceVariant,
             thickness = 1.dp,

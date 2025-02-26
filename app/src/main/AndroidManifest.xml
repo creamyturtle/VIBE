@@ -28,6 +28,7 @@
 
     <!-- Permission to use the camera -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- Declare camera as optional -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
@@ -43,6 +44,9 @@
     <!-- Android 13+ (API 33) -->
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+
+
 
 
 
@@ -72,6 +76,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
+
 
 </manifest>

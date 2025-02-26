@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
 import com.example.vibe.ui.screens.ApproveReservationsScreen
+import com.example.vibe.ui.screens.CheckInScreen
 import com.example.vibe.ui.screens.ControlPanelScreen
 import com.example.vibe.ui.screens.ErrorScreen
 import com.example.vibe.ui.screens.EventCalendarScreen
@@ -41,6 +42,7 @@ import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
+import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import com.example.vibe.utils.SessionManager
@@ -58,10 +60,10 @@ fun VibeNavHost(
     userViewModel: UserViewModel,
     context: Context,
     languageViewModel: LanguageViewModel,
-    approveReservationsViewModel: ApproveReservationsViewModel
+    approveReservationsViewModel: ApproveReservationsViewModel,
+    qrViewModel: QRViewModel
 ) {
 
-    //val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     NavHost(
         navController = navController,
@@ -287,14 +289,14 @@ fun VibeNavHost(
         }
 
 
-        composable(route = "events_attending") { backStackEntry ->
+        composable(route = "events_attending") {
 
 
             LaunchedEffect(Unit) {
                 eventsViewModel.getAttending()
             }
 
-            //val token = authViewModel.getToken()
+
 
             EventsAttendingScreen(
                 eventsUiState = eventsViewModel.eventsUiState,
@@ -308,14 +310,14 @@ fun VibeNavHost(
 
         }
 
-        composable(route = "manage_hosted") { backStackEntry ->
+        composable(route = "manage_hosted") {
 
 
             LaunchedEffect(Unit) {
                 eventsViewModel.getByID()
             }
 
-            //val token = authViewModel.getToken()
+
 
             ManageHostedScreen(
                 eventsUiState = eventsViewModel.eventsUiState,
@@ -331,7 +333,7 @@ fun VibeNavHost(
 
 
 
-        composable(route = "approve_reservations") { backStackEntry ->
+        composable(route = "approve_reservations") {
 
 
             LaunchedEffect(Unit) {
@@ -339,11 +341,31 @@ fun VibeNavHost(
                 approveReservationsViewModel.fetchPendingRSVPs()
             }
 
-            //val token = authViewModel.getToken()
+
 
             ApproveReservationsScreen(
                 navController = navController,
                 approveReservationsViewModel = approveReservationsViewModel,
+                onBack = { navController.navigateUp() }
+            )
+
+
+        }
+
+
+        composable(route = "check_in") {
+
+
+            LaunchedEffect(Unit) {
+
+                //approveReservationsViewModel.fetchPendingRSVPs()
+            }
+
+
+
+            CheckInScreen(
+                navController = navController,
+                qrViewModel = qrViewModel,
                 onBack = { navController.navigateUp() }
             )
 
