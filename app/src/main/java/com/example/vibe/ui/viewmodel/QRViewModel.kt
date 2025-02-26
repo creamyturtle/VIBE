@@ -1,5 +1,6 @@
 package com.example.vibe.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -76,8 +77,9 @@ class CheckInViewModel(private val apiService: RSVPApiService) : ViewModel() {
 
                 val response = apiService.processQRCode(qrCode, matchingRSVP.partyId.toString())
 
-                if (response.success) { // ✅ Use `success` instead of `status`
-                    // ✅ Update the guest as checked-in
+                Log.d("API_DEBUG", "Raw API Response: $response") // ✅ Log the response
+
+                if (response.success) { // ✅ Use success instead of status
                     rsvpList = rsvpList.map {
                         if (it.id == matchingRSVP.id) it.copy(enteredparty = 1) else it
                     }
@@ -87,9 +89,16 @@ class CheckInViewModel(private val apiService: RSVPApiService) : ViewModel() {
                 }
             } catch (e: Exception) {
                 errorMessage = "Error: ${e.message}"
+                Log.e("API_DEBUG", "Error processing QR Code: ${e.message}")
             }
         }
     }
+
+    fun clearErrorMessage() {
+        errorMessage = null
+    }
+
+
 
 
     fun clearSuccessMessage() {

@@ -359,9 +359,10 @@ fun VibeNavHost(
 
 
             LaunchedEffect(Unit) {
-
-                //approveReservationsViewModel.fetchPendingRSVPs()
+                checkInViewModel.clearErrorMessage()
             }
+
+
 
 
 
