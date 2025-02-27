@@ -195,7 +195,8 @@ fun ManageHostedScreen(
 @Composable
 fun HostedCard(
     navController: NavController,
-    event: Event, onViewQrCode: (String) -> Unit,
+    event: Event,
+    onViewQrCode: (String) -> Unit,
     onCancelReservation: () -> Unit
 ) {
     Card(
@@ -305,7 +306,7 @@ fun HostedCard(
 
 
             Button(
-                onClick = { navController.navigate("check_in_guests")},
+                onClick = { navController.navigate("check_in")},
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3F51B5)),
                 shape = RoundedCornerShape(12.dp)

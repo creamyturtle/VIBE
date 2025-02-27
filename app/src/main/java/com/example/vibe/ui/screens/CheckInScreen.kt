@@ -1,7 +1,5 @@
 package com.example.vibe.ui.screens
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
@@ -13,16 +11,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -35,35 +37,32 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.vibe.network.RSVPItem
-import com.example.vibe.ui.viewmodel.CheckInViewModel
-import com.example.vibe.ui.viewmodel.QRViewModel
-import com.example.vibe.utils.CameraPermissionRequest
-import com.example.vibe.utils.QRScanner
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.vibe.network.RSVPItem
+import com.example.vibe.ui.viewmodel.CheckInViewModel
+import com.example.vibe.ui.viewmodel.QRViewModel
+import com.example.vibe.utils.QRScanner
 
 
 @Composable
@@ -235,39 +234,98 @@ fun CheckInCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 12.dp),
+            .padding(vertical = 8.dp, horizontal = 4.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-            Spacer(Modifier.height(24.dp))
+        Column(modifier = Modifier.padding(24.dp)) {
 
-            Text(text = rsvpItem.partyName, style = MaterialTheme.typography.titleMedium, fontSize = 20.sp)
-            Spacer(Modifier.height(16.dp))
+            Row() {
 
-            Text(text = "Guest: ${rsvpItem.name}", fontSize = 16.sp)
-            Spacer(Modifier.height(8.dp))
-            Text(text = "Age: ${rsvpItem.age} | Gender: ${rsvpItem.gender}", fontSize = 16.sp)
 
-            Spacer(Modifier.height(24.dp))
+                Column(Modifier.width(200.dp)) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                if (isCheckedIn) {
-                    Text("Checked-In ✅", color = Color.Green, fontSize = 18.sp)
-                } else {
-                    Button(
-                        onClick = onScanClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text("Scan QR Code", color = Color.White)
-                    }
+                    Text(text = rsvpItem.name, style = MaterialTheme.typography.titleMedium, fontSize = 24.sp)
+                    Spacer(Modifier.height(16.dp))
+
+                    Text(text = "Age: ${rsvpItem.age}  |  Gender: ${rsvpItem.gender}", fontSize = 16.sp)
+                    Spacer(Modifier.height(16.dp))
+
+
+
+                    Text(text = "Add. Guests:  ${rsvpItem.guestCount}", fontSize = 16.sp)
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Text(text = "Bringing:  ${rsvpItem.bringing}", fontSize = 16.sp)
+
+                    Spacer(Modifier.height(24.dp))
+
+                    Text(text = rsvpItem.partyName, fontSize = 16.sp, fontWeight = FontWeight.W400)
+
+
+
                 }
+
+                Spacer(Modifier.weight(1f))
+
+
+                Column(
+                    horizontalAlignment = Alignment.End
+                ) {
+
+                    Spacer(Modifier.height(16.dp))
+
+                    val baseUrl = "https://www.vibesocial.org/" // ✅ Base URL
+
+                    Row(horizontalArrangement = Arrangement.End) {
+                        AsyncImage(
+                            model = baseUrl + rsvpItem.usersphoto, // ✅ Load the full image URL
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(CircleShape)
+                                .border(2.dp, Color.Gray, CircleShape),
+                            contentScale = ContentScale.Crop // ✅ Ensures proper cropping
+                        )
+                        Spacer(Modifier.width(16.dp))
+                    }
+
+
+                    Spacer(Modifier.height(24.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        if (isCheckedIn) {
+                            Text("Checked-In ✅", color = Color.Green, fontSize = 18.sp)
+                        } else {
+                            Button(
+                                onClick = onScanClick,
+                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                                shape = RoundedCornerShape(8.dp),
+                                //modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("Scan QR Code", color = Color.White)
+                            }
+                        }
+                    }
+
+
+                }
+
+
+
+
+
+
             }
+
+
+
+
         }
     }
 }

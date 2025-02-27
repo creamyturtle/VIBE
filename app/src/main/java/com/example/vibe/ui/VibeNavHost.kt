@@ -284,6 +284,7 @@ fun VibeNavHost(
         composable(route = "control_panel") {
 
             ControlPanelScreen(
+                userViewModel = userViewModel,
                 navController = navController,
                 onBack = { navController.navigateUp() }
             )

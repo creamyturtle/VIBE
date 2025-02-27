@@ -75,4 +75,9 @@ data class RSVPItem(
     @SerialName("usersphoto") val usersphoto: String,
     @SerialName("enteredparty") val enteredparty: Int,
     @SerialName("qrcode") val qrcode: String
-)
+) {
+    // ✅ Custom property that counts non-null and non-empty additional guests
+    val guestCount: Int
+        get() = listOf(addguest1, addguest2, addguest3, addguest4)
+            .count { !it.isNullOrBlank() }
+}

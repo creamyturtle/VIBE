@@ -1,6 +1,5 @@
 package com.example.vibe.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,11 +33,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -46,14 +48,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.vibe.R
+import com.example.vibe.data.MoreUserData
+import com.example.vibe.ui.viewmodel.UserViewModel
 
 
 @Composable
 fun ControlPanelScreen(
+    userViewModel: UserViewModel,
     navController: NavController,
     onBack: () -> Unit
 ) {
+
+    val user by userViewModel.userData.observeAsState()
+
+
     Box( // ✅ Use Box to allow absolute positioning
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +79,16 @@ fun ControlPanelScreen(
             Spacer(Modifier.height(128.dp))
 
             // User Profile Section
-            ProfileSection()
+            user?.let {
+                ProfileSection(navController, it)
+            } ?: Text(
+                text = "Loading...",
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+
 
             Spacer(modifier = Modifier.height(36.dp))
 
@@ -126,7 +145,9 @@ fun ControlPanelScreen(
 
 
 @Composable
-fun ProfileSection() {
+fun ProfileSection(
+    navController: NavController,
+    user: MoreUserData) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -135,18 +156,51 @@ fun ProfileSection() {
     ) {
         Surface(
             shape = CircleShape,
-            modifier = Modifier.size(64.dp),
+            modifier = Modifier.size(82.dp),
             color = Color.Gray
         ) {
-            Image(
-                painter = painterResource(R.drawable.avatar),
-                contentDescription = "Profile Photo"
+
+
+            val baseUrl = "https://www.vibesocial.org/" // ✅ Base URL
+            val defaultImageUrl = "https://www.vibesocial.org/images/team5.jpg" // ✅ Fallback image
+
+            val fullImageUrl = when {
+                user.photourl.isNullOrEmpty() -> defaultImageUrl // ✅ If null or empty, use default
+                user.photourl.startsWith("http") -> user.photourl // ✅ If already a full URL, use as is
+                else -> baseUrl + user.photourl // ✅ Append base URL if relative path
+            }
+
+
+            AsyncImage(
+                model = fullImageUrl, // ✅ Load the full image URL
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape),
+                    //.border(2.dp, Color.Gray, CircleShape),
+                contentScale = ContentScale.Crop // ✅ Ensures proper cropping
             )
+
         }
+
         Spacer(modifier = Modifier.width(12.dp))
+
         Column {
-            Text("John Doe", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
-            Text("View Profile", fontSize = 14.sp, color = MaterialTheme.colorScheme.outline)
+            Text(
+                text = user.name,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .clickable { navController.navigate("user_profile") })
+            Text(
+                text = "View Profile",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier
+                    .clickable { navController.navigate("user_profile") }
+            )
+
         }
     }
 }
