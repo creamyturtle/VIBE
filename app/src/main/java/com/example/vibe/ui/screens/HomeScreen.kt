@@ -40,7 +40,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.outlined.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -299,7 +305,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp))
+                            //.clip(RoundedCornerShape(12.dp))
                             .then(if (isImageLoading) Modifier.background(brush = ShimmerEffect()) else Modifier), // ✅ FIXED
                         contentScale = ContentScale.Crop,
                         onSuccess = { isImageLoading = false }, // Hide shimmer when loaded
@@ -313,7 +319,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .padding(16.dp, 16.dp, 16.dp, 16.dp)
+                        .padding(20.dp, 20.dp, 16.dp, 16.dp)
                         .background(
                             color = Color.White,
                             shape = RoundedCornerShape(16.dp)
@@ -327,6 +333,60 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                         fontWeight = FontWeight.Bold
                     )
                 }
+
+
+                /*
+                // Bookmark button
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp, 16.dp, 16.dp, 16.dp)
+                        //.background(
+                        //    color = Color.Black.copy(alpha = 0.3f), // ✅ Semi-transparent black
+                        //    shape = CircleShape // ✅ Make it a perfect circle
+                        //)
+                        .size(36.dp) // ✅ Adjust size for a proper circular look
+                        .clip(CircleShape) // ✅ Ensure clipping to the circle
+                        .clickable { /* Handle click if needed */ }
+                        .padding(6.dp) // ✅ Padding inside the bubble
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.BookmarkBorder,
+                        contentDescription = "Bookmark",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                */
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                        .size(36.dp) // ✅ Adjust container size
+                        .clip(CircleShape) // ✅ Ensures it's clipped properly
+                        .clickable { /* Handle click */ },
+                    contentAlignment = Alignment.Center // ✅ Centers the icon
+                ) {
+                    // ✅ Semi-transparent black filled heart (Back layer)
+                    Icon(
+                        imageVector = Icons.Filled.Bookmark, // ✅ Filled heart icon for the background
+                        contentDescription = null, // No need for duplicate content description
+                        modifier = Modifier.size(28.dp), // ✅ Adjust heart size
+                        tint = Color.Black.copy(alpha = 0.3f) // ✅ 50% black transparency inside
+                    )
+
+                    // ✅ White outline heart (Front layer)
+                    Icon(
+                        imageVector = Icons.Outlined.BookmarkBorder, // ✅ Use the same Filled heart
+                        contentDescription = "Favorite",
+                        modifier = Modifier
+                            .size(28.dp),
+                        tint = Color.White // ✅ White outline
+                    )
+                }
+
+
 
 
                 // Page Indicators
