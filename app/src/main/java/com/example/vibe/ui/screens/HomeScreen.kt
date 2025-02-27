@@ -41,12 +41,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.Bookmarks
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -69,7 +65,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -78,7 +73,6 @@ import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.ShimmerEffect
 import com.example.vibe.ui.components.ShimmerEventCard
-import com.example.vibe.ui.theme.VibeTheme
 import com.example.vibe.ui.viewmodel.EventsUiState
 
 
