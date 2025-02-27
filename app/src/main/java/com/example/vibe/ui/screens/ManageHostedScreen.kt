@@ -248,7 +248,7 @@ fun HostedCard(
                     Text(text = "Event Type:", fontWeight = FontWeight.Bold)
                     Text(
                         text = event.partytype,
-                        color = Color.Blue
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
 

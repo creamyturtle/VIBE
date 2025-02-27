@@ -174,18 +174,7 @@ fun HomeScreen(
  * The home screen displaying the loading message.
  */
 
-/*
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
 
-    Image(
-        painter = painterResource(R.drawable.loading_img),
-        contentDescription = stringResource(R.string.loading),
-        modifier = modifier
-    )
-}
-
-*/
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Column(
@@ -319,6 +308,27 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                     )
                 }
 
+
+                // Floating Bubble
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(16.dp, 16.dp, 16.dp, 16.dp)
+                        .background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(horizontal = 12.dp, vertical = 6.dp) // Padding inside the bubble
+                ) {
+                    Text(
+                        text = event.partyMod, // The bubble text
+                        color = Color.Black, // Text color
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+
                 // Page Indicators
                 Row(
                     modifier = Modifier
@@ -378,50 +388,4 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
     }
 }
 
-
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun LoadingScreenPreview() {
-    VibeTheme {
-        LoadingScreen(
-            Modifier
-                .fillMaxSize()
-                .size(200.dp)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ErrorScreenPreview() {
-    VibeTheme {
-        ErrorScreen({}, Modifier.fillMaxSize())
-    }
-}
-
- */
-
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun AmphibiansListScreenPreview() {
-    VibeTheme {
-        val mockData = List(10) {
-            Event(
-                "Lorem Ipsum - $it",
-                "$it",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do" +
-                        " eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad" +
-                        " minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-                        " ex ea commodo consequat.",
-                imgSrc = ""
-            )
-        }
-        //AmphibiansListScreen(mockData, Modifier.fillMaxSize())
-    }
-}
-*/
 

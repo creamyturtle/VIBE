@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Search
@@ -93,7 +94,7 @@ fun VibeBottomAppBarNew(
                                 navController,
                                 "host_event",
                                 currentRoute,
-                                Icons.Default.Public,
+                                Icons.Default.Groups,
                                 stringResource(R.string.host)
                             )
                         } else {
@@ -101,7 +102,7 @@ fun VibeBottomAppBarNew(
                                 navController,
                                 "login",
                                 currentRoute,
-                                Icons.Default.Public,
+                                Icons.Default.Groups,
                                 stringResource(R.string.host)
                             )
                         }
