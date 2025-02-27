@@ -2,7 +2,9 @@ package com.example.vibe.ui.screens
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +53,15 @@ import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.utils.CameraPermissionRequest
 import com.example.vibe.utils.QRScanner
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -64,7 +74,8 @@ fun CheckInScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val rsvpList by remember { derivedStateOf { checkInViewModel.rsvpList } }
+    val rsvpList by checkInViewModel.rsvpList.collectAsState()
+
 
     val isLoading = checkInViewModel.isLoading
     val errorMessage = checkInViewModel.errorMessage
@@ -79,21 +90,36 @@ fun CheckInScreen(
 
     LaunchedEffect(scannedQRCode) {
         scannedQRCode?.let { qrCode ->
-            checkInViewModel.markUserCheckedIn(qrCode) {
-                scanningQR = false // ✅ Close the scanner
+            if (qrCode.isNotBlank()) {
+                scanningQR = false
+                checkInViewModel.markUserCheckedIn(qrCode) {
+                    scanningQR = false
+                }
+                qrViewModel.updateScannedQRCode("") // ✅ Ensure QR Code resets properly
             }
-            qrViewModel.updateScannedQRCode("") // ✅ Reset after processing
         }
     }
+
+    LaunchedEffect(Unit) {
+        Log.d("CheckInScreen", "Re-fetching RSVPs on screen enter") // ✅ Debug
+        checkInViewModel.fetchApprovedRSVPs()
+    }
+
 
 
     // ✅ Show Toast when check-in is successful
     LaunchedEffect(successMessage) {
         successMessage?.let { message ->
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             checkInViewModel.clearSuccessMessage()
         }
     }
+
+    // ✅ Debug: Log when the list changes
+    LaunchedEffect(rsvpList) {
+        Log.d("CheckInScreen", "LazyColumn updated with: $rsvpList")
+    }
+
 
     Column(
         modifier = Modifier
@@ -133,7 +159,7 @@ fun CheckInScreen(
                     CircularProgressIndicator()
                 }
             }
-            !errorMessage.isNullOrEmpty() -> {
+            !errorMessage.isNullOrEmpty() && rsvpList.isEmpty() -> { // ✅ Only show error if list is also empty
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = errorMessage!!)
                 }
@@ -148,7 +174,9 @@ fun CheckInScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)
                 ) {
-                    items(rsvpList) { rsvp ->
+                    val sortedList = rsvpList.sortedBy { it.enteredparty } // ✅ Show enteredparty = 0 first
+
+                    items(sortedList) { rsvp ->
                         CheckInCard(
                             rsvpItem = rsvp,
                             onScanClick = { scanningQR = true },
@@ -160,8 +188,10 @@ fun CheckInScreen(
                         Spacer(modifier = Modifier.height(120.dp))
                     }
                 }
+
             }
         }
+
     }
 
 
@@ -169,21 +199,24 @@ fun CheckInScreen(
 
     // ✅ Show QR Scanner when scanning is enabled
     if (scanningQR) {
-        QRScannerScreen { scannedQRCode ->
-            if (!isProcessing) {
-                isProcessing = true
-                qrViewModel.updateScannedQRCode(scannedQRCode)
+        QRScannerScreen(
+            onQRCodeScanned = { scannedQRCode ->
+                if (!isProcessing && scannedQRCode.isNotBlank()) {
+                    isProcessing = true
+                    scanningQR = false // ✅ Close scanner immediately
 
-                checkInViewModel.markUserCheckedIn(scannedQRCode) {
-                    scanningQR = false // ✅ Close scanner after success
+                    qrViewModel.updateScannedQRCode(scannedQRCode)
+
+                    checkInViewModel.markUserCheckedIn(scannedQRCode) {
+                        scanningQR = false // ✅ Ensure scanner is closed
+                        isProcessing = false // ✅ Reset flag after processing
+                    }
                 }
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    isProcessing = false
-                }, 2000)
-            }
-        }
+            },
+            onBack = { scanningQR = false } // ✅ Close scanner when back button is pressed
+        )
     }
+
 
 
 
@@ -240,11 +273,82 @@ fun CheckInCard(
 }
 
 @Composable
-fun QRScannerScreen(onQRCodeScanned: (String) -> Unit) {
-    CameraPermissionRequest {
-        QRScanner { scannedQRCode ->
-            onQRCodeScanned(scannedQRCode)
+fun QRScannerScreen(
+    onQRCodeScanned: (String) -> Unit,
+    onBack: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black) // Ensure full black background for contrast
+    ) {
+        QRScanner(onQRCodeScanned)
+
+        // Back button & title (moved down)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 124.dp), // Adjust for TopAppBar height
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Scan your guest's QR code",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
+
+        // Scanner Overlay with Cutout
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f)) // Dim background
+        ) {
+            // Transparent cutout area for QR code
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val cornerRadius = 20.dp.toPx()
+                val cutoutSize = size.width * 0.7f // 70% of screen width
+                val cutoutOffsetX = (size.width - cutoutSize) / 2
+                val cutoutOffsetY = (size.height - cutoutSize) / 2
+
+                drawRect(
+                    color = Color.Transparent,
+                    topLeft = Offset(cutoutOffsetX, cutoutOffsetY),
+                    size = Size(cutoutSize, cutoutSize),
+                    blendMode = BlendMode.Clear // Makes the area transparent
+                )
+
+                // Draw a border around the scanning area
+                drawRoundRect(
+                    color = Color.White,
+                    topLeft = Offset(cutoutOffsetX, cutoutOffsetY),
+                    size = Size(cutoutSize, cutoutSize),
+                    cornerRadius = CornerRadius(cornerRadius, cornerRadius),
+                    style = Stroke(width = 4.dp.toPx()) // Thick border
+                )
+            }
+        }
+
+        // Back Button (Bottom Left)
+        IconButton(
+            onClick = onBack,
+            modifier = Modifier
+                .padding(horizontal = 24.dp, vertical = 68.dp)
+                .align(Alignment.BottomStart)
+                .size(48.dp)
+                .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White,
+                modifier = Modifier.size(32.dp)
+            )
         }
     }
 }
+
+
 

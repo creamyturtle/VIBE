@@ -358,20 +358,16 @@ fun VibeNavHost(
         composable(route = "check_in") {
 
 
-            LaunchedEffect(Unit) {
-                checkInViewModel.clearErrorMessage()
-            }
-
-
-
-
-
             CheckInScreen(
                 navController = navController,
                 qrViewModel = qrViewModel,
                 checkInViewModel = checkInViewModel,
                 onBack = { navController.navigateUp() }
             )
+
+            LaunchedEffect(Unit) {
+                checkInViewModel.clearErrorMessage()
+            }
 
 
         }
