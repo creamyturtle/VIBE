@@ -1,5 +1,7 @@
 package com.example.vibe.ui.screens
 
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,6 +51,9 @@ import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.utils.CameraPermissionRequest
 import com.example.vibe.utils.QRScanner
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -66,17 +71,21 @@ fun CheckInScreen(
     val successMessage = checkInViewModel.successMessage
     var scanningQR by remember { mutableStateOf(false) }
 
+    var isProcessing by remember { mutableStateOf(false) }
+
 
 
     val scannedQRCode by qrViewModel.qrScanResult.collectAsState()
 
-    // ✅ Automatically process scanned QR Code
     LaunchedEffect(scannedQRCode) {
         scannedQRCode?.let { qrCode ->
-            checkInViewModel.markUserCheckedIn(qrCode)
-            qrViewModel.updateScannedQRCode("") // Reset after processing
+            checkInViewModel.markUserCheckedIn(qrCode) {
+                scanningQR = false // ✅ Close the scanner
+            }
+            qrViewModel.updateScannedQRCode("") // ✅ Reset after processing
         }
     }
+
 
     // ✅ Show Toast when check-in is successful
     LaunchedEffect(successMessage) {
@@ -155,13 +164,30 @@ fun CheckInScreen(
         }
     }
 
+
+    val coroutineScope = rememberCoroutineScope()
+
     // ✅ Show QR Scanner when scanning is enabled
     if (scanningQR) {
-        QRScannerScreen { scannedQRCode2 ->
-            qrViewModel.updateScannedQRCode(scannedQRCode2)
-            scanningQR = false
+        QRScannerScreen { scannedQRCode ->
+            if (!isProcessing) {
+                isProcessing = true
+                qrViewModel.updateScannedQRCode(scannedQRCode)
+
+                checkInViewModel.markUserCheckedIn(scannedQRCode) {
+                    scanningQR = false // ✅ Close scanner after success
+                }
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    isProcessing = false
+                }, 2000)
+            }
         }
     }
+
+
+
+
 
 
 }
