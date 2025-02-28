@@ -72,7 +72,10 @@ fun PrivacyPolicyScreen(
                     "Name\n" +
                     "Instagram Username\n" +
                     "Age\n" +
-                    "Gender"
+                    "Gender\n" +
+                    " \n" +
+                    "Whatsapp Number\n" +
+                    "Facebook Username"
         )
 
         ContentCard(
@@ -88,12 +91,14 @@ fun PrivacyPolicyScreen(
 
         ContentCard(
             title = "3. Data Security",
-            content = "We take reasonable precautions to protect your information. However, no method of transmission over the Internet or method of electronic storage is 100% secure, and we cannot guarantee absolute security."
+            content = "Your personal data is stored on our server using 256 bit encryption. Thus even our site admins do not have access to your personal information. Authentication is handled using tokens so as to never transfer your raw user information. All connections are made via an https secure sockets layer certificate. We take every reasonable precaution to protect your data. However, no method of transmission over the Internet or method of electronic storage is 100% secure, and we cannot guarantee absolute security.\n" +
+                    "\n" +
+                    "The VIBE app may ask you for permission to access your photos or videos, for the explicit purpose of uploading them to create an event hosted by you. This is a one time permission, and the app does not maintain access to your photos or videos while in use. These are optional features, and you may participate without granting access to this data on your phone."
         )
 
         ContentCard(
             title = "4. Data Retention",
-            content = "We retain your personal information as long as necessary to fulfill the purposes outlined in this Privacy Policy, or as required by law."
+            content = "We retain your personal information as long as necessary to fulfill the purposes outlined in this Privacy Policy, or as required by law. If you cancel your account, your user information will be deleted."
         )
 
         ContentCard(
