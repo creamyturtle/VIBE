@@ -28,9 +28,21 @@ data class EventAttending(
     val rsvpapproved: Int,
     val qrcode: String,
     val tablename: String,
+    val addguest1: String,
+    val addguest2: String,
+    val addguest3: String,
+    val addguest4: String,
+    val bringing: String,
+
 
     @SerialName("imageurl1") val imgSrc: String? = null
 ) {
+
+    // ✅ Custom property that counts non-null and non-empty additional guests
+    val guestCount: Int
+        get() = listOf(addguest1, addguest2, addguest3, addguest4)
+            .count { !it.isNullOrBlank() }
+
 
     val fullImgSrc: String
         get() = "https://www.vibesocial.org/$imgSrc"

@@ -242,12 +242,12 @@ fun CheckInCard(
             Row() {
 
 
-                Column(Modifier.width(200.dp)) {
+                Column(Modifier.width(184.dp)) {
 
                     Text(text = rsvpItem.name, style = MaterialTheme.typography.titleMedium, fontSize = 24.sp)
                     Spacer(Modifier.height(16.dp))
 
-                    Text(text = "Age: ${rsvpItem.age}  |  Gender: ${rsvpItem.gender}", fontSize = 16.sp)
+                    Text(text = "Age: ${rsvpItem.age} | Gender: ${rsvpItem.gender}", fontSize = 16.sp)
                     Spacer(Modifier.height(16.dp))
 
 
@@ -266,14 +266,13 @@ fun CheckInCard(
 
                 }
 
-                Spacer(Modifier.weight(1f))
+                //Spacer(Modifier.weight(1f))
 
 
                 Column(
                     horizontalAlignment = Alignment.End
                 ) {
 
-                    Spacer(Modifier.height(16.dp))
 
                     val baseUrl = "https://www.vibesocial.org/" // ✅ Base URL
 
@@ -291,7 +290,7 @@ fun CheckInCard(
                     }
 
 
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(40.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -304,7 +303,7 @@ fun CheckInCard(
                                 onClick = onScanClick,
                                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                                 shape = RoundedCornerShape(8.dp),
-                                //modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text("Scan QR Code", color = Color.White)
                             }
@@ -340,21 +339,7 @@ fun QRScannerScreen(
     ) {
         QRScanner(onQRCodeScanned)
 
-        // Back button & title (moved down)
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 124.dp), // Adjust for TopAppBar height
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Scan your guest's QR code",
-                color = Color.White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-        }
+
 
         // Scanner Overlay with Cutout
         Box(
@@ -371,8 +356,8 @@ fun QRScannerScreen(
 
                 drawRect(
                     color = Color.Transparent,
-                    topLeft = Offset(cutoutOffsetX, cutoutOffsetY),
-                    size = Size(cutoutSize, cutoutSize),
+                    topLeft = Offset(cutoutOffsetX + 4, cutoutOffsetY + 6),
+                    size = Size(cutoutSize - 8, cutoutSize - 12),
                     blendMode = BlendMode.Clear // Makes the area transparent
                 )
 
@@ -382,16 +367,32 @@ fun QRScannerScreen(
                     topLeft = Offset(cutoutOffsetX, cutoutOffsetY),
                     size = Size(cutoutSize, cutoutSize),
                     cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                    style = Stroke(width = 4.dp.toPx()) // Thick border
+                    style = Stroke(width = 8.dp.toPx()) // Thick border
                 )
             }
+        }
+
+        // Back button & title (moved down)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 172.dp), // Adjust for TopAppBar height
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Scan your guest's QR code",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
         }
 
         // Back Button (Bottom Left)
         IconButton(
             onClick = onBack,
             modifier = Modifier
-                .padding(horizontal = 24.dp, vertical = 68.dp)
+                .padding(horizontal = 24.dp, vertical = 80.dp)
                 .align(Alignment.BottomStart)
                 .size(48.dp)
                 .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape)
