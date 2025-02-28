@@ -19,6 +19,7 @@ import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
 import com.example.vibe.ui.screens.ApproveReservationsScreen
 import com.example.vibe.ui.screens.CheckInScreen
+import com.example.vibe.ui.screens.ContactScreen
 import com.example.vibe.ui.screens.ControlPanelScreen
 import com.example.vibe.ui.screens.ErrorScreen
 import com.example.vibe.ui.screens.EventCalendarScreen
@@ -370,6 +371,16 @@ fun VibeNavHost(
                 checkInViewModel.clearErrorMessage()
             }
 
+
+        }
+
+
+        composable(route = "contact") {
+
+            ContactScreen(
+                navController = navController,
+                onBack = { navController.navigateUp() }
+            )
 
         }
 

@@ -251,6 +251,12 @@ fun RightSideDrawer(
                                 submenuExpanded = false; isOpen.value =
                                 false; navController.navigate("privacy_policy")
                             })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.contact_support),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("contact")
+                            })
                     }
 
                     DrawerMenuItem(
@@ -337,6 +343,12 @@ fun RightSideDrawer(
                             onClick = {
                                 submenuExpanded = false; isOpen.value =
                                 false; navController.navigate("privacy_policy")
+                            })
+                        DrawerSubMenuItem(
+                            text = stringResource(R.string.contact_support),
+                            onClick = {
+                                submenuExpanded = false; isOpen.value =
+                                false; navController.navigate("contact")
                             })
                     }
 
