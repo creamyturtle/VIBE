@@ -50,15 +50,6 @@ fun ContactScreen(
     contactViewModel: ContactViewModel,
     onBack: () -> Unit
 ) {
-    /*
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var subject by remember { mutableStateOf("") }
-    var message by remember { mutableStateOf("") }
-
-     */
-
-
 
 
     Column(
