@@ -90,6 +90,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.vibe.R
 import com.example.vibe.model.Event
@@ -1055,24 +1056,6 @@ suspend fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
 }
 
 
-@Composable
-fun MediaPicker(label: String, onMediaSelected: (Uri) -> Unit) {
-    val pickMediaLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        uri?.let { onMediaSelected(it) }
-    }
-
-    Button(onClick = {
-        pickMediaLauncher.launch(
-            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo) // ✅ Corrected
-        )
-    }) {
-        Text(label)
-    }
-}
-
-
 
 fun validateFields(
     context: Context,
@@ -1236,7 +1219,7 @@ fun MediaSelectionRow(selectedImages: MutableList<Uri>, selectedVideo: MutableSt
                             .padding(4.dp)
                     ) {
                         Image(
-                            painter = rememberImagePainter(uri),
+                            painter = rememberAsyncImagePainter(uri),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
