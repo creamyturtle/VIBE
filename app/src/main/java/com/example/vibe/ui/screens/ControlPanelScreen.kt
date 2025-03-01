@@ -18,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Checklist
@@ -28,6 +27,7 @@ import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -256,28 +256,28 @@ fun ActionButtonsGrid(navController: NavController) {
         modifier = Modifier.fillMaxWidth()
     ) {
         ListButton(icon = Icons.Outlined.Event, text = "View Events Attending") { navController.navigate("events_attending")}
-        Divider(
-            color = MaterialTheme.colorScheme.surfaceVariant,
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
         ListButton(icon = Icons.Outlined.DisplaySettings, text = "Manage Hosted Events") { navController.navigate("manage_hosted")}
-        Divider(
-            color = MaterialTheme.colorScheme.surfaceVariant,
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
         ListButton(icon = Icons.Outlined.ThumbUp, text = "Approve Reservations") { navController.navigate("approve_reservations")}
-        Divider(
-            color = MaterialTheme.colorScheme.surfaceVariant,
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
         ListButton(icon = Icons.Outlined.Checklist, text = "Check-in Guests") { navController.navigate("check_in")}
-        Divider(
-            color = MaterialTheme.colorScheme.surfaceVariant,
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            color = MaterialTheme.colorScheme.surfaceVariant
         )
         ListButton(icon = Icons.Outlined.PersonOutline, text = "Edit Profile") { navController.navigate("events_attending")}
     }
