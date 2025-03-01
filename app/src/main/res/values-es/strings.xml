@@ -55,6 +55,14 @@
     <string name="general_location_city_or_barrio">Ubicación General (Ciudad o Barrio)</string>
     <string name="rules_restrictions_optional">Reglas y Restricciones (Opcional)</string>
     <string name="max_of_guests_allowed">Número máximo de invitados</string>
-    <string name="list_three_things_that_your_event_offers_to_attract_attendees">Enumere tres cosas que ofrece su evento para atraer a los asistentes</string>
+    <string name="list_three_things">Enumere tres cosas que ofrece su evento para atraer a los asistentes</string>
+    <string name="offering_1">Ofrenda 1</string>
+    <string name="offering_2">Ofrenda 2</string>
+    <string name="offering_3">Ofrenda 3</string>
+    <string name="music_type">Tipo de Música</string>
+    <string name="social_media">Redes Sociales</string>
+    <string name="instagram_username">Usuario de Instagram</string>
+    <string name="media_uploads">Subidas de Medios</string>
+    <string name="add_up_to_4_images">Agregue hasta 4 imágenes y un video para mejorar la lista de su evento</string>
 
 </resources>

@@ -340,20 +340,36 @@ fun EventCreationForm(
         SectionTitle("Attractions")
 
         Text(
-            text = stringResource(R.string.list_three_things_that_your_event_offers_to_attract_attendees),
+            text = stringResource(R.string.list_three_things),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.padding(horizontal = 24.dp)
         )
 
 
-        StyledTextField(value = offerings1.value, onValueChange = { offerings1.value = it }, label = "Offering 1")
-        StyledTextField(value = offerings2.value, onValueChange = { offerings2.value = it }, label = "Offering 2")
-        StyledTextField(value = offerings3.value, onValueChange = { offerings3.value = it }, label = "Offering 3")
+        StyledTextField(
+            value = offerings1.value,
+            onValueChange = { offerings1.value = it },
+            label = stringResource(R.string.offering_1)
+        )
+        StyledTextField(
+            value = offerings2.value,
+            onValueChange = { offerings2.value = it },
+            label = stringResource(R.string.offering_2)
+        )
+        StyledTextField(
+            value = offerings3.value,
+            onValueChange = { offerings3.value = it },
+            label = stringResource(R.string.offering_3)
+        )
 
         Spacer(Modifier.height(8.dp))
 
-        StyledTextField(value = musicType.value, onValueChange = { musicType.value = it }, label = "Music Type")
+        StyledTextField(
+            value = musicType.value,
+            onValueChange = { musicType.value = it },
+            label = stringResource(R.string.music_type)
+        )
 
 
         Spacer(Modifier.height(24.dp))
@@ -366,18 +382,22 @@ fun EventCreationForm(
         Spacer(Modifier.height(24.dp))
 
         // Social Media Section
-        SectionTitle("Social Media")
-        StyledTextField(value = hostInstagram.value, onValueChange = { hostInstagram.value = it }, label = "Instagram Username")
+        SectionTitle(stringResource(R.string.social_media))
+        StyledTextField(
+            value = hostInstagram.value,
+            onValueChange = { hostInstagram.value = it },
+            label = stringResource(R.string.instagram_username)
+        )
 
         Spacer(Modifier.height(24.dp))
 
 
 
         // Image Picker (Max 4 images)
-        SectionTitle("Media Uploads")
+        SectionTitle(stringResource(R.string.media_uploads))
 
         Text(
-            text = "Add up to 4 images and a video to enhance your event listing",
+            text = stringResource(R.string.add_up_to_4_images),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.padding(horizontal = 24.dp)
@@ -386,28 +406,6 @@ fun EventCreationForm(
         MediaSelectionRow(selectedImages, selectedVideo)
 
 
-        /*
-        repeat(4) { index ->
-            MediaPicker(label = "Select Image ${index + 1}") { uri ->
-                if (selectedImages.size < 4) selectedImages.add(uri)
-            }
-        }
-
-        // Video Picker
-        MediaPicker(label = "Select Video") { uri ->
-            selectedVideo.value = uri
-        }
-
-        // Display Selected Media
-        selectedImages.forEach { uri ->
-            Image(painter = rememberImagePainter(uri), contentDescription = null)
-        }
-
-        selectedVideo.value?.let { uri ->
-            Text("Selected Video: $uri")
-        }
-
-        */
 
         OrDivider()
 
