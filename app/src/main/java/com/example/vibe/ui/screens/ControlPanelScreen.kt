@@ -18,7 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
+import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Checklist
@@ -58,8 +58,7 @@ import com.example.vibe.ui.viewmodel.UserViewModel
 @Composable
 fun ControlPanelScreen(
     userViewModel: UserViewModel,
-    navController: NavController,
-    onBack: () -> Unit
+    navController: NavController
 ) {
 
     val user by userViewModel.userData.observeAsState()

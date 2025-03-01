@@ -288,8 +288,7 @@ fun VibeNavHost(
 
                 ControlPanelScreen(
                     userViewModel = userViewModel,
-                    navController = navController,
-                    onBack = { navController.navigateUp() }
+                    navController = navController
                 )
 
             }
