@@ -83,6 +83,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -195,7 +196,11 @@ fun EventCreationForm(
             modifier = Modifier
                 .align(Alignment.Start)
                 .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = CircleShape
+                )
                 .size(32.dp)
         ) {
             Icon(
@@ -220,7 +225,7 @@ fun EventCreationForm(
                 modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = "Host your event on VIBE", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text(text = stringResource(R.string.host_your_event_on_vibe), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 HorizontalDivider()
 
                 Text(
@@ -447,7 +452,9 @@ fun EventCreationForm(
                 text = it,
                 color = Color.Gray,
                 fontSize = 14.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
             )
         }
 
@@ -846,7 +853,9 @@ fun MapWithSearch(locationLong: MutableState<String>) {
         ) {
             GoogleMap(
                 properties = mapProperties,
-                modifier = Modifier.fillMaxWidth().height(400.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp),
                 cameraPositionState = cameraPositionState,
                 onMapClick = { latLng ->
                     coroutineScope.launch {
@@ -869,7 +878,9 @@ fun MapWithSearch(locationLong: MutableState<String>) {
         Spacer(Modifier.height(12.dp))
 
         // Address Input Field
-        Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)) {
             OutlinedTextField(
                 value = locationLong.value,
                 onValueChange = { newValue ->

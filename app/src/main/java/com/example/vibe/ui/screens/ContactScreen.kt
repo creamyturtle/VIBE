@@ -18,9 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -92,21 +92,21 @@ fun ContactInfoSection() {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ContactInfoItem(
-                icon = Icons.Default.Phone,
+                icon = Icons.Outlined.Phone,
                 title = "WhatsApp",
                 content = "+57 324 589 7861",
                 link = "https://wa.me/573245897861",
                 modifier = Modifier.weight(1f) // Move weight here
             )
             ContactInfoItem(
-                icon = Icons.Default.Email,
+                icon = Icons.Outlined.Email,
                 title = "Email Us",
                 content = "Use the Gmail App",
                 link = "mailto:vibemedellin2025@vibesocial.org",
                 modifier = Modifier.weight(1f)
             )
             ContactInfoItem(
-                icon = Icons.Default.LocationOn,
+                icon = Icons.Outlined.LocationOn,
                 title = "Home Base",
                 content = "Medellín, Colombia",
                 modifier = Modifier.weight(1f)
@@ -163,14 +163,47 @@ fun ContactFormSection(
 
         val response by contactViewModel.response.collectAsState()
 
-        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Your Name") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Your Email") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("Subject") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = message, onValueChange = { message = it }, label = { Text("Message") }, modifier = Modifier.fillMaxWidth().height(140.dp), maxLines = 4)
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Your Name") },
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Your Email") },
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = subject,
+            onValueChange = { subject = it },
+            label = { Text("Subject") },
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = message,
+            onValueChange = { message = it },
+            label = { Text("Message") },
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.fillMaxWidth()
+                .height(140.dp),
+            maxLines = 4
+        )
 
         Spacer(Modifier.height(16.dp))
 
-        Button(onClick = { contactViewModel.sendContactMessage(name, email, subject, message) }, modifier = Modifier.align(Alignment.End)) {
+        Button(
+            onClick = { contactViewModel.sendContactMessage(name, email, subject, message) },
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .align(Alignment.End)
+                .height(50.dp)
+                .padding(horizontal = 16.dp)
+        ) {
             Text("Send Message")
         }
 
