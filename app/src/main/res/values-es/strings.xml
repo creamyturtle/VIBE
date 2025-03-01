@@ -41,8 +41,20 @@
     <string name="activities">Actividades</string>
     <string name="light">Claro</string>
     <string name="dark">Oscuro</string>
+
+    <!-- Various Translations -->
     <string name="your_official_party_connection">Tu conexión oficial de fiesta</string>
     <string name="contact_support">Contáctenos</string>
     <string name="host_your_event_on_vibe">Organiza tu evento en VIBE</string>
+    <string name="vibe_is_a_completely_free">VIBE es una plataforma completamente gratuita y no se permite el cobro de entradas. No se permitirán eventos ni empresas comerciales.</string>
+    <string name="please_read_the_pages_below">Lea las páginas siguientes para obtener más información.</string>
+    <string name="event_information">Información del Evento</string>
+    <string name="event_name">Nombre del Evento</string>
+    <string name="category">Categoría</string>
+    <string name="event_description">Descripción del Evento</string>
+    <string name="general_location_city_or_barrio">Ubicación General (Ciudad o Barrio)</string>
+    <string name="rules_restrictions_optional">Reglas y Restricciones (Opcional)</string>
+    <string name="max_of_guests_allowed">Número máximo de invitados</string>
+    <string name="list_three_things_that_your_event_offers_to_attract_attendees">Enumere tres cosas que ofrece su evento para atraer a los asistentes</string>
 
 </resources>

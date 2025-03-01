@@ -229,7 +229,7 @@ fun EventCreationForm(
                 HorizontalDivider()
 
                 Text(
-                    text = "VIBE is a completely free platform and charging entry fees is not allowed.  Any commercial events or businesses will be denied.",
+                    text = stringResource(R.string.vibe_is_a_completely_free),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
@@ -237,7 +237,7 @@ fun EventCreationForm(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Please read the pages below for more information",
+                    text = stringResource(R.string.please_read_the_pages_below),
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
@@ -277,7 +277,7 @@ fun EventCreationForm(
                             disabledContentColor = Color.White
                         ),
                     ) {
-                        Text("About Us")
+                        Text(text = stringResource(R.string.about))
                     }
                 }
 
@@ -290,23 +290,31 @@ fun EventCreationForm(
 
 
         // General Info Section
-        SectionTitle("Event Information")
+        SectionTitle(stringResource(R.string.event_information))
 
-        StyledTextField(value = partyName.value, onValueChange = { partyName.value = it }, label = "Event Name")
+        StyledTextField(
+            value = partyName.value,
+            onValueChange = { partyName.value = it },
+            label = stringResource(R.string.event_name)
+        )
 
         CustomDropdownMenu(
             options = partyTypeMap.keys.toList(),
             selectedOption = selectedPartyType,
-            label = "Category"
+            label = stringResource(R.string.category)
         )
 
         StyledTextField2(
             value = description.value,
             onValueChange = { description.value = it },
-            label = "Event Description"
+            label = stringResource(R.string.event_description)
         )
 
-        StyledTextField(value = location.value, onValueChange = { location.value = it }, label = "General Location (City or Barrio)")
+        StyledTextField(
+            value = location.value,
+            onValueChange = { location.value = it },
+            label = stringResource(R.string.general_location_city_or_barrio)
+        )
 
         Spacer(Modifier.height(4.dp))
 
@@ -314,8 +322,17 @@ fun EventCreationForm(
 
         Spacer(Modifier.height(0.dp))
 
-        StyledTextField(value = rules.value, onValueChange = { rules.value = it }, label = "Rules & Restrictions (Optional)")
-        StyledTextField(value = totalSlots.value, onValueChange = { totalSlots.value = it }, label = "Max # of Guests Allowed")
+        StyledTextField(
+            value = rules.value,
+            onValueChange = { rules.value = it },
+            label = stringResource(R.string.rules_restrictions_optional)
+        )
+
+        StyledTextField(
+            value = totalSlots.value,
+            onValueChange = { totalSlots.value = it },
+            label = stringResource(R.string.max_of_guests_allowed)
+        )
 
         Spacer(Modifier.height(24.dp))
 
@@ -323,7 +340,7 @@ fun EventCreationForm(
         SectionTitle("Attractions")
 
         Text(
-            text = "List three things that your event offers to attract attendees",
+            text = stringResource(R.string.list_three_things_that_your_event_offers_to_attract_attendees),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.padding(horizontal = 24.dp)
