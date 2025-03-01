@@ -513,12 +513,12 @@ fun EventCreationForm(
                     selectedVideo = selectedVideo.value,
                     onSuccess = {
                         progressMessage.value = "Event submitted successfully!"
-                        Toast.makeText(context, "Event submitted successfully!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Event submitted successfully!", Toast.LENGTH_LONG).show()
                         navController.popBackStack()
                     },
                     onError = { errorMessage ->
                         progressMessage.value = "Error: $errorMessage"
-                        Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_LONG).show()
                     },
                     onProgressUpdate = { message ->
                         progressMessage.value = message

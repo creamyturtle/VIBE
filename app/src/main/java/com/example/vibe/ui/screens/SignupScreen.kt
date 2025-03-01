@@ -168,7 +168,7 @@ fun SignupScreen(
                 onClick = {
                     val validationMessage = viewModel.validateFields()
                     if (validationMessage != null) {
-                        Toast.makeText(context, validationMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, validationMessage, Toast.LENGTH_LONG).show()
                     } else {
                         viewModel.signup {
                             coroutineScope.launch {
