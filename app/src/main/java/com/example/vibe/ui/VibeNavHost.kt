@@ -381,8 +381,7 @@ fun VibeNavHost(
 
             ContactScreen(
                 navController = navController,
-                contactViewModel = contactViewModel,
-                onBack = { navController.navigateUp() }
+                contactViewModel = contactViewModel
             )
 
         }

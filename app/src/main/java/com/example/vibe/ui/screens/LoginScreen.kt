@@ -36,14 +36,8 @@ fun LoginScreen(
     authViewModel: AuthViewModel, // ✅ Use AuthViewModel
     onBack: () -> Unit
 ) {
-    val isLoading = authViewModel.isLoading
-    val errorMessage = authViewModel.errorMessage
-
-    //DO SOMETHING WITH THIS TO DISPLAY TO ALREADY LOGGED IN USERS>>>
-    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
 
     val context = LocalContext.current
-
 
     Column(
         modifier = Modifier

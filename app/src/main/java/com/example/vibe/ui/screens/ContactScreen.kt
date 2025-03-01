@@ -48,8 +48,7 @@ import com.example.vibe.ui.viewmodel.ContactViewModel
 @Composable
 fun ContactScreen(
     navController: NavController,
-    contactViewModel: ContactViewModel,
-    onBack: () -> Unit
+    contactViewModel: ContactViewModel
 ) {
 
     val context = LocalContext.current
