@@ -4,8 +4,10 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,330 +71,324 @@ fun VibeNavHost(
     contactViewModel: ContactViewModel
 ) {
 
-
-    NavHost(
-        navController = navController,
-        startDestination = "home_screen/{filterType}",
-        modifier = Modifier.fillMaxSize()
-    ) {
-        composable(
-            route = "home_screen/{filterType}",
-            arguments = listOf(navArgument("filterType") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
-
-
-            // ✅ 2. Fetch events on filter change + reset scroll only when switching filters
-            LaunchedEffect(filterType) {
-                Log.d("UI", "📢 Filter changed: Fetching new events and resetting scroll")
-
-                if (filterType == "all") {
-                    eventsViewModel.getEvents()
-                } else {
-                    eventsViewModel.getEventsByType(filterType)
-                }
-
-                // ✅ Reset scroll position to the top when switching filters
-                listState.animateScrollToItem(0)
-            }
-
-            HomeScreen(
-                listState = listState, // ✅ Retains scroll position unless a filter changes
-                eventsUiState = eventsViewModel.eventsUiState,
-                contentPadding = innerPadding,
-                retryAction = eventsViewModel::getEvents,
-                onEventClick = { eventId -> navController.navigate("event_details/$eventId") },
-                navController = navController
-            )
-        }
+        NavHost(
+            navController = navController,
+            startDestination = "home_screen/all",
+            modifier = Modifier.fillMaxSize()
+        ) {
+            composable(
+                route = "home_screen/{filterType}",
+                arguments = listOf(navArgument("filterType") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
 
+                // ✅ 2. Fetch events on filter change + reset scroll only when switching filters
+                LaunchedEffect(filterType) {
+                    Log.d("UI", "📢 Filter changed: Fetching new events and resetting scroll")
 
-
-        composable(
-            route = "map_screen/{filterType}",
-            arguments = listOf(navArgument("filterType") { type = NavType.StringType })
-        ) { backStackEntry ->
-
-            val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
-
-
-            LaunchedEffect(filterType) {
-                if (filterType == "all") {
-                    eventsViewModel.getEvents() // Fetch all events
-                } else {
-                    eventsViewModel.getEventsByType(filterType) // Fetch filtered events
-                }
-            }
-
-            MapScreen(
-                eventsUiState = eventsViewModel.eventsUiState,
-                geocodeAddress = { context, address -> geocodeAddress(context, address) },
-                //retryAction = eventsViewModel::getEvents,
-                navController = navController
-            )
-        }
-
-
-        composable(
-            route = "event_details/{eventId}",
-            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
-
-            val event = eventsViewModel.selectedEvent // ✅ Get event from ViewModel
-            LaunchedEffect(eventId) {
-                eventsViewModel.selectEvent(eventId) // ✅ Fetch the selected event
-            }
-
-            EventDetailsScreen(
-                contentPadding = innerPadding,
-                event = event,
-                onBack = { navController.navigateUp() },
-                context = context
-            )
-
-        }
-
-
-        composable(
-            route = "reservation_screen/{eventId}",
-            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
-
-            val event = eventsViewModel.selectedEvent // ✅ Retrieve the event from ViewModel
-            LaunchedEffect(eventId) {
-                eventsViewModel.selectEvent(eventId) // ✅ Load the correct event
-            }
-
-            ReservationScreen(
-                event = event,
-                onBack = { navController.navigateUp() },
-                authViewModel = authViewModel,
-                rsvpViewModel = rsvpViewModel,
-                userViewModel = userViewModel,
-                navController = navController
-            )
-        }
-
-
-
-        composable(route = "login") {
-
-            LoginScreen(
-                navController = navController,
-                authViewModel = authViewModel,
-                onBack = { navController.navigateUp() }
-            )
-        }
-
-
-        composable(route = "signup") {
-
-            SignupScreen(
-                navController = navController,
-                signupApi = signupApi,
-                onSignupSuccess = { navController.popBackStack() }
-            )
-        }
-
-        composable(route = "host_event") {
-
-            EventCreationForm(
-                navController = navController,
-                eventsViewModel = eventsViewModel,
-                userViewModel = userViewModel,
-                context = context
-            )
-        }
-
-
-        composable(route = "about_us") {
-
-            AboutUsScreen(
-                onBack = { navController.navigateUp() }
-            )
-
-        }
-
-
-        composable(route = "terms_and_conditions") {
-
-            TermsAndConditionsScreen(
-                onBack = { navController.navigateUp() }
-            )
-
-        }
-
-
-        composable(route = "privacy_policy") {
-
-            PrivacyPolicyScreen(
-                onBack = { navController.navigateUp() }
-            )
-
-        }
-
-
-        composable(route = "faq") {
-
-            FAQScreen(
-                onBack = { navController.navigateUp() }
-            )
-
-        }
-
-
-        composable(route = "user_profile") {
-
-            UserProfileScreen(userViewModel, SessionManager(context), navController) {
-                navController.navigate("login") {
-                    popUpTo("user_profile") { inclusive = true } // Clear back stack
-                }
-            }
-
-        }
-
-
-        composable(route = "calendar") { backStackEntry ->
-
-            val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
-
-            LaunchedEffect(filterType) {
-                if (filterType != eventsViewModel.lastFilter) {
                     if (filterType == "all") {
-                        eventsViewModel.lastFilter = "all"
                         eventsViewModel.getEvents()
                     } else {
                         eventsViewModel.getEventsByType(filterType)
                     }
+
+                    // ✅ Reset scroll position to the top when switching filters
+                    listState.animateScrollToItem(0)
+                }
+
+                HomeScreen(
+                    listState = listState, // ✅ Retains scroll position unless a filter changes
+                    eventsUiState = eventsViewModel.eventsUiState,
+                    contentPadding = innerPadding,
+                    retryAction = eventsViewModel::getEvents,
+                    onEventClick = { eventId -> navController.navigate("event_details/$eventId") },
+                    navController = navController
+                )
+            }
+
+
+
+
+            composable(
+                route = "map_screen/{filterType}",
+                arguments = listOf(navArgument("filterType") { type = NavType.StringType })
+            ) { backStackEntry ->
+
+                val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+
+
+                LaunchedEffect(filterType) {
+                    if (filterType == "all") {
+                        eventsViewModel.getEvents() // Fetch all events
+                    } else {
+                        eventsViewModel.getEventsByType(filterType) // Fetch filtered events
+                    }
+                }
+
+                MapScreen(
+                    eventsUiState = eventsViewModel.eventsUiState,
+                    geocodeAddress = { context, address -> geocodeAddress(context, address) },
+                    //retryAction = eventsViewModel::getEvents,
+                    navController = navController
+                )
+            }
+
+
+            composable(
+                route = "event_details/{eventId}",
+                arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
+
+                val event = eventsViewModel.selectedEvent // ✅ Get event from ViewModel
+                LaunchedEffect(eventId) {
+                    eventsViewModel.selectEvent(eventId) // ✅ Fetch the selected event
+                }
+
+                EventDetailsScreen(
+                    contentPadding = innerPadding,
+                    event = event,
+                    onBack = { navController.navigateUp() },
+                    context = context
+                )
+
+            }
+
+
+            composable(
+                route = "reservation_screen/{eventId}",
+                arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
+
+                val event = eventsViewModel.selectedEvent // ✅ Retrieve the event from ViewModel
+                LaunchedEffect(eventId) {
+                    eventsViewModel.selectEvent(eventId) // ✅ Load the correct event
+                }
+
+                ReservationScreen(
+                    event = event,
+                    onBack = { navController.navigateUp() },
+                    authViewModel = authViewModel,
+                    rsvpViewModel = rsvpViewModel,
+                    userViewModel = userViewModel,
+                    navController = navController
+                )
+            }
+
+
+
+            composable(route = "login") {
+
+                LoginScreen(
+                    navController = navController,
+                    authViewModel = authViewModel,
+                    onBack = { navController.navigateUp() }
+                )
+            }
+
+
+            composable(route = "signup") {
+
+                SignupScreen(
+                    navController = navController,
+                    signupApi = signupApi,
+                    onSignupSuccess = { navController.popBackStack() }
+                )
+            }
+
+            composable(route = "host_event") {
+
+                EventCreationForm(
+                    navController = navController,
+                    eventsViewModel = eventsViewModel,
+                    userViewModel = userViewModel,
+                    context = context
+                )
+            }
+
+
+            composable(route = "about_us") {
+
+                AboutUsScreen(
+                    onBack = { navController.navigateUp() }
+                )
+
+            }
+
+
+            composable(route = "terms_and_conditions") {
+
+                TermsAndConditionsScreen(
+                    onBack = { navController.navigateUp() }
+                )
+
+            }
+
+
+            composable(route = "privacy_policy") {
+
+                PrivacyPolicyScreen(
+                    onBack = { navController.navigateUp() }
+                )
+
+            }
+
+
+            composable(route = "faq") {
+
+                FAQScreen(
+                    onBack = { navController.navigateUp() }
+                )
+
+            }
+
+
+            composable(route = "user_profile") {
+
+                UserProfileScreen(userViewModel, SessionManager(context), navController) {
+                    navController.navigate("login") {
+                        popUpTo("user_profile") { inclusive = true } // Clear back stack
+                    }
+                }
+
+            }
+
+
+            composable(route = "calendar") { backStackEntry ->
+
+                val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+
+                LaunchedEffect(filterType) {
+                    if (filterType != eventsViewModel.lastFilter) {
+                        if (filterType == "all") {
+                            eventsViewModel.lastFilter = "all"
+                            eventsViewModel.getEvents()
+                        } else {
+                            eventsViewModel.getEventsByType(filterType)
+                        }
+                    }
+                }
+
+                when (val state = eventsViewModel.eventsUiState) {
+                    is EventsUiState.Success -> {
+                        EventCalendarScreen(
+                            events = state.events,
+                            navController = navController,
+                            onBack = { navController.navigateUp() }
+                        )
+                    }
+
+                    is EventsUiState.Loading -> LoadingScreen()
+                    else -> ErrorScreen(retryAction = { eventsViewModel.getEvents() })
                 }
             }
 
-            when (val state = eventsViewModel.eventsUiState) {
-                is EventsUiState.Success -> {
-                    EventCalendarScreen(
-                        events = state.events,
-                        navController = navController,
-                        onBack = { navController.navigateUp() }
-                    )
+
+            composable(route = "control_panel") {
+
+                ControlPanelScreen(
+                    userViewModel = userViewModel,
+                    navController = navController,
+                    onBack = { navController.navigateUp() }
+                )
+
+            }
+
+
+            composable(route = "events_attending") {
+
+
+                LaunchedEffect(Unit) {
+                    eventsViewModel.getAttending()
                 }
-                is EventsUiState.Loading -> LoadingScreen()
-                else -> ErrorScreen(retryAction = { eventsViewModel.getEvents() })
-            }
-        }
 
 
-        composable(route = "control_panel") {
 
-            ControlPanelScreen(
-                userViewModel = userViewModel,
-                navController = navController,
-                onBack = { navController.navigateUp() }
-            )
-
-        }
-
-
-        composable(route = "events_attending") {
+                EventsAttendingScreen(
+                    eventsUiState = eventsViewModel.eventsUiState,
+                    retryAction = eventsViewModel::getAttending,
+                    onCancelReservation = { tableName ->
+                        eventsViewModel.cancelReservation(tableName)
+                    },
+                    onBack = { navController.navigateUp() }
+                )
 
 
-            LaunchedEffect(Unit) {
-                eventsViewModel.getAttending()
             }
 
+            composable(route = "manage_hosted") {
 
 
-            EventsAttendingScreen(
-                eventsUiState = eventsViewModel.eventsUiState,
-                retryAction = eventsViewModel::getAttending,
-                onCancelReservation = { tableName ->
-                    eventsViewModel.cancelReservation(tableName)
-                },
-                onBack = { navController.navigateUp() }
-            )
+                LaunchedEffect(Unit) {
+                    eventsViewModel.getByID()
+                }
 
 
-        }
 
-        composable(route = "manage_hosted") {
+                ManageHostedScreen(
+                    eventsUiState = eventsViewModel.eventsUiState,
+                    navController = navController,
+                    retryAction = eventsViewModel::getAttending,
+                    onCancelReservation = {
+                    },
+                    onBack = { navController.navigateUp() }
+                )
 
 
-            LaunchedEffect(Unit) {
-                eventsViewModel.getByID()
             }
 
 
 
-            ManageHostedScreen(
-                eventsUiState = eventsViewModel.eventsUiState,
-                navController = navController,
-                retryAction = eventsViewModel::getAttending,
-                onCancelReservation = {
-                },
-                onBack = { navController.navigateUp() }
-            )
+            composable(route = "approve_reservations") {
 
 
-        }
+                LaunchedEffect(Unit) {
+
+                    approveReservationsViewModel.fetchPendingRSVPs()
+                }
 
 
 
-        composable(route = "approve_reservations") {
+                ApproveReservationsScreen(
+                    navController = navController,
+                    approveReservationsViewModel = approveReservationsViewModel,
+                    onBack = { navController.navigateUp() }
+                )
 
 
-            LaunchedEffect(Unit) {
-
-                approveReservationsViewModel.fetchPendingRSVPs()
             }
 
 
-
-            ApproveReservationsScreen(
-                navController = navController,
-                approveReservationsViewModel = approveReservationsViewModel,
-                onBack = { navController.navigateUp() }
-            )
+            composable(route = "check_in") {
 
 
-        }
+                CheckInScreen(
+                    navController = navController,
+                    qrViewModel = qrViewModel,
+                    checkInViewModel = checkInViewModel,
+                    onBack = { navController.navigateUp() }
+                )
+
+                LaunchedEffect(Unit) {
+                    checkInViewModel.clearErrorMessage()
+                }
 
 
-        composable(route = "check_in") {
+            }
 
 
-            CheckInScreen(
-                navController = navController,
-                qrViewModel = qrViewModel,
-                checkInViewModel = checkInViewModel,
-                onBack = { navController.navigateUp() }
-            )
+            composable(route = "contact") {
 
-            LaunchedEffect(Unit) {
-                checkInViewModel.clearErrorMessage()
+                ContactScreen(
+                    navController = navController,
+                    contactViewModel = contactViewModel
+                )
+
             }
 
 
         }
 
-
-        composable(route = "contact") {
-
-            ContactScreen(
-                navController = navController,
-                contactViewModel = contactViewModel
-            )
-
-        }
-
-
-
-
-
-
-
-
-
-    }
 }
