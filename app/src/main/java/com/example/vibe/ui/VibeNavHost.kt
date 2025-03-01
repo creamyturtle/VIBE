@@ -126,7 +126,7 @@ fun VibeNavHost(
             MapScreen(
                 eventsUiState = eventsViewModel.eventsUiState,
                 geocodeAddress = { context, address -> geocodeAddress(context, address) },
-                retryAction = eventsViewModel::getEvents,
+                //retryAction = eventsViewModel::getEvents,
                 navController = navController
             )
         }

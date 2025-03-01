@@ -92,11 +92,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui:1.6.1")
     implementation("androidx.navigation:navigation-compose:2.7.7") // ✅ Latest stable version
     implementation("androidx.compose.material:material-icons-extended:1.6.0-alpha03")
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("com.google.maps.android:maps-compose:2.11.2")
+    implementation("androidx.compose.foundation:foundation:1.6.1")
+    implementation("androidx.compose.foundation:foundation-layout:1.6.0")
+    implementation("androidx.compose.runtime:runtime:1.6.1")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
@@ -117,7 +120,7 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-permissions:0.31.0-alpha")
 
-    implementation("androidx.compose.material:material:1.5.1")
+    implementation("androidx.compose.material:material:1.6.1")
     implementation("androidx.compose.ui:ui-tooling:1.5.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose")
     implementation("com.google.firebase:firebase-perf-ktx:21.0.4")

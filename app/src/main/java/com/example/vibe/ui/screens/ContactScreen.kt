@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.ui.text.style.TextAlign
 
 
+
 @Composable
 fun ContactScreen(
     navController: NavController,
@@ -45,8 +46,9 @@ fun ContactScreen(
 ) {
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Header/Breadcrumb
-        BreadcrumbHeader()
+
+        Spacer(Modifier.height(170.dp))
+
 
         // Contact Info Section
         ContactInfoSection()
@@ -57,67 +59,49 @@ fun ContactScreen(
 
 }
 
-@Composable
-fun BreadcrumbHeader() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .background(Brush.verticalGradient(listOf(Color(0xFF3D3D3D), Color(0xFF1A1A1A))))
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Contact Us",
-                fontSize = 30.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-            Row {
-                Text(text = "Home", color = Color.White, modifier = Modifier.clickable { /* Navigate */ })
-                Text(text = " > ", color = Color.White)
-                Text(text = "Pages", color = Color.White)
-                Text(text = " > ", color = Color.White)
-                Text(text = "Contact", color = Color.White, fontWeight = FontWeight.Bold)
-            }
-        }
-    }
-}
+
 
 @Composable
 fun ContactInfoSection() {
     Column(modifier = Modifier.padding(16.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             ContactInfoItem(
                 icon = Icons.Default.Phone,
                 title = "WhatsApp",
                 content = "+57 324 589 7861",
-                link = "https://wa.me/573245897861"
+                link = "https://wa.me/573245897861",
+                modifier = Modifier.weight(1f) // Move weight here
             )
             ContactInfoItem(
                 icon = Icons.Default.Email,
                 title = "Email Us",
                 content = "support@vibe.com",
-                link = "mailto:support@vibe.com"
+                link = "mailto:support@vibe.com",
+                modifier = Modifier.weight(1f)
             )
             ContactInfoItem(
                 icon = Icons.Default.LocationOn,
                 title = "Visit Us",
-                content = "Medellín, Colombia"
+                content = "Medellín, Colombia",
+                modifier = Modifier.weight(1f)
             )
         }
     }
 }
 
 @Composable
-fun ContactInfoItem(icon: ImageVector, title: String, content: String, link: String? = null) {
+fun ContactInfoItem(
+    icon: ImageVector,
+    title: String,
+    content: String,
+    link: String? = null,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
-            //.weight(1f)
+        modifier = modifier // Modifier should come from parent Row
             .background(Color.LightGray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp))
             .padding(16.dp)
             .clickable { link?.let { /* Open link */ } },
@@ -129,6 +113,8 @@ fun ContactInfoItem(icon: ImageVector, title: String, content: String, link: Str
         Text(text = content, textAlign = TextAlign.Center)
     }
 }
+
+
 
 @Composable
 fun ContactFormSection() {
