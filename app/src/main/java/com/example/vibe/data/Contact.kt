@@ -1,8 +1,10 @@
 package com.example.vibe.data
 
+import kotlinx.serialization.Serializable
 import retrofit2.http.Body
 import retrofit2.http.POST
 
+@Serializable
 data class ContactRequest(
     val name: String,
     val email: String,
@@ -10,6 +12,7 @@ data class ContactRequest(
     val message: String
 )
 
+@Serializable
 data class ContactResponse(
     val success: Boolean,
     val message: String

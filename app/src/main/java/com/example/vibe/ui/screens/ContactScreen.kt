@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +52,8 @@ fun ContactScreen(
     onBack: () -> Unit
 ) {
 
+    val context = LocalContext.current
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -74,7 +77,7 @@ fun ContactScreen(
         Spacer(Modifier.height(8.dp))
 
         // Contact Form Section
-        ContactFormSection(contactViewModel)
+        ContactFormSection(contactViewModel, navController, context)
     }
 
 }
@@ -145,7 +148,9 @@ fun ContactInfoItem(
 
 @Composable
 fun ContactFormSection(
-    contactViewModel: ContactViewModel
+    contactViewModel: ContactViewModel,
+    navController: NavController,
+    context: Context
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "Send us a message", fontSize = 22.sp, fontWeight = FontWeight.Bold)
@@ -163,13 +168,20 @@ fun ContactFormSection(
         OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("Subject") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = message, onValueChange = { message = it }, label = { Text("Message") }, modifier = Modifier.fillMaxWidth().height(140.dp), maxLines = 4)
 
+        Spacer(Modifier.height(16.dp))
 
-
-        Button(onClick = { /* Submit form */ }, modifier = Modifier.align(Alignment.End)) {
+        Button(onClick = { contactViewModel.sendContactMessage(name, email, subject, message) }, modifier = Modifier.align(Alignment.End)) {
             Text("Send Message")
         }
 
         response?.let {
+            if (it.success) {
+                LaunchedEffect(it) {
+                    Toast.makeText(context, "Email sent successfully!", Toast.LENGTH_LONG).show()
+                    navController.navigate("home_screen/all") // Navigate to home if successful
+                }
+            }
+
             Text(
                 text = it.message,
                 color = if (it.success) Color.Green else Color.Red,
