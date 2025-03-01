@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,20 +41,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vibe.ui.viewmodel.ContactViewModel
 
 
 @Composable
 fun ContactScreen(
     navController: NavController,
+    contactViewModel: ContactViewModel,
     onBack: () -> Unit
 ) {
+    /*
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var subject by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
+
+     */
+
+
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(Modifier.height(148.dp))
+        Spacer(Modifier.height(132.dp))
 
         Text(
             text = "Contact VIBE Support",
@@ -67,8 +80,10 @@ fun ContactScreen(
         // Contact Info Section
         ContactInfoSection()
 
+        Spacer(Modifier.height(8.dp))
+
         // Contact Form Section
-        ContactFormSection()
+        ContactFormSection(contactViewModel)
     }
 
 }
@@ -93,7 +108,7 @@ fun ContactInfoSection() {
                 icon = Icons.Default.Email,
                 title = "Email Us",
                 content = "Use the Gmail App",
-                link = "vibemedellin2025@vibesocial.org",
+                link = "mailto:vibemedellin2025@vibesocial.org",
                 modifier = Modifier.weight(1f)
             )
             ContactInfoItem(
@@ -138,7 +153,9 @@ fun ContactInfoItem(
 
 
 @Composable
-fun ContactFormSection() {
+fun ContactFormSection(
+    contactViewModel: ContactViewModel
+) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "Send us a message", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
@@ -148,15 +165,25 @@ fun ContactFormSection() {
         var subject by remember { mutableStateOf("") }
         var message by remember { mutableStateOf("") }
 
+        val response by contactViewModel.response.collectAsState()
+
         OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Your Name") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Your Email") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("Subject") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = message, onValueChange = { message = it }, label = { Text("Message") }, modifier = Modifier.fillMaxWidth(), maxLines = 4)
+        OutlinedTextField(value = message, onValueChange = { message = it }, label = { Text("Message") }, modifier = Modifier.fillMaxWidth().height(140.dp), maxLines = 4)
 
 
 
         Button(onClick = { /* Submit form */ }, modifier = Modifier.align(Alignment.End)) {
             Text("Send Message")
+        }
+
+        response?.let {
+            Text(
+                text = it.message,
+                color = if (it.success) Color.Green else Color.Red,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }

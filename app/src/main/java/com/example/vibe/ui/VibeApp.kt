@@ -41,6 +41,7 @@ import com.example.vibe.ui.components.TopBar
 import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.CheckInViewModel
+import com.example.vibe.ui.viewmodel.ContactViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.QRViewModel
@@ -109,6 +110,10 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
 
 
 
+    val contactViewModel = remember { ContactViewModel(appContainer.contactApi)}
+
+
+
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -150,7 +155,8 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
                 languageViewModel = languageViewModel,
                 approveReservationsViewModel = approveReservationsViewModel,
                 qrViewModel = qrViewModel,
-                checkInViewModel = checkInViewModel
+                checkInViewModel = checkInViewModel,
+                contactViewModel = contactViewModel
             )
 
 
