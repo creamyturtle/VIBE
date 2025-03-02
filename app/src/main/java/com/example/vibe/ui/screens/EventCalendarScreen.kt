@@ -69,11 +69,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 @Composable
 fun EventCalendarScreen(
     events: List<Event>,
-    navController: NavController,
-    onBack: () -> Unit
+    navController: NavController
 ) {
     val pagerState = rememberPagerState(pageCount = { 12 }) // New way to define page count
-    val today = remember { LocalDate.now() }
 
     // ✅ Track the selected date & selected event
     val selectedDate = remember { mutableStateOf<LocalDate?>(null) }
@@ -92,30 +90,6 @@ fun EventCalendarScreen(
     ) {
         Spacer(Modifier.height(128.dp))
 
-        /*
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, top = 40.dp, bottom = 8.dp), // ✅ Left-aligned with padding
-            horizontalArrangement = Arrangement.Start // ✅ Align to the left
-        ) {
-            IconButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
-                    .size(32.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-        }
-
-         */
 
 
         // ✅ Month Title
@@ -135,7 +109,6 @@ fun EventCalendarScreen(
             val currentMonth = YearMonth.now().plusMonths(page.toLong())
             MonthCalendar(
                 month = currentMonth,
-                today = today,
                 events = events,
                 onDayClick = { date -> selectedDate.value = date }
             )
@@ -217,7 +190,6 @@ fun EventCalendarScreen(
 @Composable
 fun MonthCalendar(
     month: YearMonth,
-    today: LocalDate,
     events: List<Event>,
     onDayClick: (LocalDate) -> Unit // ✅ Pass click event
 ) {

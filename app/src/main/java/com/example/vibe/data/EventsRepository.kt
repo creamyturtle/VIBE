@@ -19,8 +19,6 @@ package com.example.vibe.data
 import android.util.Log
 import com.example.vibe.model.Event
 import com.example.vibe.network.EventsApiService
-import com.example.vibe.utils.SessionManager
-import com.google.android.libraries.places.api.model.kotlin.autoCompleteSessionToken
 import okhttp3.MultipartBody
 
 /**

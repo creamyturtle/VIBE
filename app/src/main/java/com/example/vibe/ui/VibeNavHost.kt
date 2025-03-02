@@ -273,8 +273,7 @@ fun VibeNavHost(
                     is EventsUiState.Success -> {
                         EventCalendarScreen(
                             events = state.events,
-                            navController = navController,
-                            onBack = { navController.navigateUp() }
+                            navController = navController
                         )
                     }
 
@@ -362,7 +361,6 @@ fun VibeNavHost(
 
 
                 CheckInScreen(
-                    navController = navController,
                     qrViewModel = qrViewModel,
                     checkInViewModel = checkInViewModel,
                     onBack = { navController.navigateUp() }

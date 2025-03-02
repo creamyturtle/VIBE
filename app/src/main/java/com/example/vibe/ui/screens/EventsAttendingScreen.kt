@@ -273,7 +273,7 @@ fun EventCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(text = "People Attending:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
-                    Text(text = "${event.totalslots.toInt() - event.openslots.toInt()}")
+                    Text(text = "${event.totalslots - event.openslots}")
                 }
 
                 Spacer(Modifier.height(8.dp))

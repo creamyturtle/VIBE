@@ -38,7 +38,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +53,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.network.RSVPItem
 import com.example.vibe.ui.viewmodel.CheckInViewModel
@@ -64,7 +62,6 @@ import com.example.vibe.utils.QRScanner
 
 @Composable
 fun CheckInScreen(
-    navController: NavController,
     checkInViewModel: CheckInViewModel,
     qrViewModel: QRViewModel,
     onBack: () -> Unit
@@ -190,8 +187,6 @@ fun CheckInScreen(
 
     }
 
-
-    val coroutineScope = rememberCoroutineScope()
 
     // ✅ Show QR Scanner when scanning is enabled
     if (scanningQR) {
