@@ -21,6 +21,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+repositories {
+    google()
+    mavenCentral()
+    maven("https://jitpack.io")
+}
+
 android {
     namespace = "com.example.vibe"
     compileSdk = 35
