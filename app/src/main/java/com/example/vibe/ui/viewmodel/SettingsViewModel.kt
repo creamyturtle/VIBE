@@ -11,25 +11,23 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = application.applicationContext
 
-    // ✅ Read user preference (nullable, null means "follow system")
-    private val userDarkModePreference = UserPreferences.getDarkModeFlow(context)
+    // ✅ Use application directly (no memory leak)
+    private val userDarkModePreference = UserPreferences.getDarkModeFlow(application)
 
-    // ✅ Function to update theme based on system setting
     fun getDarkModeState(systemDarkTheme: Boolean): StateFlow<Boolean> {
         return userDarkModePreference
-            .map { userPref -> userPref ?: systemDarkTheme } // Use system theme if null
+            .map { userPref -> userPref ?: systemDarkTheme }
             .stateIn(viewModelScope, SharingStarted.Eagerly, systemDarkTheme)
     }
 
-    /** ✅ Save user-selected dark mode, overriding system setting */
     fun toggleDarkMode(enabled: Boolean?) {
         viewModelScope.launch {
-            UserPreferences.saveDarkMode(context, enabled)
+            UserPreferences.saveDarkMode(getApplication(), enabled) // ✅ No context leak
         }
     }
 }
+
 
 
 

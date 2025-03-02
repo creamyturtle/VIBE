@@ -13,11 +13,14 @@ class UserViewModelFactory(
     private val context: Context
 ) : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST") // ✅ Suppress only for the cast
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return UserViewModel(userApi, sessionManager, context) as T
+            val userRepository = UserRepository(context, userApi) // ✅ Create Repository
+            return UserViewModel(userRepository, sessionManager) as T
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 }
+
+

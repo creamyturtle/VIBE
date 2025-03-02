@@ -127,9 +127,14 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.7.8")
     implementation("com.google.android.libraries.places:places:4.1.0")
 
+    //implementation("com.google.android.play:app-update:2.1.0")
+    //implementation("com.google.android.play:app-update-ktx:2.1.0")
+    //implementation("com.google.android.play:locale:1.0.0")
+
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.github.dhaval2404:imagepicker:2.1")
+    implementation("com.google.android.play:integrity:1.4.0")
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.compose.ui:ui-tooling")

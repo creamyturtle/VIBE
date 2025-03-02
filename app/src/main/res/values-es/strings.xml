@@ -4,8 +4,7 @@
     <string name="app_name">VIBE</string>
     <string name="loading_failed">Error al cargar</string>
     <string name="retry">Rever</string>
-    <string name="loading">Cargando</string>
-    <string name="amphibian_title">%s (%s)</string>
+
     <string name="google_maps_api_key">AIzaSyAYyjUmjtNPceyS9f0vYrPyeBc_bEXXnwk</string>
 
     <!-- Drawer Menu Items -->
@@ -24,9 +23,10 @@
     <string name="create_account">Crear Cuenta</string>
     <string name="login">Iniciar Sesión</string>
 
-    <!-- Language Switcher -->
+    <!-- Language Switcher
     <string name="language_en">EN</string>
     <string name="language_es">ES</string>
+    -->
 
     <!-- Bottom Menu Items -->
     <string name="explore">Explorar</string>
