@@ -107,7 +107,6 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.RectangularBounds
-import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.maps.android.compose.GoogleMap
@@ -655,7 +654,7 @@ fun CustomDropdownMenu(
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
-                    dropdownWidth.value = coordinates.size.width
+                    dropdownWidth.intValue = coordinates.size.width
                 },
             shape = RoundedCornerShape(8.dp),
             singleLine = true
@@ -666,7 +665,7 @@ fun CustomDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current) { dropdownWidth.value.toDp() }) // Match text field width
+                .width(with(LocalDensity.current) { dropdownWidth.intValue.toDp() }) // Match text field width
                 .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
                 .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
                 .padding(0.dp) // Ensures it stays within the boundaries
@@ -784,7 +783,7 @@ fun showDatePicker(context: Context, date: MutableState<String>) {
     val day = calendar.get(Calendar.DAY_OF_MONTH)
 
     DatePickerDialog(context, { _, selectedYear, selectedMonth, selectedDay ->
-        val formattedDate = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+        val formattedDate = String.format(Locale.US, "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
         date.value = formattedDate
     }, year, month, day).show()
 }
@@ -997,14 +996,14 @@ suspend fun getPlacePredictions(context: Context, query: String): List<Autocompl
             val placesClient = Places.createClient(context)
             val request = FindAutocompletePredictionsRequest.builder()
                 .setQuery(query)
-                .setCountries("CO") // Explicitly restrict to Colombia
+                .setCountries("CO") // Restrict to Colombia
                 .setLocationBias(
                     RectangularBounds.newInstance(
                         LatLng(4.0, -75.0),  // SouthWest corner of Colombia
                         LatLng(12.0, -67.0)  // NorthEast corner of Colombia
                     )
                 )
-                .setTypeFilter(TypeFilter.GEOCODE) // Broader results, including cities/neighborhoods
+                .setTypesFilter(listOf("locality")) // ✅ Use raw string, not Place.Type
                 .build()
 
             val response = placesClient.findAutocompletePredictions(request).await()
@@ -1020,17 +1019,16 @@ suspend fun getPlacePredictions(context: Context, query: String): List<Autocompl
 
 
 
-
-
+@Suppress("DEPRECATION") // TODO: Replace `LAT_LNG` when Google provides a new API
 
 suspend fun getLatLngFromPlaceId(context: Context, placeId: String): LatLng? {
     return withContext(Dispatchers.IO) {
         try {
             val placesClient = Places.createClient(context)
-            val request = FetchPlaceRequest.builder(placeId, listOf(Place.Field.LAT_LNG)).build()
+            val request = FetchPlaceRequest.builder(placeId, listOf(Place.Field.LAT_LNG)).build() // ✅ Correct type
 
             val response = placesClient.fetchPlace(request).await()
-            response.place.latLng
+            response.place.latLng // ✅ No more type mismatch
         } catch (e: Exception) {
             Log.e("PlacesAPI", "Error fetching place details: ${e.message}")
             null
@@ -1045,7 +1043,10 @@ suspend fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
     return withContext(Dispatchers.IO) {
         try {
             val geocoder = Geocoder(context, Locale.getDefault())
+
+            @Suppress("DEPRECATION") // ✅ Temporary fix for Geocoder API
             val results = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+
             results?.firstOrNull()?.getAddressLine(0) ?: "Unknown Location"
         } catch (e: IOException) {
             Log.e("Geocoder", "Failed to get address", e)
@@ -1053,7 +1054,6 @@ suspend fun getAddressFromLatLng(context: Context, latLng: LatLng): String {
         }
     }
 }
-
 
 
 fun validateFields(
