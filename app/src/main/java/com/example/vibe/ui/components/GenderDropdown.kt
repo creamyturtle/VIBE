@@ -10,6 +10,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -48,7 +50,7 @@ fun GenderDropdown(
                 focusedContainerColor = Color.White, // White background when focused
                 unfocusedContainerColor = Color.White, // White background when not focused
                 disabledContainerColor = Color.LightGray, // Background when disabled
-                focusedIndicatorColor = Color.Gray, // Border color when focused
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary, // Border color when focused
                 unfocusedIndicatorColor = Color.LightGray, // Border color when not focused
                 cursorColor = Color.Black // Cursor color
             ),
@@ -61,7 +63,7 @@ fun GenderDropdown(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .menuAnchor() // Required for dropdown alignment
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true) // Required for dropdown alignment
         )
 
         ExposedDropdownMenu(

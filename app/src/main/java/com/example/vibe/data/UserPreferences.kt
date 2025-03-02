@@ -37,7 +37,7 @@ object UserPreferences {
             preferences[USER_GENDER_KEY] = userData.gender
             preferences[USER_FACEBOOK_KEY] = userData.facebook ?: ""
             preferences[USER_WHATSAPP_KEY] = userData.whatsapp ?: ""
-            preferences[USER_INSTAGRAM_KEY] = userData.instagram ?: ""
+            preferences[USER_INSTAGRAM_KEY] = userData.instagram
             preferences[USER_BIO_KEY] = userData.bio ?: ""
             preferences[USER_PHOTO_URL_KEY] = userData.photourl ?: ""
             preferences[USER_CREATED_AT_KEY] = userData.created_at

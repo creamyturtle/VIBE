@@ -102,7 +102,7 @@ class DefaultEventsRepository(
         return try {
             val response = eventsApiService.getAttending() // ✅ Now returns AttendingResponse
             Log.d("Repository", "Fetched data: $response")
-            response.events ?: emptyList() // ✅ Ensure it doesn't return null
+            response.events // ✅ Ensure it doesn't return null
         } catch (e: Exception) {
             Log.e("Repository", "Error fetching data: ${e.message}", e)
             emptyList()

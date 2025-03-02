@@ -253,7 +253,7 @@ fun EventCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(text = "Bringing:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
-                    Text(text = event.bringing?.takeIf { it.isNotBlank() } ?: "Nothing")
+                    Text(text = event.bringing.takeIf { it.isNotBlank() } ?: "Nothing")
                 }
 
                 Spacer(Modifier.height(8.dp))

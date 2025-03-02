@@ -114,7 +114,7 @@ fun ApproveReservationsScreen(
             }
             !errorMessage.isNullOrEmpty() -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = errorMessage!!)
+                    Text(text = errorMessage)
                 }
             }
             rsvpList.isEmpty() -> {

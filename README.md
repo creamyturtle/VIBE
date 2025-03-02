@@ -39,3 +39,4 @@ Future Updates
 18. Event Calendar - DONE
 19. Manage Hosted Events - DONE
 20. Bookmark Saved Events functionality
+21. Error Warning Clean-Up - working

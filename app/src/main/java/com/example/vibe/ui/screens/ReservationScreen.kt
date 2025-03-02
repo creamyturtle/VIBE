@@ -138,7 +138,7 @@ fun ReservationScreen(
                     openSlots = event.openslots,
                     date = event.formattedDate,
                     time = event.formattedTime,
-                    imageUrl = event.fullImgSrc ?: ""
+                    imageUrl = event.fullImgSrc
                 )
 
                 // This should come from logged-in user data

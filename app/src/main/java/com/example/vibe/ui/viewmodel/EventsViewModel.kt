@@ -258,11 +258,10 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                             val videoFile = File(context.cacheDir, "upload_video.mp4")
                             Log.d("UploadDebug", "File exists: ${videoFile.exists()}, Size: ${videoFile.length()} bytes")
 
-                            Log.d("UploadDebug", "Uploading file: ${selectedVideo?.path}")
-                            Log.d("UploadDebug", "File size: ${selectedVideo?.let { File(it.path!!).length() } ?: "N/A"} bytes")
-                            Log.d("UploadDebug", "Request Headers: ${videoPart.headers}")
-                            Log.d("UploadDebug", "Request Content Type: ${videoPart.body.contentType()}")
-
+                            //Log.d("UploadDebug", "Uploading file: ${selectedVideo?.path}")
+                            //Log.d("UploadDebug", "File size: ${selectedVideo?.let { File(it.path!!).length() } ?: "N/A"} bytes")
+                            //Log.d("UploadDebug", "Request Headers: ${videoPart.headers}")
+                            //Log.d("UploadDebug", "Request Content Type: ${videoPart.body.contentType()}")
 
 
                             val response = eventsRepository.uploadMedia(videoPart)

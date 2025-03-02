@@ -60,7 +60,7 @@ private val json = Json {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer(context: Context) : AppContainer {
-    private val BASE_URL = "https://www.vibesocial.org/"
+    private val baseURL = "https://www.vibesocial.org/"
 
     override val sessionManager = SessionManager(context)
 
@@ -79,7 +79,7 @@ class DefaultAppContainer(context: Context) : AppContainer {
     private val retrofit: Retrofit = Retrofit.Builder()
         .client(client) // Add the logging interceptor
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(BASE_URL)
+        .baseUrl(baseURL)
         .build()
 
     /**

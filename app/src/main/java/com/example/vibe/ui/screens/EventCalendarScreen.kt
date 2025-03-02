@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -57,12 +58,11 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.EventDetailsCard
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
+import androidx.compose.foundation.pager.rememberPagerState
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -72,7 +72,7 @@ fun EventCalendarScreen(
     navController: NavController,
     onBack: () -> Unit
 ) {
-    val pagerState = rememberPagerState(initialPage = 0)
+    val pagerState = rememberPagerState(pageCount = { 12 }) // New way to define page count
     val today = remember { LocalDate.now() }
 
     // ✅ Track the selected date & selected event
@@ -129,15 +129,18 @@ fun EventCalendarScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // ✅ Swipeable Calendar
-        HorizontalPager(count = 12, state = pagerState) { page ->
+
+
+        HorizontalPager(state = pagerState) { page ->
             val currentMonth = YearMonth.now().plusMonths(page.toLong())
             MonthCalendar(
                 month = currentMonth,
                 today = today,
                 events = events,
-                onDayClick = { date -> selectedDate.value = date } // ✅ Capture clicked date
+                onDayClick = { date -> selectedDate.value = date }
             )
         }
+
 
         Spacer(Modifier.height(16.dp))
 

@@ -79,7 +79,6 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2025.02.00"))
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.activity:activity-ktx:1.10.1")
-    implementation("com.google.accompanist:accompanist-pager:0.30.1")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.core:core-ktx:1.15.0")
@@ -104,7 +103,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.3")
 
     implementation("com.kizitonwose.calendar:view:2.0.4")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
+
 
     implementation("com.google.zxing:core:3.4.1")
 

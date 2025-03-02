@@ -96,14 +96,13 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
 
 
 
-    val systemLanguage = Locale.getDefault().language.uppercase(Locale.ROOT) // ✅ Ensure uppercase
+    //val systemLanguage = Locale.getDefault().language.uppercase(Locale.ROOT) // ✅ Ensure uppercase
     val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(appContainer.sessionManager))
 
     val savedLanguage = appContainer.sessionManager.getLanguage().uppercase(Locale.ROOT)
-    val initialLanguage = savedLanguage ?: if (systemLanguage == "ES") "ES" else "EN"
 
-    LaunchedEffect(initialLanguage) {
-        languageViewModel.setLanguage(context, initialLanguage)
+    LaunchedEffect(savedLanguage) {
+        languageViewModel.setLanguage(context, savedLanguage)
     }
 
     val selectedLanguage by languageViewModel.language.collectAsState()

@@ -157,7 +157,7 @@ fun CheckInScreen(
             }
             !errorMessage.isNullOrEmpty() && rsvpList.isEmpty() -> { // ✅ Only show error if list is also empty
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = errorMessage!!)
+                    Text(text = errorMessage)
                 }
             }
             rsvpList.isEmpty() -> {

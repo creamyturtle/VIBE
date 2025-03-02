@@ -14,7 +14,7 @@ import java.util.Locale
 
 class LanguageViewModel(private val sessionManager: SessionManager) : ViewModel() {
 
-    private val _language = MutableStateFlow(sessionManager.getLanguage()?.uppercase(Locale.ROOT) ?: "EN")
+    private val _language = MutableStateFlow(sessionManager.getLanguage().uppercase(Locale.ROOT))
     val language: StateFlow<String> = _language.asStateFlow() // ✅ Use StateFlow
 
     fun setLanguage(context: Context, langCode: String) {
