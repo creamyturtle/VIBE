@@ -21,7 +21,7 @@ Future Updates
 
 1. Display party listings - DONE
 2. User registrations/logins - DONE
-3. User control panel - working
+3. User control panel - DONE
 4. UI redesign - DONE
 5. Event reservations - DONE
 6. Google Maps API integration - DONE
@@ -29,13 +29,13 @@ Future Updates
 8. Events Attending Page - DONE
 9. Information pages - DONE
 10. Caching / Prediction
-11. Language translations (en/es) - working
+11. Language translations (en/es) - working/need new implementation for Google Play req's
 12. Fancy homepage dropdown menu - DONE
 13. Dark mode - DONE
 14. Homepage filters - DONE
 15. User Profile editable
 16. Approve RSVPs System - DONE
-17. Check-In Guests System
+17. Check-In Guests System - DONE
 18. Event Calendar - DONE
-19. Manage Hosted Events - working
+19. Manage Hosted Events - DONE
 20. Bookmark Saved Events functionality
