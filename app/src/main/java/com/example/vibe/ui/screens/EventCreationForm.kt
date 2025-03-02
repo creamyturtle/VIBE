@@ -38,8 +38,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
@@ -60,6 +58,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -91,7 +91,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.OrDivider
@@ -632,20 +631,19 @@ fun CustomDropdownMenu(
     ) {
         OutlinedTextField(
             value = selectedOption.value,
-            onValueChange = {},
+            onValueChange = { },
             readOnly = true,
-            label = {
-                Text(
-                    text = label
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = MaterialTheme.colorScheme.surface, // White background
-                focusedBorderColor = Color(0xFFFE1943), // Red border when focused
-                unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
-                cursorColor = MaterialTheme.colorScheme.onBackground // Cursor color
+            label = { Text(text = label) },
+            colors = OutlinedTextFieldDefaults.colors( // ✅ Use Material3's API
+                focusedContainerColor = Color.Transparent, // ✅ Removes background
+                unfocusedContainerColor = Color.Transparent, // ✅ Keeps UI clean
+                focusedBorderColor = Color(0xFFFE1943), // ✅ Red border when focused
+                unfocusedBorderColor = Color.LightGray, // ✅ Gray border when not focused
+                cursorColor = MaterialTheme.colorScheme.primary, // ✅ Cursor color
+                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedTextColor = MaterialTheme.colorScheme.onBackground
             ),
-            textStyle = TextStyle( // ✅ Makes selected text bigger
+            textStyle = TextStyle(
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground
             ),
@@ -659,11 +657,12 @@ fun CustomDropdownMenu(
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
-                    dropdownWidth.value = coordinates.size.width // Capture text field width
+                    dropdownWidth.value = coordinates.size.width
                 },
             shape = RoundedCornerShape(8.dp),
             singleLine = true
         )
+
 
         DropdownMenu(
             expanded = expanded,
@@ -918,11 +917,14 @@ fun MapWithSearch(locationLong: MutableState<String>) {
                 keyboardActions = KeyboardActions(onDone = {
                     showDropdown = false // Close dropdown on done
                 }),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    backgroundColor = MaterialTheme.colorScheme.surface, // White background
-                    focusedBorderColor = Color(0xFFFE1943), // Gray border when focused
-                    unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
-                    cursorColor = Color.Black // Cursor color
+                colors = OutlinedTextFieldDefaults.colors( // ✅ Use Material3's API
+                    focusedContainerColor = Color.Transparent, // ✅ Removes background
+                    unfocusedContainerColor = Color.Transparent, // ✅ Keeps UI clean
+                    focusedBorderColor = Color(0xFFFE1943), // ✅ Red border when focused
+                    unfocusedBorderColor = Color.LightGray, // ✅ Gray border when not focused
+                    cursorColor = MaterialTheme.colorScheme.primary, // ✅ Cursor color
+                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
