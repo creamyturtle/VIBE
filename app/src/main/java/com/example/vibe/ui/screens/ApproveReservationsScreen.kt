@@ -55,7 +55,6 @@ import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 
 @Composable
 fun ApproveReservationsScreen(
-    navController: NavController,
     approveReservationsViewModel: ApproveReservationsViewModel,
     onBack: () -> Unit
 ) {

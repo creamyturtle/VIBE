@@ -348,7 +348,6 @@ fun VibeNavHost(
 
 
                 ApproveReservationsScreen(
-                    navController = navController,
                     approveReservationsViewModel = approveReservationsViewModel,
                     onBack = { navController.navigateUp() }
                 )
