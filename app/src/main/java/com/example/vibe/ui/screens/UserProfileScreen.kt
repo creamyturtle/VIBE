@@ -198,7 +198,7 @@ fun UserProfileContent(
             if (!user.whatsapp.isNullOrEmpty()) {
                 SocialMediaButton("WhatsApp : ${user.whatsapp}", R.drawable.whatsapp, "https://wa.me/${user.whatsapp}", Modifier.fillMaxWidth())
             }
-            if (!user.instagram.isNullOrEmpty()) {
+            if (user.instagram.isNotEmpty()) {
                 SocialMediaButton("Instagram : @${user.instagram}", R.drawable.instagram, "https://www.instagram.com/${user.instagram}", Modifier.fillMaxWidth())
             }
         }

@@ -573,7 +573,7 @@ fun EventDetailsScreen(
 
 
 
-                if (!event.videourl.isNullOrBlank()) {
+                if (event.videourl.isNotBlank()) {
 
                     Spacer(modifier = Modifier.height(48.dp))
 

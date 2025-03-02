@@ -49,8 +49,8 @@ sealed interface EventsUiState {
     data class Success(val events: List<Event>) : EventsUiState
     data class SuccessAttending(val events: List<EventAttending>) : EventsUiState
 
-    object Error : EventsUiState
-    object Loading : EventsUiState
+    data object Error : EventsUiState
+    data object Loading : EventsUiState
 }
 
 /**

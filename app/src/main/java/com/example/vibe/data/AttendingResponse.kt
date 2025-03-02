@@ -41,7 +41,7 @@ data class EventAttending(
     // ✅ Custom property that counts non-null and non-empty additional guests
     val guestCount: Int
         get() = listOf(addguest1, addguest2, addguest3, addguest4)
-            .count { !it.isNullOrBlank() }
+            .count { it.isNotBlank() }
 
 
     val fullImgSrc: String
