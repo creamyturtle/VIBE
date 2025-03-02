@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.location.Geocoder
+import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.provider.MediaStore
@@ -778,7 +779,7 @@ fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {
 
 
 // Date Picker Function
-@OptIn(ExperimentalMaterial3Api::class)
+
 fun showDatePicker(context: Context, date: MutableState<String>) {
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
@@ -798,13 +799,12 @@ fun showTimePicker(context: Context, time: MutableState<String>) {
     val minute = calendar.get(Calendar.MINUTE)
 
     TimePickerDialog(context, { _, selectedHour, selectedMinute ->
-        val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+        val formattedTime = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute) // ✅ Fix applied
         time.value = formattedTime
     }, hour, minute, true).show()
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapWithSearch(locationLong: MutableState<String>) {
     val context = LocalContext.current
@@ -1276,26 +1276,17 @@ fun MediaSelectionRow(selectedImages: MutableList<Uri>, selectedVideo: MutableSt
 
 fun getVideoThumbnail(context: Context, uri: Uri): Bitmap? {
     return try {
-        val filePath = getPathFromUri(context, uri)
-        if (filePath != null) {
-            ThumbnailUtils.createVideoThumbnail(File(filePath).toString(), MediaStore.Video.Thumbnails.MINI_KIND)
-        } else {
-            null // Return null if path conversion fails
-        }
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(context, uri) // ✅ Set video source using Uri
+        val bitmap = retriever.getFrameAtTime(1000000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC) // ✅ Extract frame
+        retriever.release() // ✅ Prevent memory leaks
+        bitmap
     } catch (e: Exception) {
         e.printStackTrace()
         null
     }
 }
 
-fun getPathFromUri(context: Context, uri: Uri): String? {
-    val cursor = context.contentResolver.query(uri, arrayOf(MediaStore.Video.Media.DATA), null, null, null)
-    return cursor?.use {
-        if (it.moveToFirst()) {
-            it.getString(it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
-        } else null
-    }
-}
 
 
 
