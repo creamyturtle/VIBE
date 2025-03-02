@@ -151,7 +151,6 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
                 rsvpViewModel = rsvpViewModel,
                 userViewModel = userViewModel,
                 context = context,
-                languageViewModel = languageViewModel,
                 approveReservationsViewModel = approveReservationsViewModel,
                 qrViewModel = qrViewModel,
                 checkInViewModel = checkInViewModel,

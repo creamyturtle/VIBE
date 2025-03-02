@@ -44,7 +44,6 @@ import com.example.vibe.ui.viewmodel.CheckInViewModel
 import com.example.vibe.ui.viewmodel.ContactViewModel
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
-import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
@@ -62,7 +61,6 @@ fun VibeNavHost(
     rsvpViewModel: RSVPViewModel,
     userViewModel: UserViewModel,
     context: Context,
-    languageViewModel: LanguageViewModel,
     approveReservationsViewModel: ApproveReservationsViewModel,
     qrViewModel: QRViewModel,
     checkInViewModel: CheckInViewModel,
