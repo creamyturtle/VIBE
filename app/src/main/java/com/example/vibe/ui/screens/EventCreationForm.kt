@@ -6,9 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.location.Geocoder
 import android.media.MediaMetadataRetriever
-import android.media.ThumbnailUtils
 import android.net.Uri
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -53,7 +51,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -68,6 +65,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -123,7 +121,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.io.IOException
 import java.util.Calendar
 import java.util.Locale
@@ -624,7 +621,7 @@ fun CustomDropdownMenu(
     label: String
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val dropdownWidth = remember { mutableStateOf(0) } // Store width dynamically
+    val dropdownWidth = remember { mutableIntStateOf(0) } // Store width dynamically
 
     Box(modifier = Modifier
         .fillMaxWidth()

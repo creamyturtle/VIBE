@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,11 +31,14 @@ fun StyledTextField(
         label = { Text(label) },
         singleLine = true,
         shape = RoundedCornerShape(8.dp), // Rounded corners
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            backgroundColor = MaterialTheme.colorScheme.surface, // White background
-            focusedBorderColor = Color(0xFFFE1943), // Gray border when focused
-            unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
-            cursorColor = Color.Black // Cursor color
+        colors = OutlinedTextFieldDefaults.colors( // ✅ Use Material3's API
+            focusedContainerColor = Color.Transparent, // ✅ Removes background
+            unfocusedContainerColor = Color.Transparent, // ✅ Keeps UI clean
+            focusedBorderColor = Color(0xFFFE1943), // ✅ Red border when focused
+            unfocusedBorderColor = Color.LightGray, // ✅ Gray border when not focused
+            cursorColor = MaterialTheme.colorScheme.primary, // ✅ Cursor color
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground
         ),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         modifier = Modifier
@@ -60,11 +63,14 @@ fun StyledTextField2(
         onValueChange = onValueChange,
         label = { Text(label) },
         shape = RoundedCornerShape(8.dp), // Rounded corners
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            backgroundColor = MaterialTheme.colorScheme.surface, // White background
-            focusedBorderColor = Color(0xFFFE1943), // Red border when focused
-            unfocusedBorderColor = Color.LightGray, // Lighter border when not focused
-            cursorColor = Color.Black // Cursor color
+        colors = OutlinedTextFieldDefaults.colors( // ✅ Use Material3's API
+            focusedContainerColor = Color.Transparent, // ✅ Removes background
+            unfocusedContainerColor = Color.Transparent, // ✅ Keeps UI clean
+            focusedBorderColor = Color(0xFFFE1943), // ✅ Red border when focused
+            unfocusedBorderColor = Color.LightGray, // ✅ Gray border when not focused
+            cursorColor = MaterialTheme.colorScheme.primary, // ✅ Cursor color
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground
         ),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         modifier = Modifier
