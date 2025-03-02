@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -35,7 +34,7 @@ fun ShimmerEventCard(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .height(260.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(brush = ShimmerEffect()) // Shimmer Effect
+                    .background(brush = shimmerEffect()) // Shimmer Effect
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -47,7 +46,7 @@ fun ShimmerEventCard(modifier: Modifier = Modifier) {
                     .height(20.dp)
                     .fillMaxWidth(0.6f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(brush = ShimmerEffect()) // Shimmer Effect
+                    .background(brush = shimmerEffect()) // Shimmer Effect
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -59,7 +58,7 @@ fun ShimmerEventCard(modifier: Modifier = Modifier) {
                     .height(12.dp)
                     .fillMaxWidth(0.4f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(brush = ShimmerEffect()) // Shimmer Effect
+                    .background(brush = shimmerEffect()) // Shimmer Effect
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -71,7 +70,7 @@ fun ShimmerEventCard(modifier: Modifier = Modifier) {
                     .height(12.dp)
                     .fillMaxWidth(0.4f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(brush = ShimmerEffect()) // Shimmer Effect
+                    .background(brush = shimmerEffect()) // Shimmer Effect
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -83,7 +82,7 @@ fun ShimmerEventCard(modifier: Modifier = Modifier) {
                     .height(16.dp)
                     .fillMaxWidth(0.5f)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(brush = ShimmerEffect()) // Shimmer Effect
+                    .background(brush = shimmerEffect()) // Shimmer Effect
             )
 
             Spacer(modifier = Modifier.height(16.dp))

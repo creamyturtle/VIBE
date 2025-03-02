@@ -71,8 +71,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
-import com.example.vibe.ui.components.ShimmerEffect
 import com.example.vibe.ui.components.ShimmerEventCard
+import com.example.vibe.ui.components.shimmerEffect
 import com.example.vibe.ui.viewmodel.EventsUiState
 
 
@@ -280,7 +280,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(brush = ShimmerEffect()) // ✅ FIXED
+                            .background(brush = shimmerEffect()) // ✅ FIXED
                     )
                 }
 
@@ -300,7 +300,7 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                         modifier = Modifier
                             .fillMaxSize()
                             //.clip(RoundedCornerShape(12.dp))
-                            .then(if (isImageLoading) Modifier.background(brush = ShimmerEffect()) else Modifier), // ✅ FIXED
+                            .then(if (isImageLoading) Modifier.background(brush = shimmerEffect()) else Modifier), // ✅ FIXED
                         contentScale = ContentScale.Crop,
                         onSuccess = { isImageLoading = false }, // Hide shimmer when loaded
                         onError = { isImageLoading = false },
