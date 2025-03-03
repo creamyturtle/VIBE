@@ -68,13 +68,6 @@ object UserPreferences {
         }
     }
 
-    /** ✅ Clear User Data */
-    suspend fun clearUser(context: Context) {
-        context.dataStore.edit { it.clear() }
-    }
-
-
-
 
     /** ✅ Save Dark Mode Preference */
     suspend fun saveDarkMode(context: Context, isDarkMode: Boolean?) {

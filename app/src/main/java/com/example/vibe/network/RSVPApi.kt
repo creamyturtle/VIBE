@@ -22,13 +22,4 @@ interface RSVPApi {
     ): Response<RSVPResponse>
 
 
-
-    @GET("rsvp_api.php")
-    suspend fun checkRSVP(
-        @Header("Authorization") token: String,
-        @Query("party_id") partyId: Int
-    ): Response<RSVPResponse>
-
-
-
 }

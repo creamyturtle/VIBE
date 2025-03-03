@@ -65,10 +65,6 @@ fun ManageHostedScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit
 ) {
-    var selectedQrCode by remember { mutableStateOf<String?>(null) }
-    var showQrModal by remember { mutableStateOf(false) }
-
-
 
 
     Column(
@@ -76,7 +72,6 @@ fun ManageHostedScreen(
             .fillMaxSize()
             .padding(top = 104.dp) // Ensure it doesn't overlap with the TopBar
     ) {
-
 
 
         Row {
@@ -135,11 +130,6 @@ fun ManageHostedScreen(
                             HostedCard(
                                 navController = navController,
                                 event = event,
-                                onViewQrCode = { qrcode ->
-                                    Log.d("UI", "🔍 Showing QR Code for: $qrcode")
-                                    selectedQrCode = qrcode
-                                    showQrModal = true
-                                },
                                 onCancelReservation = {
                                     coroutineScope.launch {
 
@@ -181,13 +171,6 @@ fun ManageHostedScreen(
 
     }
 
-    // ✅ Display QR Code Dialog when showQrModal is true
-    if (showQrModal && selectedQrCode != null) {
-        QRCodeDialog(qrcodeData = selectedQrCode!!) {
-            showQrModal = false
-            selectedQrCode = null
-        }
-    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -195,7 +178,6 @@ fun ManageHostedScreen(
 fun HostedCard(
     navController: NavController,
     event: Event,
-    onViewQrCode: (String) -> Unit,
     onCancelReservation: () -> Unit
 ) {
     Card(

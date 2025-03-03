@@ -76,12 +76,15 @@ fun VibeTheme(
         else -> LightColorScheme
     }
 
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             setUpEdgeToEdge(view, darkTheme)
         }
     }
+
+
 
     MaterialTheme(
         colorScheme = colorScheme,
