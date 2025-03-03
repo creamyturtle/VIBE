@@ -324,9 +324,8 @@ fun VibeNavHost(
                 ManageHostedScreen(
                     eventsUiState = eventsViewModel.eventsUiState,
                     navController = navController,
-                    retryAction = eventsViewModel::getAttending,
-                    onCancelReservation = {
-                    },
+                    retryAction = eventsViewModel::getByID,
+                    onCancelEvent = { },
                     onBack = { navController.navigateUp() }
                 )
 

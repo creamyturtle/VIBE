@@ -112,17 +112,8 @@ fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            //.offset(y = )
-            //.then(
-            //    when {
-            //        offsetY == 148.dp -> Modifier.offset(y = offsetY - 188.dp)
-            //        else -> Modifier.offset(y = offsetY - 104.dp)
-            //    }
-            //)
-
             .padding(bottom = 104.dp)
     ) {
-        // Content goes here...
 
         FloatingActionButton(
             onClick = { navController.navigate("map_screen/all") },
@@ -163,9 +154,6 @@ fun HomeScreen(
 
         }
     }
-
-
-
 
 
 }
