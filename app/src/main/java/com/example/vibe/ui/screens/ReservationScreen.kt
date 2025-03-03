@@ -471,7 +471,7 @@ fun GuestDetailsCard(
             Text("Guest Details", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             HorizontalDivider()
 
-            Row() {
+            Row {
 
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)){
 

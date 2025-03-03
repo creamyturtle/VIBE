@@ -77,7 +77,7 @@ fun ApproveReservationsScreen(
             .fillMaxSize()
             .padding(top = 104.dp)
     ) {
-        Row() {
+        Row {
             IconButton(
                 onClick = onBack,
                 modifier = Modifier
@@ -201,7 +201,7 @@ fun RSVPCard(
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween) {
 
-                Column() {
+                Column {
 
 
                     Text(text = "Guest: ${rsvpItem.name}", fontSize = 16.sp)
@@ -225,7 +225,7 @@ fun RSVPCard(
 
                 }
 
-                Column() {
+                Column {
 
                     val baseUrl = "https://www.vibesocial.org/" // ✅ Base URL
 
@@ -256,7 +256,7 @@ fun RSVPCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                Column() {
+                Column {
                     Text(text = "Bringing:", fontWeight = FontWeight.Bold)
 
                     if (rsvpItem.bringing.isNullOrEmpty()) {

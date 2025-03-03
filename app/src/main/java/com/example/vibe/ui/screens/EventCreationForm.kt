@@ -412,7 +412,7 @@ fun EventCreationForm(
 
         Spacer(Modifier.height(24.dp))
 
-        Column() {
+        Column {
             // Amenities Section
             SectionTitle("Amenities")
 

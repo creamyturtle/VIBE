@@ -280,7 +280,7 @@ fun EventSelectionPopup(
         onDismissRequest = onDismiss,
         title = {
 
-            Column() {
+            Column {
 
                 Text(
                     text = "Events for",

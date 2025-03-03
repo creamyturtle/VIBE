@@ -24,9 +24,5 @@ class AuthRepository(
     }
 
 
-    // ✅ Logout function clears the stored token
-    fun logout() {
-        sessionManager.clearToken()
-    }
 }
 

@@ -88,7 +88,7 @@ fun EventsAttendingScreen(
     ) {
         // ✅ Title at the top
 
-        Row() {
+        Row {
 
             IconButton(
                 onClick = onBack,

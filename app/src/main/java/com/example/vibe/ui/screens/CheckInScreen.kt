@@ -1,6 +1,5 @@
 package com.example.vibe.ui.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -57,6 +56,7 @@ import coil.compose.AsyncImage
 import com.example.vibe.network.RSVPItem
 import com.example.vibe.ui.viewmodel.CheckInViewModel
 import com.example.vibe.ui.viewmodel.QRViewModel
+import com.example.vibe.utils.CameraPermissionRequest
 import com.example.vibe.utils.QRScanner
 
 
@@ -69,38 +69,32 @@ fun CheckInScreen(
     val context = LocalContext.current
     val rsvpList by checkInViewModel.rsvpList.collectAsState()
 
-
     val isLoading = checkInViewModel.isLoading
     val errorMessage = checkInViewModel.errorMessage
     val successMessage = checkInViewModel.successMessage
-    var scanningQR by remember { mutableStateOf(false) }
-
+    val isScanning by qrViewModel.isScanning.collectAsState() // ✅ Use ViewModel's scanning state
+    val scannedQRCode by qrViewModel.qrScanResult.collectAsState()
     var isProcessing by remember { mutableStateOf(false) }
 
-
-
-    val scannedQRCode by qrViewModel.qrScanResult.collectAsState()
-
+    // ✅ Handle scanned QR codes
     LaunchedEffect(scannedQRCode) {
         scannedQRCode?.let { qrCode ->
             if (qrCode.isNotBlank()) {
-                scanningQR = false
+                qrViewModel.stopScanning() // ✅ Close scanner
                 checkInViewModel.markUserCheckedIn(qrCode) {
-                    scanningQR = false
+                    qrViewModel.stopScanning()
                 }
-                qrViewModel.updateScannedQRCode("") // ✅ Ensure QR Code resets properly
+                qrViewModel.updateScannedQRCode("") // ✅ Reset QR Code state
             }
         }
     }
 
+    // ✅ Fetch RSVPs when screen loads
     LaunchedEffect(Unit) {
-        Log.d("CheckInScreen", "Re-fetching RSVPs on screen enter") // ✅ Debug
         checkInViewModel.fetchApprovedRSVPs()
     }
 
-
-
-    // ✅ Show Toast when check-in is successful
+    // ✅ Show success toast
     LaunchedEffect(successMessage) {
         successMessage?.let { message ->
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
@@ -108,18 +102,12 @@ fun CheckInScreen(
         }
     }
 
-    // ✅ Debug: Log when the list changes
-    LaunchedEffect(rsvpList) {
-        Log.d("CheckInScreen", "LazyColumn updated with: $rsvpList")
-    }
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 104.dp)
     ) {
-        Row() {
+        Row {
             IconButton(
                 onClick = onBack,
                 modifier = Modifier
@@ -152,7 +140,7 @@ fun CheckInScreen(
                     CircularProgressIndicator()
                 }
             }
-            !errorMessage.isNullOrEmpty() && rsvpList.isEmpty() -> { // ✅ Only show error if list is also empty
+            !errorMessage.isNullOrEmpty() && rsvpList.isEmpty() -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = errorMessage)
                 }
@@ -172,7 +160,7 @@ fun CheckInScreen(
                     items(sortedList) { rsvp ->
                         CheckInCard(
                             rsvpItem = rsvp,
-                            onScanClick = { scanningQR = true },
+                            onScanClick = { qrViewModel.startScanning() }, // ✅ Use ViewModel to start scanning
                             isCheckedIn = rsvp.enteredparty == 1
                         )
                     }
@@ -181,39 +169,38 @@ fun CheckInScreen(
                         Spacer(modifier = Modifier.height(120.dp))
                     }
                 }
-
             }
         }
-
     }
 
+    // ✅ Request Camera Permission Before Scanning
+    if (isScanning) {
+        CameraPermissionRequest(
+            onPermissionGranted = {
+                qrViewModel.startScanning() // ✅ Keep scanning enabled after permission
+            }
+        )
+    }
 
     // ✅ Show QR Scanner when scanning is enabled
-    if (scanningQR) {
+    if (isScanning) {
         QRScannerScreen(
             onQRCodeScanned = { scannedQRCode ->
                 if (!isProcessing && scannedQRCode.isNotBlank()) {
                     isProcessing = true
-                    scanningQR = false // ✅ Close scanner immediately
+                    qrViewModel.stopScanning() // ✅ Close scanner immediately
 
                     qrViewModel.updateScannedQRCode(scannedQRCode)
 
                     checkInViewModel.markUserCheckedIn(scannedQRCode) {
-                        scanningQR = false // ✅ Ensure scanner is closed
+                        qrViewModel.stopScanning() // ✅ Ensure scanner is closed
                         isProcessing = false // ✅ Reset flag after processing
                     }
                 }
             },
-            onBack = { scanningQR = false } // ✅ Close scanner when back button is pressed
+            onBack = { qrViewModel.stopScanning() } // ✅ Close scanner when back button is pressed
         )
     }
-
-
-
-
-
-
-
 }
 
 
@@ -233,7 +220,7 @@ fun CheckInCard(
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
 
-            Row() {
+            Row {
 
 
                 Column(Modifier.width(184.dp)) {

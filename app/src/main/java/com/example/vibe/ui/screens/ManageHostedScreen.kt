@@ -79,7 +79,7 @@ fun ManageHostedScreen(
 
 
 
-        Row() {
+        Row {
 
             IconButton(
                 onClick = onBack,

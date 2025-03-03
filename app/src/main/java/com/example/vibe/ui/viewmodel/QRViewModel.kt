@@ -21,12 +21,22 @@ class QRViewModel(private val appContainer: AppContainer) : ViewModel() {
     private val _qrScanResult = MutableStateFlow<String?>(null)
     val qrScanResult = _qrScanResult.asStateFlow()
 
+    private val _isScanning = MutableStateFlow(false) // ✅ Track scanning state in ViewModel
+    val isScanning = _isScanning.asStateFlow()
+
     fun updateScannedQRCode(qrCode: String) {
         _qrScanResult.value = qrCode
     }
 
+    fun startScanning() {
+        _isScanning.value = true // ✅ Ensures scanner opens
+    }
 
+    fun stopScanning() {
+        _isScanning.value = false // ✅ Ensures scanner closes
+    }
 }
+
 
 
 

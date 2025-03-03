@@ -1,56 +1,43 @@
 package com.example.vibe.utils
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 
-@OptIn(ExperimentalPermissionsApi::class)
+
 @Composable
-fun CameraPermissionRequest(onPermissionGranted: @Composable () -> Unit) {
-    val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+fun CameraPermissionRequest(
+    onPermissionGranted: @Composable () -> Unit
+) {
+    val context = LocalContext.current
+    val cameraPermission = Manifest.permission.CAMERA
 
-    LaunchedEffect(Unit) {
-        if (!cameraPermissionState.status.isGranted) {
-            cameraPermissionState.launchPermissionRequest()
-        }
-    }
-
-    when {
-        cameraPermissionState.status.isGranted -> {
-            onPermissionGranted() // Start scanner
-        }
-        cameraPermissionState.status.shouldShowRationale -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text("This app requires camera access to scan QR codes.")
-                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                    Text("Grant Permission")
-                }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                // ✅ Proceed to the scanner if permission is granted
+            } else {
+                Toast.makeText(context, "Camera permission is required to scan QR codes.", Toast.LENGTH_LONG).show()
             }
         }
+    )
+
+    val permissionState = ContextCompat.checkSelfPermission(context, cameraPermission)
+
+    when {
+        permissionState == PackageManager.PERMISSION_GRANTED -> {
+            onPermissionGranted() // ✅ If permission is already granted, proceed
+        }
         else -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text("Camera permission is required to scan QR codes.")
-                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                    Text("Request Permission")
-                }
+            LaunchedEffect(Unit) { // ✅ Automatically launches permission request
+                permissionLauncher.launch(cameraPermission)
             }
         }
     }

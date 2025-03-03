@@ -49,7 +49,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
             .padding(16.dp, 4.dp, 16.dp, 16.dp)
 
     ) {
-        Column () {
+        Column {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
@@ -84,7 +84,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
                 Spacer(Modifier.width(12.dp))
 
 
-                Column() {
+                Column {
                     Text(
                         text = "📍 ${event.location}",
                         fontSize = 16.sp,
