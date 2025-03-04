@@ -1,5 +1,6 @@
 package com.example.vibe.ui.components
 
+import android.app.Activity
 import android.content.Context
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -68,6 +69,7 @@ import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.SettingsViewModel
+import com.example.vibe.utils.setAppLocale
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -156,15 +158,18 @@ fun RightSideDrawer(
 
                 Spacer(Modifier.height(40.dp))
 
+                val activity = context as? Activity // Get activity reference
+
                 LanguageToggle(
-                    selectedLanguage = selectedLanguage, // ✅ This should be working correctly now
+                    selectedLanguage = selectedLanguage,
                     onLanguageChange = { lang ->
-                        languageViewModel.setLanguage(
-                            context,
-                            lang
-                        ) // ✅ Ensure it updates the app language
+                        activity?.let {
+                            setAppLocale(it, lang, navController) // ✅ Pass `NavController` for correct restart
+                        }
                     }
                 )
+
+
 
 
 
@@ -364,15 +369,15 @@ fun RightSideDrawer(
 
                 Spacer(Modifier.height(32.dp))
 
-                key(selectedLanguage) {
 
-                    DarkModeToggle(
-                        isDarkMode = isDarkMode,
-                        onThemeChange = { newTheme ->
-                            settingsViewModel.toggleDarkMode(newTheme)
-                        }
-                    )
-                }
+
+                DarkModeToggle(
+                    isDarkMode = isDarkMode,
+                    onThemeChange = { newTheme ->
+                        settingsViewModel.toggleDarkMode(newTheme)
+                    }
+                )
+
 
 
 

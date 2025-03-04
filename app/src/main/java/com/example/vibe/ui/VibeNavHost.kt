@@ -64,12 +64,15 @@ fun VibeNavHost(
     approveReservationsViewModel: ApproveReservationsViewModel,
     qrViewModel: QRViewModel,
     checkInViewModel: CheckInViewModel,
-    contactViewModel: ContactViewModel
+    contactViewModel: ContactViewModel,
+    startDestination: String
 ) {
+
+
 
         NavHost(
             navController = navController,
-            startDestination = "home_screen/all",
+            startDestination = startDestination,
             modifier = Modifier.fillMaxSize()
         ) {
             composable(

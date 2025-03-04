@@ -27,6 +27,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
+
 android {
     namespace = "com.example.vibe"
     compileSdk = 35
@@ -73,6 +74,12 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3" // Use the latest stable version
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 
 

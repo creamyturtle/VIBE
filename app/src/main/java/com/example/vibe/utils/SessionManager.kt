@@ -1,9 +1,11 @@
 package com.example.vibe.utils
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
+import androidx.navigation.NavController
 import com.example.vibe.data.UserData
 import org.json.JSONObject
 import java.util.Locale
@@ -88,13 +90,23 @@ class SessionManager(context: Context) {
     }
 
     // ✅ Save selected language
-    fun saveLanguage(language: String) {
-        prefs.edit().putString(KEY_LANGUAGE, language).apply()
+    fun getLanguage(): String {
+        return prefs.getString(KEY_LANGUAGE, Locale.getDefault().language) ?: Locale.getDefault().language
     }
 
-    // ✅ Retrieve language (defaults to system language if not set)
-    fun getLanguage(): String {
-        return prefs.getString(KEY_LANGUAGE, null) ?: Locale.getDefault().language
+    // Save the selected language
+    fun saveLanguage(langCode: String) {
+        prefs.edit().putString(KEY_LANGUAGE, langCode).apply()
     }
+
+    // Apply language at app startup
+    fun applySavedLanguage(activity: Activity, navController: NavController?) {
+        val language = getLanguage()
+        navController?.let {
+            setAppLocale(activity, language, it, shouldRestart = false) // ✅ Ensure correct locale on startup
+        }
+    }
+
+
 
 }

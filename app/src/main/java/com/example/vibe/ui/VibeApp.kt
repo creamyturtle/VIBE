@@ -16,6 +16,7 @@
 
 package com.example.vibe.ui
 
+import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -53,13 +54,17 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
+fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDestination: String) {
 
     //val listState = rememberLazyListState()
 
     val navController = rememberNavController()
 
+
+
     val context = LocalContext.current
+    val activity = context as? Activity
+
 
     val appContainer = remember { DefaultAppContainer(context) } // ✅ Initialize AppContainer
 
@@ -96,20 +101,29 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
 
 
 
-    //val systemLanguage = Locale.getDefault().language.uppercase(Locale.ROOT) // ✅ Ensure uppercase
     val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(appContainer.sessionManager))
 
     val savedLanguage = appContainer.sessionManager.getLanguage().uppercase(Locale.ROOT)
 
-    LaunchedEffect(savedLanguage) {
-        languageViewModel.setLanguage(context, savedLanguage)
+    LaunchedEffect(Unit) {
+        activity?.let {
+            languageViewModel.setLanguage(it, navController, savedLanguage) // Now correctly applies the locale
+        }
     }
 
     val selectedLanguage by languageViewModel.language.collectAsState()
 
 
 
+
     val contactViewModel = remember { ContactViewModel(appContainer.contactApi)}
+
+
+    LaunchedEffect(Unit) {
+        activity?.let {
+            appContainer.sessionManager.applySavedLanguage(it, navController) // ✅ Now has access to NavController
+        }
+    }
 
 
 
@@ -154,7 +168,8 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean) {
                 approveReservationsViewModel = approveReservationsViewModel,
                 qrViewModel = qrViewModel,
                 checkInViewModel = checkInViewModel,
-                contactViewModel = contactViewModel
+                contactViewModel = contactViewModel,
+                startDestination = startDestination
             )
 
 

@@ -32,11 +32,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vibe.ui.VibeApp
 import com.example.vibe.ui.theme.VibeTheme
 import com.example.vibe.ui.viewmodel.SettingsViewModel
+import com.example.vibe.utils.SessionManager
 
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val startDestination = intent?.getStringExtra("NAV_DESTINATION") ?: "home_screen/all"
+
+
         super.onCreate(savedInstanceState)
         setContent {
             val settingsViewModel: SettingsViewModel = viewModel()
@@ -52,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    VibeApp(settingsViewModel, isDarkMode)
+                    VibeApp(settingsViewModel, isDarkMode, startDestination)
                 }
             }
         }

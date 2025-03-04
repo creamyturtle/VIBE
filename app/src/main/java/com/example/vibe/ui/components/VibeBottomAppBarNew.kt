@@ -51,131 +51,130 @@ fun VibeBottomAppBarNew(
 
     //val selectedLanguage by languageViewModel.language.collectAsState()
 
-    key(selectedLanguage) {
 
-        Column {
-            // Separator bar (1px light grey)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(onePixel.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant) // Light grey separator
-            )
+    Column {
+        // Separator bar (1px light grey)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(onePixel.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant) // Light grey separator
+        )
 
-            BottomAppBar(
-                modifier = Modifier
-                    //.offset(y = offsetY)
-                    .height(104.dp),
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = Color.Gray,
-                contentPadding = PaddingValues(0.dp)
+        BottomAppBar(
+            modifier = Modifier
+                //.offset(y = offsetY)
+                .height(104.dp),
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = Color.Gray,
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.Top
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
+                    BottomNavItem(
+                        navController,
+                        "home_screen",
+                        currentRoute,
+                        Icons.Default.Search,
+                        stringResource(R.string.explore)
+                    )
+                }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    if (isLoggedIn) {
                         BottomNavItem(
                             navController,
-                            "home_screen",
+                            "host_event",
                             currentRoute,
-                            Icons.Default.Search,
-                            stringResource(R.string.explore)
+                            Icons.Default.Groups,
+                            stringResource(R.string.host)
                         )
-                    }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        if (isLoggedIn) {
-                            BottomNavItem(
-                                navController,
-                                "host_event",
-                                currentRoute,
-                                Icons.Default.Groups,
-                                stringResource(R.string.host)
-                            )
-                        } else {
-                            BottomNavItem(
-                                navController,
-                                "login",
-                                currentRoute,
-                                Icons.Default.Groups,
-                                stringResource(R.string.host)
-                            )
-                        }
-
-                    }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
+                    } else {
                         BottomNavItem(
                             navController,
-                            "calendar",
+                            "login",
                             currentRoute,
-                            Icons.Default.Event,
-                            stringResource(R.string.calendar)
+                            Icons.Default.Groups,
+                            stringResource(R.string.host)
                         )
                     }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        if (isLoggedIn) {
-                            BottomNavItem(
-                                navController,
-                                "user_profile",
-                                currentRoute,
-                                Icons.Default.AccountCircle,
-                                stringResource(R.string.profile)
-                            )
-                        } else {
-                            BottomNavItem(
-                                navController,
-                                "login",
-                                currentRoute,
-                                Icons.Default.AccountCircle,
-                                stringResource(R.string.profile)
-                            )
-                        }
-
-                    }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        if (isLoggedIn) {
-                            BottomNavItem(
-                                navController,
-                                baseRoute = "logout",
-                                currentRoute = currentRoute,
-                                icon = Icons.AutoMirrored.Filled.ExitToApp,
-                                label = stringResource(R.string.logout),
-                                onClick = {
-                                    // ✅ Get context for Toast
-                                    authViewModel.logout(context) // ✅ Pass context for Toast
-                                    navController.navigate("login") {
-                                        popUpTo("home_screen/all") {
-                                            inclusive = false
-                                        }
-                                    }
-                                }
-                            )
-                        } else {
-                            BottomNavItem(
-                                navController,
-                                "login",
-                                currentRoute,
-                                Icons.Default.Person,
-                                "Log In"
-                            )
-                        }
-                    }
-
 
                 }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    BottomNavItem(
+                        navController,
+                        "calendar",
+                        currentRoute,
+                        Icons.Default.Event,
+                        stringResource(R.string.calendar)
+                    )
+                }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    if (isLoggedIn) {
+                        BottomNavItem(
+                            navController,
+                            "user_profile",
+                            currentRoute,
+                            Icons.Default.AccountCircle,
+                            stringResource(R.string.profile)
+                        )
+                    } else {
+                        BottomNavItem(
+                            navController,
+                            "login",
+                            currentRoute,
+                            Icons.Default.AccountCircle,
+                            stringResource(R.string.profile)
+                        )
+                    }
+
+                }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    if (isLoggedIn) {
+                        BottomNavItem(
+                            navController,
+                            baseRoute = "logout",
+                            currentRoute = currentRoute,
+                            icon = Icons.AutoMirrored.Filled.ExitToApp,
+                            label = stringResource(R.string.logout),
+                            onClick = {
+                                // ✅ Get context for Toast
+                                authViewModel.logout(context) // ✅ Pass context for Toast
+                                navController.navigate("login") {
+                                    popUpTo("home_screen/all") {
+                                        inclusive = false
+                                    }
+                                }
+                            }
+                        )
+                    } else {
+                        BottomNavItem(
+                            navController,
+                            "login",
+                            currentRoute,
+                            Icons.Default.Person,
+                            "Log In"
+                        )
+                    }
+                }
+
+
             }
         }
     }
+
 
 }
 

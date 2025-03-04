@@ -123,8 +123,15 @@ data class Event(
         @RequiresApi(Build.VERSION_CODES.O)
         get() {
             val parsedDate = LocalDate.parse(date) // Parse the SQL date
-            val dayOfWeek = parsedDate.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault())
-            val month = parsedDate.month.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault())
+
+            val dayOfWeek = parsedDate.dayOfWeek
+                .getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault())
+                .replaceFirstChar { it.uppercaseChar() } // ✅ Ensure Proper Case
+
+            val month = parsedDate.month
+                .getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault())
+                .replaceFirstChar { it.uppercaseChar() } // ✅ Ensure Proper Case
+
             val dayOfMonth = parsedDate.dayOfMonth
             val suffix = when {
                 dayOfMonth in 11..13 -> "th" // Special case for 11th, 12th, 13th
@@ -133,8 +140,10 @@ data class Event(
                 dayOfMonth % 10 == 3 -> "rd"
                 else -> "th"
             }
+
             return "$dayOfWeek, $month $dayOfMonth$suffix"
         }
+
 
     val formattedTime: String
         @RequiresApi(Build.VERSION_CODES.O)

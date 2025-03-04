@@ -46,111 +46,109 @@ fun MapBottomAppBar(
     //val selectedLanguage by languageViewModel.language.collectAsState()
 
 
-    key(selectedLanguage) {
+    Column {
+        // Separator bar (1px light grey)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(onePixel.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant) // Light grey separator
+        )
 
-        Column {
-            // Separator bar (1px light grey)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(onePixel.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant) // Light grey separator
-            )
+        BottomAppBar(
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .height(104.dp),
+            contentPadding = PaddingValues(0.dp)
+        ) {
 
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onBackground,
+
+            Row(
                 modifier = Modifier
-                    .height(104.dp),
-                contentPadding = PaddingValues(0.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.Top
             ) {
 
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.Top
-                ) {
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        MapBottomNavItem(
-                            "all",
-                            Icons.Default.Public,
-                            stringResource(R.string.all_events),
-                            selectedFilter,
-                            navController
-                        ) {
-                            selectedFilter = "all"
-                            onFilterSelected("All Events")
-                        }
+                    MapBottomNavItem(
+                        "all",
+                        Icons.Default.Public,
+                        stringResource(R.string.all_events),
+                        selectedFilter,
+                        navController
+                    ) {
+                        selectedFilter = "all"
+                        onFilterSelected("All Events")
                     }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        MapBottomNavItem(
-                            "House",
-                            Icons.Default.Home,
-                            stringResource(R.string.house_parties),
-                            selectedFilter,
-                            navController
-                        ) {
-                            selectedFilter = "House"
-                            onFilterSelected("House")
-                        }
-                    }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        MapBottomNavItem(
-                            "Finca",
-                            Icons.Default.Agriculture,
-                            stringResource(R.string.finca_parties),
-                            selectedFilter,
-                            navController
-                        ) {
-                            selectedFilter = "Finca"
-                            onFilterSelected("Finca")
-                        }
-                    }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        MapBottomNavItem(
-                            "Pool",
-                            Icons.Default.Pool,
-                            stringResource(R.string.pool_parties),
-                            selectedFilter,
-                            navController
-                        ) {
-                            selectedFilter = "Pool"
-                            onFilterSelected("Pool")
-                        }
-                    }
-
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-
-                        MapBottomNavItem(
-                            "Activity",
-                            Icons.AutoMirrored.Filled.DirectionsBike,
-                            stringResource(R.string.activities),
-                            selectedFilter,
-                            navController
-                        ) {
-                            selectedFilter = "Activity"
-                            onFilterSelected("Activity")
-                        }
-                    }
-
-
                 }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    MapBottomNavItem(
+                        "House",
+                        Icons.Default.Home,
+                        stringResource(R.string.house_parties),
+                        selectedFilter,
+                        navController
+                    ) {
+                        selectedFilter = "House"
+                        onFilterSelected("House")
+                    }
+                }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    MapBottomNavItem(
+                        "Finca",
+                        Icons.Default.Agriculture,
+                        stringResource(R.string.finca_parties),
+                        selectedFilter,
+                        navController
+                    ) {
+                        selectedFilter = "Finca"
+                        onFilterSelected("Finca")
+                    }
+                }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    MapBottomNavItem(
+                        "Pool",
+                        Icons.Default.Pool,
+                        stringResource(R.string.pool_parties),
+                        selectedFilter,
+                        navController
+                    ) {
+                        selectedFilter = "Pool"
+                        onFilterSelected("Pool")
+                    }
+                }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+
+                    MapBottomNavItem(
+                        "Activity",
+                        Icons.AutoMirrored.Filled.DirectionsBike,
+                        stringResource(R.string.activities),
+                        selectedFilter,
+                        navController
+                    ) {
+                        selectedFilter = "Activity"
+                        onFilterSelected("Activity")
+                    }
+                }
+
 
             }
 
-
         }
+
+
     }
+
 
 
 
