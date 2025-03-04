@@ -22,16 +22,24 @@ fun setAppLocale(activity: Activity, languageCode: String, navController: NavCon
     activity.resources.updateConfiguration(config, activity.resources.displayMetrics)
 
     if (shouldRestart) {
-        // ✅ If current destination is null or home_screen/all, explicitly set it to home_screen/all
+        // ✅ Get current route, but ensure `filterType` is present
         val currentDestination = navController.currentDestination?.route ?: "home_screen/all"
 
+        // ✅ If user is on home screen but `filterType` is missing, default to `all`
+        val safeDestination = if (currentDestination.startsWith("home_screen")) {
+            "home_screen/all" // ✅ Provide a default filterType
+        } else {
+            currentDestination
+        }
+
         val intent = Intent(activity, activity::class.java).apply {
-            putExtra("NAV_DESTINATION", currentDestination) // ✅ Always pass a valid route
+            putExtra("NAV_DESTINATION", safeDestination) // ✅ Always provide a valid route
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         activity.startActivity(intent)
     }
 }
+
 
 
 
