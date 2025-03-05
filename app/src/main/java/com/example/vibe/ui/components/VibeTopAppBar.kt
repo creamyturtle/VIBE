@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,8 +46,7 @@ import com.example.vibe.R
 fun VibeTopAppBar(
     navController: NavController,
     isDrawerOpen: MutableState<Boolean>,
-    listState: LazyListState,
-    selectedLanguage: String
+    listState: LazyListState
 ) {
 
     val density = LocalDensity.current.density

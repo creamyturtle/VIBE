@@ -19,11 +19,11 @@ fun BottomBar(
     when {
         currentDestination in setOf("host_event", "calendar", "user_profile") || currentDestination?.startsWith("home_screen") == true
                  -> {
-            VibeBottomAppBarNew(navController, isLoggedIn, authViewModel, selectedLanguage)
+            VibeBottomAppBarNew(navController, isLoggedIn, authViewModel)
         }
 
         currentDestination?.startsWith("map_screen") == true -> {
-            MapBottomAppBar(navController, selectedLanguage) { filterType ->
+            MapBottomAppBar(navController) { filterType ->
                 navController.navigate("map_screen/$filterType") {
                     popUpTo("map_screen/all") { inclusive = true }
                 }

@@ -1,7 +1,6 @@
 package com.example.vibe.utils
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.navigation.NavController

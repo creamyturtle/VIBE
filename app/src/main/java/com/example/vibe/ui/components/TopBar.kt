@@ -31,7 +31,7 @@ fun TopBar(
 
         // Default case: Show the main top bar
         else -> {
-            VibeTopAppBar(navController, isDrawerOpen, listState, selectedLanguage)
+            VibeTopAppBar(navController, isDrawerOpen, listState)
         }
     }
 }

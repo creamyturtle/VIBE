@@ -174,7 +174,7 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
 
 
         }
-        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, languageViewModel, settingsViewModel, isDarkMode, selectedLanguage)
+        RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, settingsViewModel, isDarkMode, selectedLanguage)
     }
 
 

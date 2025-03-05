@@ -77,9 +77,9 @@
     <string name="precise_location">Ubicación Precisa</string>
     <string name="select_the_exact_location">Seleccione la ubicación exacta de su evento haciendo clic en el mapa o ingresando la dirección completa a continuación.\n\nLa ubicación exacta solo se mostrará a los invitados aprobados.</string>
     <string name="complete_address">Dirección Completa</string>
-    <string name="uploading">Subiendo...</string>
+    <string name="uploading">Subiendo…</string>
     <string name="submit_event">Publicar Evento</string>
-    <string name="starting_submission">Iniciando presentación...</string>
+    <string name="starting_submission">Iniciando presentación…</string>
     <string name="or">o</string>
 
 </resources>
