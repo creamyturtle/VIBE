@@ -149,6 +149,12 @@ fun EventCreationForm(
     val videoUrl = remember { mutableStateOf("") }
     val isChecked = remember { mutableStateOf(false) }
 
+    val isFreeParking = remember { mutableStateOf(false) }
+    val isWifi = remember { mutableStateOf(false) }
+    val isAlcoholProvided = remember { mutableStateOf(false) }
+    val isPetFriendly = remember { mutableStateOf(false) }
+    val isSmokingAllowed = remember { mutableStateOf(false) }
+
     val userId by userViewModel.userId.observeAsState()
 
     val amenities = remember {
@@ -323,18 +329,21 @@ fun EventCreationForm(
 
         DateTimeSelector(date, time)
 
-        Spacer(Modifier.height(0.dp))
+        Spacer(Modifier.height(16.dp))
 
-        StyledTextField(
-            value = rules.value,
-            onValueChange = { rules.value = it },
-            label = stringResource(R.string.rules_restrictions_optional)
-        )
+
+        SectionTitle(stringResource(R.string.restrictions))
 
         StyledTextField(
             value = totalSlots.value,
             onValueChange = { totalSlots.value = it },
             label = stringResource(R.string.max_of_guests_allowed)
+        )
+
+        StyledTextField(
+            value = rules.value,
+            onValueChange = { rules.value = it },
+            label = stringResource(R.string.rules_restrictions_optional)
         )
 
         Spacer(Modifier.height(24.dp))
@@ -428,20 +437,29 @@ fun EventCreationForm(
 
             Spacer(Modifier.height(16.dp))
 
-            amenities.value.forEach { (label, state) ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = isFreeParking.value, onCheckedChange = { isFreeParking.value = it })
+                Text(text = stringResource(R.string.free_parking), modifier = Modifier.padding(start = 8.dp))
+            }
 
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = isWifi.value, onCheckedChange = { isWifi.value = it })
+                Text(text = stringResource(R.string.wifi), modifier = Modifier.padding(start = 8.dp))
+            }
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = state,
-                        onCheckedChange = { checked ->
-                            amenities.value = amenities.value.toMutableMap().apply { this[label] = checked }
-                        }
-                    )
-                    Text(text = label, modifier = Modifier.padding(start = 8.dp))
-                }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = isAlcoholProvided.value, onCheckedChange = { isAlcoholProvided.value = it })
+                Text(text = stringResource(R.string.alcohol_provided), modifier = Modifier.padding(start = 8.dp))
+            }
 
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = isPetFriendly.value, onCheckedChange = { isPetFriendly.value = it })
+                Text(text = stringResource(R.string.pet_friendly), modifier = Modifier.padding(start = 8.dp))
+            }
 
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = isSmokingAllowed.value, onCheckedChange = { isSmokingAllowed.value = it })
+                Text(text = stringResource(R.string.smoking_allowed), modifier = Modifier.padding(start = 8.dp))
             }
         }
 
@@ -455,7 +473,7 @@ fun EventCreationForm(
         ) {
             Checkbox(checked = isChecked.value, onCheckedChange = { isChecked.value = it })
             Text(
-                text = "I agree to the Terms & Conditions",
+                text = stringResource(R.string.i_agree_to_the_terms_conditions),
                 Modifier.padding(start = 8.dp),
                 fontWeight = FontWeight.SemiBold)
         }
@@ -526,11 +544,11 @@ fun EventCreationForm(
                     locationlong = locationLong.value,
                     hostgram = hostInstagram.value,
                     videourl = videoUrl.value, // Keep typed URL if no upload
-                    isfreeparking = if (amenities.value["Free Parking"] == true) "1" else "0",
-                    iswifi = if (amenities.value["WiFi"] == true) "1" else "0",
-                    isalcoholprov = if (amenities.value["Alcohol Provided"] == true) "1" else "0",
-                    ispetfriendly = if (amenities.value["Pet Friendly"] == true) "1" else "0",
-                    issmokingallow = if (amenities.value["Smoking Allowed"] == true) "1" else "0",
+                    isfreeparking = if (isFreeParking.value) "1" else "0",
+                    iswifi = if (isWifi.value) "1" else "0",
+                    isalcoholprov = if (isAlcoholProvided.value) "1" else "0",
+                    ispetfriendly = if (isPetFriendly.value) "1" else "0",
+                    issmokingallow = if (isSmokingAllowed.value) "1" else "0",
                     hostid = userId?.toString() ?: "0"
                 )
 
@@ -563,7 +581,7 @@ fun EventCreationForm(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = "To submit an event, you must agree to our Terms & Conditions and Privacy Policy.",
+            text = stringResource(R.string.to_submit_an_event),
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
             color = MaterialTheme.colorScheme.secondaryContainer
         )
@@ -587,7 +605,7 @@ fun EventCreationForm(
                     disabledContentColor = Color.White
                 ),
             ) {
-                Text("Terms & Cond's")
+                Text(stringResource(R.string.terms_cond_s))
             }
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -603,13 +621,13 @@ fun EventCreationForm(
                     disabledContentColor = Color.White
                 ),
             ) {
-                Text("Privacy Policy")
+                Text(stringResource(R.string.privacy))
             }
         }
 
 
         Text(
-            text = "Please note that all events are subject to approval by our VIBE moderators.  Your event will be published within 24 hours.  Watch for an email from VIBE with your event link, or check your profile for updates.",
+            text = stringResource(R.string.please_note_that),
             modifier = Modifier.padding(start = 24.dp, end = 24.dp),
             color = MaterialTheme.colorScheme.secondaryContainer
         )
@@ -745,7 +763,7 @@ fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = if (date.value.isNotEmpty()) date.value else "Select Date",
+                        text = if (date.value.isNotEmpty()) date.value else stringResource(R.string.select_date),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -773,7 +791,7 @@ fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = if (time.value.isNotEmpty()) time.value else "Select Time",
+                        text = if (time.value.isNotEmpty()) time.value else stringResource(R.string.select_time),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -1171,7 +1189,7 @@ fun MediaSelectionRow(selectedImages: MutableList<Uri>, selectedVideo: MutableSt
                 ) {
                     Icon(
                         imageVector = Icons.Default.Image,
-                        contentDescription = "Select Images",
+                        contentDescription = stringResource(R.string.select_images),
                         tint = Color(0xFFFE1943),
                         modifier = Modifier.size(24.dp)
                     )
@@ -1204,7 +1222,7 @@ fun MediaSelectionRow(selectedImages: MutableList<Uri>, selectedVideo: MutableSt
                 ) {
                     Icon(
                         imageVector = Icons.Default.VideoLibrary,
-                        contentDescription = "Select Video",
+                        contentDescription = stringResource(R.string.select_video),
                         tint = Color(0xFFFE1943),
                         modifier = Modifier.size(24.dp)
                     )

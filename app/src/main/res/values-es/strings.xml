@@ -43,7 +43,7 @@
     <string name="dark">Oscuro</string>
 
     <!-- Various Translations -->
-    <string name="your_official_party_connection">Tu conexión oficial de fiesta</string>
+    <string name="your_official_party_connection">Tu conexión oficial de fiestas</string>
     <string name="contact_support">Contáctenos</string>
     <string name="host_your_event_on_vibe">Organiza tu evento en VIBE</string>
     <string name="vibe_is_a_completely_free">VIBE es una plataforma completamente gratuita y no se permite el cobro de entradas. No se permitirán eventos ni empresas comerciales.</string>
@@ -84,5 +84,17 @@
     <string name="select_images">Imágenes</string>
     <string name="images_selected">Imágenes: %1$d/4</string>
     <string name="select_video">Video</string>
+    <string name="free_parking">Parqueadero Gratuito</string>
+    <string name="wifi">WiFi</string>
+    <string name="alcohol_provided">Alcohol Proporcionado</string>
+    <string name="pet_friendly">Se Aceptan Mascotas</string>
+    <string name="smoking_allowed">Se Permite Fumar</string>
+    <string name="i_agree_to_the_terms_conditions">Acepto los Términos y Condiciones</string>
+    <string name="to_submit_an_event">Para publicar un evento, debes aceptar nuestros Términos y condiciones y Política de privacidad.</string>
+    <string name="terms_cond_s">Términos</string>
+    <string name="privacy">Privacidad</string>
+    <string name="please_note_that">Tenga en cuenta que todos los eventos están sujetos a la aprobación de nuestros moderadores de VIBE. Su evento se publicará en un plazo de 24 horas. Esté atento a un correo electrónico de VIBE con el enlace de su evento o consulte su perfil para ver las actualizaciones.</string>
+    <string name="restrictions">Restricciones</string>
+
 
 </resources>
