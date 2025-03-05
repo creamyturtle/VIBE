@@ -165,15 +165,21 @@ fun EventCreationForm(
 
     // Map UI-friendly labels to database values
     val partyTypeMap = mapOf(
-        "House Party" to "House",
-        "Pool Party" to "Pool",
-        "Finca Party" to "Finca",
-        "Activity" to "Activity"
+        stringResource(R.string.house_party) to "House",
+        stringResource(R.string.pool_party) to "Pool",
+        stringResource(R.string.finca_party) to "Finca",
+        stringResource(R.string.activity) to "Activity"
     )
 
-    val selectedPartyType = remember { mutableStateOf("House Party") } // Default UI selection
+    val selectedPartyType = remember {
+        mutableStateOf("")
+    }
 
+    val defaultPartyType = stringResource(R.string.house_party) // ✅ Correct way to get the string
 
+    LaunchedEffect(Unit) {
+        selectedPartyType.value = defaultPartyType // ✅ Set default value after composition
+    }
 
     val selectedImages = remember { mutableStateListOf<Uri>() }
     val selectedVideo = remember { mutableStateOf<Uri?>(null) }
@@ -334,7 +340,7 @@ fun EventCreationForm(
         Spacer(Modifier.height(24.dp))
 
         // Attractions Section
-        SectionTitle("Attractions")
+        SectionTitle(stringResource(R.string.attractions))
 
         Text(
             text = stringResource(R.string.list_three_things),
@@ -408,13 +414,17 @@ fun EventCreationForm(
 
 
 
-        StyledTextField(value = videoUrl.value, onValueChange = { videoUrl.value = it }, label = "YouTube Video URL")
+        StyledTextField(
+            value = videoUrl.value,
+            onValueChange = { videoUrl.value = it },
+            label = stringResource(R.string.youtube_video_url)
+        )
 
         Spacer(Modifier.height(24.dp))
 
         Column {
             // Amenities Section
-            SectionTitle("Amenities")
+            SectionTitle(stringResource(R.string.amenities))
 
             Spacer(Modifier.height(16.dp))
 
@@ -472,7 +482,7 @@ fun EventCreationForm(
 
         // Submit Button
         StyledButton2(
-            text = if (isUploading) "Uploading..." else "Submit Event",
+            text = if (isUploading) stringResource(R.string.uploading) else stringResource(R.string.submit_event),
             isLoading = isUploading, // ✅ Disable button during upload
             enabled = !isUploading,  // ✅ Prevent multiple clicks
             onClick = {
@@ -497,7 +507,7 @@ fun EventCreationForm(
                     return@StyledButton2 // ⛔ Stop submission if validation fails
                 }
 
-                progressMessage.value = "Starting submission..."
+                progressMessage.value = context.getString(R.string.starting_submission)
 
                 val event = Event(
                     partyname = partyName.value,
@@ -702,7 +712,7 @@ fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            text = "Event Date & Time",
+            text = stringResource(R.string.event_date_time),
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(start = 16.dp)
@@ -729,7 +739,7 @@ fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
-                        contentDescription = "Select Date",
+                        contentDescription = stringResource(R.string.select_date),
                         tint = Color(0xFFFE1943),
                         modifier = Modifier.size(24.dp)
                     )
@@ -757,7 +767,7 @@ fun DateTimeSelector(date: MutableState<String>, time: MutableState<String>) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.AccessTime,
-                        contentDescription = "Select Time",
+                        contentDescription = stringResource(R.string.select_time),
                         tint = Color(0xFFFE1943),
                         modifier = Modifier.size(24.dp)
                     )
@@ -840,12 +850,12 @@ fun MapWithSearch(locationLong: MutableState<String>) {
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        SectionTitle("Precise Location")
+        SectionTitle(stringResource(R.string.precise_location))
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Select the exact location of your event by clicking on the map or entering the complete address below.\n\nExact location will only be shown to approved guests.",
+            text = stringResource(R.string.select_the_exact_location),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.padding(horizontal = 24.dp)
@@ -907,7 +917,7 @@ fun MapWithSearch(locationLong: MutableState<String>) {
                         }
                     }
                 },
-                label = { Text("Complete Address") },
+                label = { Text(stringResource(R.string.complete_address)) },
                 shape = RoundedCornerShape(8.dp),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
