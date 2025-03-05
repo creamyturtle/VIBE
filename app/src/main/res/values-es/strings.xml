@@ -81,5 +81,8 @@
     <string name="submit_event">Publicar Evento</string>
     <string name="starting_submission">Iniciando presentación…</string>
     <string name="or">o</string>
+    <string name="select_images">Imágenes</string>
+    <string name="images_selected">Imágenes: %1$d/4</string>
+    <string name="select_video">Video</string>
 
 </resources>

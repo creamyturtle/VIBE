@@ -1177,7 +1177,7 @@ fun MediaSelectionRow(selectedImages: MutableList<Uri>, selectedVideo: MutableSt
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = if (selectedImages.isEmpty()) "Select Images" else "Images: ${selectedImages.size}/4",
+                        text = if (selectedImages.isEmpty()) stringResource(R.string.select_images) else stringResource(R.string.images_selected, selectedImages.size),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -1210,7 +1210,7 @@ fun MediaSelectionRow(selectedImages: MutableList<Uri>, selectedVideo: MutableSt
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = if (selectedVideo.value == null) "Select Video" else "Video: 1/1",
+                        text = if (selectedVideo.value == null) stringResource(R.string.select_video) else "Video: 1/1",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
