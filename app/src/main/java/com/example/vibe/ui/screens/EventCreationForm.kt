@@ -157,17 +157,6 @@ fun EventCreationForm(
 
     val userId by userViewModel.userId.observeAsState()
 
-    val amenities = remember {
-        mutableStateOf(
-            mapOf(
-                "Free Parking" to false,
-                "WiFi" to false,
-                "Alcohol Provided" to false,
-                "Pet Friendly" to false,
-                "Smoking Allowed" to false
-            )
-        )
-    }
 
     // Map UI-friendly labels to database values
     val partyTypeMap = mapOf(
