@@ -16,6 +16,7 @@
 
 package com.example.vibe.ui.viewmodel
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -31,6 +33,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.vibe.VibeApplication
 import com.example.vibe.data.EventAttending
 import com.example.vibe.data.EventsRepository
+import com.example.vibe.data.UserPreferences
 import com.example.vibe.model.Event
 import com.example.vibe.utils.uriToMultipartBody
 import kotlinx.coroutines.TimeoutCancellationException
@@ -56,7 +59,12 @@ sealed interface EventsUiState {
 /**
  * ViewModel containing the app data and method to retrieve the data
  */
-class EventsViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
+class EventsViewModel(
+    application: Application,
+    private val eventsRepository: EventsRepository,
+    private val userPreferences: UserPreferences
+) : AndroidViewModel(application) {
+
 
     val listState = LazyListState()
 
@@ -68,14 +76,16 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
     var selectedEvent: Event? by mutableStateOf(null)
         private set
 
+
+    var lastSearchQuery: String by mutableStateOf("") // Stores the last searched term
+
+    private var hasLoadedLastLocation = false
+
+
+
     init {
-        if (eventsUiState !is EventsUiState.Success) {
-            getEvents() // ✅ Ensure events load on ViewModel creation
-        }
+        loadLastLocationOrDefault() // ✅ Try loading last location first
     }
-
-
-
 
 
 
@@ -134,6 +144,26 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
                 EventsUiState.Error
             } catch (e: HttpException) {
                 EventsUiState.Error
+            }
+
+            lastSearchQuery = location
+            userPreferences.saveLastLocation(getApplication(), location) // ✅ Pass context safely
+        }
+    }
+
+
+    private fun loadLastLocationOrDefault() {
+        if (hasLoadedLastLocation) return // ✅ Prevents multiple calls
+
+        hasLoadedLastLocation = true // ✅ Marks as loaded
+        viewModelScope.launch {
+            userPreferences.getLastLocationFlow(getApplication()).collect { savedLocation ->
+                if (savedLocation.isNotEmpty()) {
+                    lastSearchQuery = savedLocation
+                    getByLocation(savedLocation) // ✅ Load from last searched location
+                } else {
+                    getEvents() // ✅ Default to fetching all events
+                }
             }
         }
     }
@@ -203,19 +233,28 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
         selectedEvent = events?.find { it.id == eventId }
     }
 
+
+
     /**
      * Factory for [EventsViewModel] that takes [EventsRepository] as a dependency
      */
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
-                        as VibeApplication)
-                val eventsRepository = application.container.eventsRepository
-                EventsViewModel(eventsRepository = eventsRepository)
+                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+                val eventsRepository = (application as VibeApplication).container.eventsRepository
+                val userPreferences = UserPreferences
+
+                EventsViewModel(
+                    application = application, // ✅ Pass application, not context
+                    eventsRepository = eventsRepository,
+                    userPreferences = userPreferences
+                )
             }
         }
     }
+
+
 
 
     fun submitEventWithMedia(

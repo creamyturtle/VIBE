@@ -23,9 +23,9 @@ class ApproveReservationsViewModel(private val apiService: RSVPApiService) : Vie
     var successMessage by mutableStateOf<String?>(null)
         private set
 
-    //init {
-    //    fetchPendingRSVPs()
-    //}
+    init {
+        fetchPendingRSVPs()
+    }
 
     fun fetchPendingRSVPs() {
         viewModelScope.launch {

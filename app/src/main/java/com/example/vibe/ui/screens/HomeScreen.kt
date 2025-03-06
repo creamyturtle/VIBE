@@ -217,7 +217,7 @@ private fun EventsListScreen(
     eventsViewModel: EventsViewModel
 ) {
 
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by remember { mutableStateOf(eventsViewModel.lastSearchQuery) }
 
 
     LazyColumn(
@@ -338,40 +338,18 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                 }
 
 
-                /*
-                // Bookmark button
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(16.dp, 16.dp, 16.dp, 16.dp)
-                        //.background(
-                        //    color = Color.Black.copy(alpha = 0.3f), // ✅ Semi-transparent black
-                        //    shape = CircleShape // ✅ Make it a perfect circle
-                        //)
-                        .size(36.dp) // ✅ Adjust size for a proper circular look
-                        .clip(CircleShape) // ✅ Ensure clipping to the circle
-                        .clickable { /* Handle click if needed */ }
-                        .padding(6.dp) // ✅ Padding inside the bubble
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.BookmarkBorder,
-                        contentDescription = "Bookmark",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-                */
+
 
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(16.dp)
+                        .padding(top = 14.dp, end = 12.dp)
                         .size(36.dp) // ✅ Adjust container size
                         .clip(CircleShape) // ✅ Ensures it's clipped properly
                         .clickable { /* Handle click */ },
                     contentAlignment = Alignment.Center // ✅ Centers the icon
                 ) {
-                    // ✅ Semi-transparent black filled heart (Back layer)
+                    // ✅ Semi-transparent bookmark icon
                     Icon(
                         imageVector = Icons.Filled.Bookmark, // ✅ Filled heart icon for the background
                         contentDescription = null, // No need for duplicate content description

@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.vibe.data.AppContainer
 import com.example.vibe.network.SignupApi
 import com.example.vibe.ui.screens.AboutUsScreen
 import com.example.vibe.ui.screens.ApproveReservationsScreen
@@ -58,13 +60,9 @@ fun VibeNavHost(
     eventsViewModel: EventsViewModel,
     signupApi: SignupApi,
     authViewModel: AuthViewModel,
-    rsvpViewModel: RSVPViewModel,
     userViewModel: UserViewModel,
     context: Context,
-    approveReservationsViewModel: ApproveReservationsViewModel,
-    qrViewModel: QRViewModel,
-    checkInViewModel: CheckInViewModel,
-    contactViewModel: ContactViewModel,
+    appContainer: AppContainer,
     startDestination: String
 ) {
 
@@ -82,17 +80,22 @@ fun VibeNavHost(
                 val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
 
-                // ✅ 2. Fetch events on filter change + reset scroll only when switching filters
-                LaunchedEffect(filterType) {
-                    Log.d("UI", "📢 Filter changed: Fetching new events and resetting scroll")
+                // ✅ Prevent duplicate API calls if a last search exists
+                LaunchedEffect(filterType, eventsViewModel.lastSearchQuery) {
+                    Log.d("UI", "📢 Filter changed: Fetching events")
 
-                    if (filterType == "all") {
-                        eventsViewModel.getEvents()
+                    if (eventsViewModel.lastSearchQuery.isNotEmpty()) {
+                        Log.d("UI", "🔍 Loading last searched location: ${eventsViewModel.lastSearchQuery}")
+                        eventsViewModel.getByLocation(eventsViewModel.lastSearchQuery)
                     } else {
-                        eventsViewModel.getEventsByType(filterType)
+                        if (filterType == "all") {
+                            eventsViewModel.getEvents()
+                        } else {
+                            eventsViewModel.getEventsByType(filterType)
+                        }
                     }
 
-                    // ✅ Reset scroll position to the top when switching filters
+                    // ✅ Reset scroll position only if a filter change occurs
                     listState.animateScrollToItem(0)
                 }
 
@@ -160,6 +163,10 @@ fun VibeNavHost(
                 route = "reservation_screen/{eventId}",
                 arguments = listOf(navArgument("eventId") { type = NavType.StringType })
             ) { backStackEntry ->
+
+
+                val rsvpViewModel = remember { RSVPViewModel(appContainer.rsvpApi, appContainer.sessionManager) }
+
                 val eventId = backStackEntry.arguments?.getString("eventId") ?: ""
 
                 val event = eventsViewModel.selectedEvent // ✅ Retrieve the event from ViewModel
@@ -341,6 +348,9 @@ fun VibeNavHost(
             composable(route = "approve_reservations") {
 
 
+                val approveReservationsViewModel = remember { ApproveReservationsViewModel(appContainer.rsvpApiService) }
+
+
                 LaunchedEffect(Unit) {
 
                     approveReservationsViewModel.fetchPendingRSVPs()
@@ -359,6 +369,9 @@ fun VibeNavHost(
 
             composable(route = "check_in") {
 
+                val qrViewModel = remember { QRViewModel(appContainer) }
+                val checkInViewModel = remember { CheckInViewModel(appContainer.rsvpApiService) }
+
 
                 CheckInScreen(
                     qrViewModel = qrViewModel,
@@ -375,6 +388,8 @@ fun VibeNavHost(
 
 
             composable(route = "contact") {
+
+                val contactViewModel = remember { ContactViewModel(appContainer.contactApi)}
 
                 ContactScreen(
                     navController = navController,

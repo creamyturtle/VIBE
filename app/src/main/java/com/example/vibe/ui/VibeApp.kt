@@ -56,10 +56,8 @@ import java.util.Locale
 @Composable
 fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDestination: String) {
 
-    //val listState = rememberLazyListState()
 
     val navController = rememberNavController()
-
 
 
     val context = LocalContext.current
@@ -71,9 +69,7 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
     val authRepository = remember { AuthRepository(appContainer.authApi, appContainer.sessionManager) } // ✅ Inject properly
     val authViewModel = remember { AuthViewModel(appContainer.sessionManager, authRepository) } // ✅ Pass AuthRepository
 
-    val rsvpViewModel = remember { RSVPViewModel(appContainer.rsvpApi, appContainer.sessionManager) }
 
-    //val userViewModel = remember { UserViewModel(appContainer.userApi, appContainer.sessionManager, context) }
 
     val userViewModel: UserViewModel = viewModel(
         factory = UserViewModelFactory(appContainer.userApi, appContainer.sessionManager, context)
@@ -90,17 +86,6 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
     val isDrawerOpen = remember { mutableStateOf(false) }
 
 
-    val approveReservationsViewModel = remember { ApproveReservationsViewModel(appContainer.rsvpApiService) }
-
-
-
-    val qrViewModel = remember { QRViewModel(appContainer) }
-    val checkInViewModel = remember { CheckInViewModel(appContainer.rsvpApiService) }
-
-
-
-
-
     val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(appContainer.sessionManager))
 
     val savedLanguage = appContainer.sessionManager.getLanguage().uppercase(Locale.ROOT)
@@ -115,16 +100,11 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
 
 
 
-
-    val contactViewModel = remember { ContactViewModel(appContainer.contactApi)}
-
-
     LaunchedEffect(Unit) {
         activity?.let {
             appContainer.sessionManager.applySavedLanguage(it, navController) // ✅ Now has access to NavController
         }
     }
-
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -162,13 +142,9 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
                 eventsViewModel = eventsViewModel,
                 signupApi = appContainer.signupApi,
                 authViewModel = authViewModel,
-                rsvpViewModel = rsvpViewModel,
                 userViewModel = userViewModel,
                 context = context,
-                approveReservationsViewModel = approveReservationsViewModel,
-                qrViewModel = qrViewModel,
-                checkInViewModel = checkInViewModel,
-                contactViewModel = contactViewModel,
+                appContainer = appContainer,
                 startDestination = startDestination
             )
 
@@ -176,7 +152,6 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
         }
         RightSideDrawer(isDrawerOpen, navController, isLoggedIn, authViewModel, context, settingsViewModel, isDarkMode, selectedLanguage)
     }
-
 
 
 }

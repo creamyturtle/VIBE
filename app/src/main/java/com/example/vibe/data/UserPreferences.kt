@@ -25,6 +25,8 @@ object UserPreferences {
 
     private val USER_DARK_MODE_KEY = booleanPreferencesKey("user_dark_mode")
 
+    private val LAST_LOCATION_KEY = stringPreferencesKey("last_searched_location")
+
 
 
     /** ✅ Save User Data */
@@ -84,6 +86,21 @@ object UserPreferences {
     fun getDarkModeFlow(context: Context): Flow<Boolean?> {
         return context.dataStore.data.map { preferences ->
             preferences[USER_DARK_MODE_KEY] // Can be null (follow system theme)
+        }
+    }
+
+
+    // ✅ Save last searched location
+    suspend fun saveLastLocation(context: Context, location: String) {
+        context.dataStore.edit { preferences ->
+            preferences[LAST_LOCATION_KEY] = location
+        }
+    }
+
+    // ✅ Retrieve last searched location (default = empty string)
+    fun getLastLocationFlow(context: Context): Flow<String> {
+        return context.dataStore.data.map { preferences ->
+            preferences[LAST_LOCATION_KEY] ?: "" // Default to empty string
         }
     }
 
