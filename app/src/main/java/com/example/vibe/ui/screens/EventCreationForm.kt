@@ -812,10 +812,12 @@ fun showTimePicker(context: Context, time: MutableState<String>) {
     val minute = calendar.get(Calendar.MINUTE)
 
     TimePickerDialog(context, { _, selectedHour, selectedMinute ->
-        val formattedTime = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute) // ✅ Fix applied
-        time.value = formattedTime
-    }, hour, minute, true).show()
+        // Store in "HH:mm" format (24-hour)
+        val storedTime = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute)
+        time.value = storedTime // ✅ This ensures the OutlinedCard shows "HH:mm"
+    }, hour, minute, false).show() // ⬅️ 12-hour format with AM/PM in the picker
 }
+
 
 
 @Composable
