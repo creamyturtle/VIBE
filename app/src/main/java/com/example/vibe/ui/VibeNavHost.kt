@@ -102,7 +102,8 @@ fun VibeNavHost(
                     contentPadding = innerPadding,
                     retryAction = eventsViewModel::getEvents,
                     onEventClick = { eventId -> navController.navigate("event_details/$eventId") },
-                    navController = navController
+                    navController = navController,
+                    eventsViewModel = eventsViewModel
                 )
             }
 

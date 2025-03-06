@@ -71,9 +71,11 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.ui.components.SearchBar
 import com.example.vibe.ui.components.ShimmerEventCard
 import com.example.vibe.ui.components.shimmerEffect
 import com.example.vibe.ui.viewmodel.EventsUiState
+import com.example.vibe.ui.viewmodel.EventsViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -85,13 +87,18 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onEventClick: (String) -> Unit,
-    navController: NavController
+    navController: NavController,
+    eventsViewModel: EventsViewModel
 ) {
+
+
+
     when (eventsUiState) {
 
         is EventsUiState.Loading -> LoadingScreen(modifier.fillMaxSize())
 
         is EventsUiState.Success ->
+
             EventsListScreen(
                 listState = listState,
                 events = eventsUiState.events,
@@ -102,7 +109,8 @@ fun HomeScreen(
                         end = dimensionResource(R.dimen.padding_medium)
                     ),
                 contentPadding = contentPadding,
-                onEventClick = onEventClick
+                onEventClick = onEventClick,
+                eventsViewModel = eventsViewModel
             )
 
         else -> ErrorScreen(retryAction, modifier)
@@ -205,8 +213,11 @@ private fun EventsListScreen(
     events: List<Event>,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    onEventClick: (String) -> Unit
+    onEventClick: (String) -> Unit,
+    eventsViewModel: EventsViewModel
 ) {
+
+    var searchQuery by remember { mutableStateOf("") }
 
 
     LazyColumn(
@@ -215,6 +226,16 @@ private fun EventsListScreen(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+
+
+        item {
+            // Search Box
+            SearchBar(
+                query = searchQuery,
+                onQueryChange = { searchQuery = it },
+                onSearch = { query -> eventsViewModel.getByLocation(query) }
+            )
+        }
         items(
             items = events,
             key = { event ->
@@ -429,5 +450,8 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
         }
     }
 }
+
+
+
 
 

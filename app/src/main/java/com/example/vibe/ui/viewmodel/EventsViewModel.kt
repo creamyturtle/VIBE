@@ -125,6 +125,21 @@ class EventsViewModel(private val eventsRepository: EventsRepository) : ViewMode
     }
 
 
+    fun getByLocation(location: String) {
+        viewModelScope.launch {
+            eventsUiState = EventsUiState.Loading
+            eventsUiState = try {
+                EventsUiState.Success(eventsRepository.getEventsByLocation(location))
+            } catch (e: IOException) {
+                EventsUiState.Error
+            } catch (e: HttpException) {
+                EventsUiState.Error
+            }
+        }
+    }
+
+
+
 
     fun getAttending() {
         viewModelScope.launch {

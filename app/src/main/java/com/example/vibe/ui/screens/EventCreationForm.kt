@@ -538,7 +538,9 @@ fun EventCreationForm(
                     isalcoholprov = if (isAlcoholProvided.value) "1" else "0",
                     ispetfriendly = if (isPetFriendly.value) "1" else "0",
                     issmokingallow = if (isSmokingAllowed.value) "1" else "0",
-                    hostid = userId?.toString() ?: "0"
+                    hostid = userId?.toString() ?: "0",
+                    latitude = 0.0,
+                    longitude = 0.0
                 )
 
 

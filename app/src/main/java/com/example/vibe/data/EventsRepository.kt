@@ -33,6 +33,8 @@ interface EventsRepository {
     suspend fun getAttending(): List<EventAttending>
     suspend fun cancelReservation(tableName: String): CancelResResponse
     suspend fun getEventsByID(): List<Event>
+    suspend fun getEventsByLocation(location: String): List<Event>
+
 
 }
 
@@ -84,6 +86,23 @@ class DefaultEventsRepository(
             emptyList() // Return an empty list in case of error
         }
     }
+
+
+    override suspend fun getEventsByLocation(location: String): List<Event> {
+        return try {
+            val data = eventsApiService.getByLocation(
+                table = "parties",
+                location = location,  // ✅ Pass location to API
+                apiToken = secretToken
+            )
+            Log.d("Repository", "Fetched data: $data") // Log data
+            data
+        } catch (e: Exception) {
+            Log.e("Repository", "Error fetching data: ${e.message}", e)
+            emptyList() // Return an empty list in case of error
+        }
+    }
+
 
 
     override suspend fun submitEvent(event: Event): ApiResponse {

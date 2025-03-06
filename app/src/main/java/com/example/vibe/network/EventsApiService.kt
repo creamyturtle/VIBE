@@ -52,9 +52,6 @@ interface SignupApi {
 
 
 
-
-
-
 interface EventsApiService {
 
     // Fetch all rows
@@ -95,10 +92,19 @@ interface EventsApiService {
 
 
 
-    // Fetch all rows
+    // Fetch an event by id
     @GET("api/{table}/getbyid")
     suspend fun getByID(
         @Path("table") table: String,
+        @Query("api_token") apiToken: String
+    ): List<Event>
+
+
+    // Fetch an event by id
+    @GET("api/{table}/getByLocation")
+    suspend fun getByLocation(
+        @Path("table") table: String,
+        @Query("location") location: String,
         @Query("api_token") apiToken: String
     ): List<Event>
 

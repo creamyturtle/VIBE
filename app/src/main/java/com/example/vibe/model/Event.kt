@@ -52,6 +52,8 @@ data class Event(
     val ispetfriendly: String? = "0",
     val issmokingallow: String? = "0",
     val hostid: String? = null,
+    val latitude: Double,
+    val longitude: Double,
 
 
     @SerialName("videourl")
