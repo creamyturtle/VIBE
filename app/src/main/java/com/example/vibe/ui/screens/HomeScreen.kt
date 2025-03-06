@@ -43,6 +43,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -73,6 +74,7 @@ import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.SearchBar
 import com.example.vibe.ui.components.ShimmerEventCard
+import com.example.vibe.ui.components.ShimmerSearchBar
 import com.example.vibe.ui.components.shimmerEffect
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
@@ -181,6 +183,10 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
     ) {
         Spacer(Modifier.height(164.dp))
 
+        ShimmerSearchBar()
+
+        Spacer(Modifier.height(8.dp))
+
         repeat(5) {
             ShimmerEventCard()
         }
@@ -236,23 +242,56 @@ private fun EventsListScreen(
                 onSearch = { query -> eventsViewModel.getByLocation(query, "") }
             )
         }
-        items(
-            items = events,
-            key = { event ->
-                event.id ?: "default_${event.hashCode()}" // ✅ Provide a fallback key
-            }
-        ) { event ->
-            EventCard(
-                event = event,
-                onClick = { onEventClick(event.id ?: "") }, // ✅ Ensure it's not null
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
 
+        if (events.isEmpty()) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Place, // Or use another cool icon
+                        contentDescription = "No events",
+                        modifier = Modifier.size(64.dp),
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "No events found in your area",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Gray,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Try searching for a different location.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray
+                    )
+                }
+            }
+        } else {
+            items(
+                items = events,
+                key = { event ->
+                    event.id ?: "default_${event.hashCode()}"
+                }
+            ) { event ->
+                EventCard(
+                    event = event,
+                    onClick = { onEventClick(event.id ?: "") },
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
 
         item {
             Spacer(modifier = Modifier.height(64.dp)) // Adjust height as needed
         }
+
     }
 
 }

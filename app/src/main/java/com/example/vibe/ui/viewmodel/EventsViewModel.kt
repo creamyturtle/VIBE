@@ -167,14 +167,14 @@ class EventsViewModel(
             userPreferences.getLastLocationFlow(getApplication()).collect { savedLocation ->
                 if (savedLocation.isNotEmpty()) {
                     lastSearchQuery = savedLocation
-                    val type = lastFilter // ✅ Use last selected filter type
-                    getByLocation(savedLocation, if (type == "all") "" else type) // ✅ Pass type correctly
+                    getByLocation(savedLocation, lastFilter) // ✅ Load from last searched location
                 } else {
-                    getEvents() // ✅ Default to fetching all events
+                    getEvents() // ✅ Default to fetching all events (only if no saved location)
                 }
             }
         }
     }
+
 
 
 
