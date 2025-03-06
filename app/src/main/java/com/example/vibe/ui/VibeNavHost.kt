@@ -86,7 +86,7 @@ fun VibeNavHost(
 
                     if (eventsViewModel.lastSearchQuery.isNotEmpty()) {
                         Log.d("UI", "🔍 Loading last searched location: ${eventsViewModel.lastSearchQuery}")
-                        eventsViewModel.getByLocation(eventsViewModel.lastSearchQuery)
+                        eventsViewModel.getByLocation(eventsViewModel.lastSearchQuery, if (filterType == "all") "" else filterType)
                     } else {
                         if (filterType == "all") {
                             eventsViewModel.getEvents()
@@ -95,7 +95,6 @@ fun VibeNavHost(
                         }
                     }
 
-                    // ✅ Reset scroll position only if a filter change occurs
                     listState.animateScrollToItem(0)
                 }
 

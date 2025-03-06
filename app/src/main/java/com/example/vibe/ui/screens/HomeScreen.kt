@@ -233,7 +233,7 @@ private fun EventsListScreen(
             SearchBar(
                 query = searchQuery,
                 onQueryChange = { searchQuery = it },
-                onSearch = { query -> eventsViewModel.getByLocation(query) }
+                onSearch = { query -> eventsViewModel.getByLocation(query, "") }
             )
         }
         items(

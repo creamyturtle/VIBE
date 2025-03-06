@@ -33,7 +33,7 @@ interface EventsRepository {
     suspend fun getAttending(): List<EventAttending>
     suspend fun cancelReservation(tableName: String): CancelResResponse
     suspend fun getEventsByID(): List<Event>
-    suspend fun getEventsByLocation(location: String): List<Event>
+    suspend fun getEventsByLocation(location: String, type: String): List<Event>
 
 
 }
@@ -88,11 +88,13 @@ class DefaultEventsRepository(
     }
 
 
-    override suspend fun getEventsByLocation(location: String): List<Event> {
+    override suspend fun getEventsByLocation(location: String, type: String): List<Event> {
         return try {
+            val eventType = if (type.isBlank()) null else type // ✅ Convert empty string to null
             val data = eventsApiService.getByLocation(
                 table = "parties",
-                location = location,  // ✅ Pass location to API
+                location = location,
+                type = eventType, // ✅ Now properly passes null when "all"
                 apiToken = secretToken
             )
             Log.d("Repository", "Fetched data: $data") // Log data
@@ -102,6 +104,7 @@ class DefaultEventsRepository(
             emptyList() // Return an empty list in case of error
         }
     }
+
 
 
 
@@ -138,8 +141,6 @@ class DefaultEventsRepository(
             CancelResResponse(success = false, message = e.message ?: "Unknown error")
         }
     }
-
-
 
 
 

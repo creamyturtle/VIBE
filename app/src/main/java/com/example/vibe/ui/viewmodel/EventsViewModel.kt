@@ -135,11 +135,14 @@ class EventsViewModel(
     }
 
 
-    fun getByLocation(location: String) {
+    fun getByLocation(location: String, type: String) {
         viewModelScope.launch {
             eventsUiState = EventsUiState.Loading
             eventsUiState = try {
-                EventsUiState.Success(eventsRepository.getEventsByLocation(location))
+                val validTypes = listOf("House", "Pool", "Finca", "Activity") // ✅ Only allow these
+                val eventType = if (type in validTypes) type else "" // ✅ If "all", pass empty string
+
+                EventsUiState.Success(eventsRepository.getEventsByLocation(location, eventType))
             } catch (e: IOException) {
                 EventsUiState.Error
             } catch (e: HttpException) {
@@ -147,9 +150,13 @@ class EventsViewModel(
             }
 
             lastSearchQuery = location
-            userPreferences.saveLastLocation(getApplication(), location) // ✅ Pass context safely
+            lastFilter = type // ✅ Store last filter selection
+            userPreferences.saveLastLocation(getApplication(), location)
         }
     }
+
+
+
 
 
     private fun loadLastLocationOrDefault() {
@@ -160,13 +167,15 @@ class EventsViewModel(
             userPreferences.getLastLocationFlow(getApplication()).collect { savedLocation ->
                 if (savedLocation.isNotEmpty()) {
                     lastSearchQuery = savedLocation
-                    getByLocation(savedLocation) // ✅ Load from last searched location
+                    val type = lastFilter // ✅ Use last selected filter type
+                    getByLocation(savedLocation, if (type == "all") "" else type) // ✅ Pass type correctly
                 } else {
                     getEvents() // ✅ Default to fetching all events
                 }
             }
         }
     }
+
 
 
 

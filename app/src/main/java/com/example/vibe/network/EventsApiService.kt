@@ -105,8 +105,10 @@ interface EventsApiService {
     suspend fun getByLocation(
         @Path("table") table: String,
         @Query("location") location: String,
+        @Query("type") type: String? = null, // ✅ New optional type filter
         @Query("api_token") apiToken: String
     ): List<Event>
+
 
 
 
