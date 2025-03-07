@@ -1,15 +1,12 @@
 package com.example.vibe.ui.screens
 
 import android.content.Context
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.widget.VideoView
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,10 +46,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,20 +64,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.vibe.R
+import com.example.vibe.data.UserPreferences
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.HostInfoCard
-import com.example.vibe.utils.geocodeAddress
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -92,11 +86,15 @@ fun EventDetailsScreen(
     context: Context
 ) {
 
-    val isDarkTheme = isSystemInDarkTheme() // ✅ Detect dark mode
-    val mapProperties by remember {
+    val cameraPositionState = remember { mutableStateOf<CameraPositionState?>(null) }
+
+
+    val isDarkMode by UserPreferences.getDarkModeFlow(context).collectAsState(initial = false) // ✅ Observe saved theme
+
+    val mapProperties by remember(isDarkMode) {
         mutableStateOf(
             MapProperties(
-                mapStyleOptions = if (isDarkTheme) {
+                mapStyleOptions = if (isDarkMode == true) { // ✅ Explicitly check for `true`
                     MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_night)
                 } else {
                     null // Default Google Maps style
@@ -117,29 +115,14 @@ fun EventDetailsScreen(
         }
     } else {
 
+        LaunchedEffect(event) {
+            val newPosition = CameraPosition.Builder()
+                .target(LatLng(event.latitude, event.longitude))
+                .zoom(13f) // Set zoom level (adjust as needed)
+                .build()
 
-        var coordinates by remember { mutableStateOf<LatLng?>(null) }
-        val scope = rememberCoroutineScope()
-
-        // Fetch coordinates for the address
-        LaunchedEffect(event.location) {
-            scope.launch {
-                coordinates = geocodeAddress(context, event.location)
-            }
+            cameraPositionState.value = CameraPositionState(position = newPosition)
         }
-
-        val cameraPositionState = rememberCameraPositionState()
-
-        LaunchedEffect(coordinates) {
-            coordinates?.let {
-                cameraPositionState.position = CameraPosition.Builder()
-                    .target(it)
-                    .zoom(13f)
-                    .build()
-            }
-        }
-
-
 
 
         Column(
@@ -615,22 +598,25 @@ fun EventDetailsScreen(
                     .clip(RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                if (coordinates != null) {
-                    GoogleMap(properties = mapProperties, cameraPositionState = cameraPositionState) {
-                        coordinates?.let { position ->
-                            Circle(
-                                center = position,
-                                radius = 1000.0, // Radius in meters (adjust as needed)
-                                strokeColor = Color(0xFF1E88E5),
-                                fillColor = Color(0x331E88E5),
-                                strokeWidth = 4f // Outline width
-                            )
-                        }
+                if (event.latitude != 0.0 && event.longitude != 0.0) { // Ensure valid coordinates
+
+                    val eventPosition = LatLng(event.latitude, event.longitude)
+
+
+                    GoogleMap(properties = mapProperties, cameraPositionState = cameraPositionState.value ?: rememberCameraPositionState()) {
+                        Circle(
+                            center = eventPosition,
+                            radius = 1000.0, // Radius in meters (adjust as needed)
+                            strokeColor = Color(0xFF1E88E5),
+                            fillColor = Color(0x331E88E5),
+                            strokeWidth = 4f // Outline width
+                        )
                     }
                 } else {
-                    Text(text = "Loading map...")
+                    Text(text = "Location not available")
                 }
             }
+
 
             Text(
                 text = "(Exact Location will be revealed upon reservation acceptance)",

@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.vibe.R
+import com.example.vibe.data.UserPreferences
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.EventDetailsCard
 import com.example.vibe.ui.viewmodel.EventsUiState
@@ -63,14 +65,15 @@ fun MapScreen(
     val context = LocalContext.current
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
 
-    val isDarkTheme = isSystemInDarkTheme()
-    val mapProperties by remember {
+    val isDarkMode by UserPreferences.getDarkModeFlow(context).collectAsState(initial = false) // ✅ Observe saved theme
+
+    val mapProperties by remember(isDarkMode) {
         mutableStateOf(
             MapProperties(
-                mapStyleOptions = if (isDarkTheme) {
+                mapStyleOptions = if (isDarkMode == true) { // ✅ Explicitly check for `true`
                     MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_night)
                 } else {
-                    null
+                    null // Default Google Maps style
                 }
             )
         )

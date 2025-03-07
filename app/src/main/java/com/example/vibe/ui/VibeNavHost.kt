@@ -49,7 +49,6 @@ import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import com.example.vibe.utils.SessionManager
-import com.example.vibe.utils.geocodeAddress
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
