@@ -65,13 +65,12 @@ import com.example.vibe.utils.SessionManager
 @Composable
 fun UserProfileScreen(
     userViewModel: UserViewModel,
-    sessionManager: SessionManager,
     navController: NavController,
-    onLogout: () -> Unit // Callback for handling logout
+    onBack: () -> Unit
 ) {
 
     val user by userViewModel.userData.observeAsState() // Observe user data
-    val context = LocalContext.current
+
 
     LaunchedEffect(Unit) {
         userViewModel.fetchUserData() // Fetch user data on screen launch
@@ -89,7 +88,7 @@ fun UserProfileScreen(
                 CircularProgressIndicator() // Loading indicator
             }
             else -> {
-                UserProfileContent(user!!, sessionManager, context, navController, onLogout)
+                UserProfileContent(user!!, navController)
             }
         }
     }
@@ -100,10 +99,7 @@ fun UserProfileScreen(
 @Composable
 fun UserProfileContent(
     user: MoreUserData,
-    sessionManager: SessionManager,
-    context: Context,
-    navController: NavController,
-    onLogout: () -> Unit
+    navController: NavController
 ) {
     val baseUrl = "https://www.vibesocial.org/" // ✅ Base URL
     val defaultImageUrl = "https://www.vibesocial.org/images/team5.jpg" // ✅ Fallback image

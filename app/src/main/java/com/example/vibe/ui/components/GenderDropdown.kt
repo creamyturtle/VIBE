@@ -1,5 +1,7 @@
 package com.example.vibe.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,8 +23,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,17 +46,17 @@ fun GenderDropdown(
         OutlinedTextField(
             value = selectedOption,
             onValueChange = {},
-            readOnly = true, // Prevents manual input
-            label = { Text(label) },
+            readOnly = true,
+            label = { Text(label, color = Color.Black) },
             singleLine = true,
-            shape = RoundedCornerShape(8.dp), // ✅ Matches StyledTextField
+            shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White, // White background when focused
-                unfocusedContainerColor = Color.White, // White background when not focused
-                disabledContainerColor = Color.LightGray, // Background when disabled
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary, // Border color when focused
-                unfocusedIndicatorColor = Color.LightGray, // Border color when not focused
-                cursorColor = Color.Black // Cursor color
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.LightGray,
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = Color.LightGray,
+                cursorColor = Color.Black
             ),
             trailingIcon = {
                 Icon(
@@ -63,22 +67,30 @@ fun GenderDropdown(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true) // Required for dropdown alignment
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true) // ✅ Properly aligns dropdown to the text field
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .background(Color.White)
+                .exposedDropdownSize()
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = {
+                        Text(option, color = Color.Black, fontSize = 16.sp)
+                    },
                     onClick = {
                         onOptionSelected(option)
                         expanded = false
-                    }
+                    },
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), // ✅ Less vertical space
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
     }
 }
+

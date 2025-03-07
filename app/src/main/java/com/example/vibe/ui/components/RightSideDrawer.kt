@@ -6,6 +6,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,6 +47,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,6 +58,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,10 +68,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.vibe.R
+import com.example.vibe.data.MoreUserData
+import com.example.vibe.ui.screens.UserProfileContent
 import com.example.vibe.ui.viewmodel.AuthViewModel
-import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.SettingsViewModel
+import com.example.vibe.ui.viewmodel.UserViewModel
 import com.example.vibe.utils.setAppLocale
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -83,7 +90,8 @@ fun RightSideDrawer(
     context: Context,
     settingsViewModel: SettingsViewModel,
     isDarkMode: Boolean,
-    selectedLanguage: String
+    selectedLanguage: String,
+    userViewModel: UserViewModel
 ) {
     val density = LocalDensity.current
     val drawerWidth = with(density) { 280.dp.toPx() } // Drawer width in pixels
@@ -95,6 +103,12 @@ fun RightSideDrawer(
 
 
     //val selectedLanguage by languageViewModel.language
+
+    val user by userViewModel.userData.observeAsState()
+
+    LaunchedEffect(Unit) {
+        userViewModel.fetchUserData() // Fetch user data on screen launch
+    }
 
 
 
@@ -175,7 +189,18 @@ fun RightSideDrawer(
                 Spacer(Modifier.height(16.dp))
 
                 if (isLoggedIn) {
-                    UserProfileSection()
+
+                    when {
+                        user == null -> {
+                            CircularProgressIndicator() // Loading indicator
+                        }
+                        else -> {
+
+                            UserProfileSection(user!!)
+                        }
+                    }
+
+
 
                     // **🔹 Menu Items**
                     Spacer(Modifier.height(16.dp))
@@ -388,15 +413,26 @@ fun RightSideDrawer(
 
 
 @Composable
-fun UserProfileSection() {
+fun UserProfileSection(
+    user: MoreUserData
+) {
+
     //val username = userViewModel.username.collectAsState().value ?: "Guest"
     //val karma = userViewModel.karma.collectAsState().value ?: "0"
     //val userImage = userViewModel.profilePicture.collectAsState().value
 
-    val username =  "John Doe"
-    val pHosted =  "0"
-    val userImage = R.drawable.avatar
+    val baseUrl = "https://www.vibesocial.org/" // ✅ Base URL
+    val defaultImageUrl = "https://www.vibesocial.org/images/team5.jpg" // ✅ Fallback image
 
+    val fullImageUrl = when {
+        user.photourl.isNullOrEmpty() -> defaultImageUrl // ✅ If null or empty, use default
+        user.photourl.startsWith("http") -> user.photourl // ✅ If already a full URL, use as is
+        else -> baseUrl + user.photourl // ✅ Append base URL if relative path
+    }
+
+
+    val username =  user.name
+    val instagram =  user.instagram
 
 
     Column(
@@ -407,7 +443,7 @@ fun UserProfileSection() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-
+        Spacer(Modifier.height(8.dp))
 
         // Profile Image
         Box(
@@ -417,20 +453,13 @@ fun UserProfileSection() {
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
-            if (userImage != null) {
-                Image(
-                    painter = painterResource(id = userImage),
-                    contentDescription = "User Profile",
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = "Default Profile",
-                    tint = Color.White,
-                    modifier = Modifier.size(60.dp)
-                )
-            }
+
+
+            AsyncImage(
+                model = fullImageUrl, // ✅ Load the full image URL
+                contentDescription = "Profile Picture"
+            )
+
         }
 
         Spacer(Modifier.height(8.dp))
@@ -440,11 +469,13 @@ fun UserProfileSection() {
 
         // Parties Hosted
         Text(
-            text = "$pHosted Parties Hosted",
+            text = "@$instagram",
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.secondaryContainer
         )
     }
+
+
 }
 
 

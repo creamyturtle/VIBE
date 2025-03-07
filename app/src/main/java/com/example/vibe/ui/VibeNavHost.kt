@@ -255,16 +255,17 @@ fun VibeNavHost(
 
         composable(route = "user_profile") {
 
-            UserProfileScreen(userViewModel, SessionManager(context), navController) {
-                navController.navigate("login") {
-                    popUpTo("user_profile") { inclusive = true } // Clear back stack
-                }
-            }
+            UserProfileScreen(
+                userViewModel,
+                navController,
+                onBack = { navController.navigateUp() }
+            )
+
 
         }
 
 
-        composable(route = "calendar") { backStackEntry ->
+        composable(route = "calendar") {
 
             //val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
