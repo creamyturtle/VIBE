@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
         val startDestination = intent?.getStringExtra("NAV_DESTINATION") ?: "home_screen/all"
 
 
-        val splashScreen = installSplashScreen()
+        installSplashScreen()
 
         super.onCreate(savedInstanceState)
 

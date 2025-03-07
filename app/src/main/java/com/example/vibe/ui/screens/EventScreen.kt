@@ -28,14 +28,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Liquor
 import androidx.compose.material.icons.filled.LocalParking
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Policy
-import androidx.compose.material.icons.filled.SmokeFree
-import androidx.compose.material.icons.filled.SmokingRooms
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.CircularProgressIndicator
