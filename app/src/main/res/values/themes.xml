@@ -16,6 +16,14 @@
 -->
 
 <resources>
-
     <style name="Theme.Vibe" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Vibe.SplashScreen" parent="Theme.Vibe">
+        <item name="windowSplashScreenBackground">@color/quantum_white_text</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/vibe</item>
+        <item name="postSplashScreenTheme">@style/Theme.Vibe</item>
+    </style>
 </resources>
+
+
+
