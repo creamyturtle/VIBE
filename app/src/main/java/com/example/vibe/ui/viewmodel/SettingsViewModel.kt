@@ -4,26 +4,35 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vibe.data.UserPreferences
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
-    // ✅ Use application directly (no memory leak)
     private val userDarkModePreference = UserPreferences.getDarkModeFlow(application)
 
-    fun getDarkModeState(systemDarkTheme: Boolean): StateFlow<Boolean> {
-        return userDarkModePreference
-            .map { userPref -> userPref ?: systemDarkTheme }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, systemDarkTheme)
+    private val _darkModeState = MutableStateFlow<Boolean?>(null) // ✅ Start as null
+    val darkModeState: StateFlow<Boolean?> = _darkModeState.asStateFlow()
+
+    fun resolveDarkMode(systemDarkTheme: Boolean) {
+        viewModelScope.launch {
+            userDarkModePreference.collect { userPref ->
+                val resolvedTheme = userPref ?: systemDarkTheme // ✅ Apply system theme only if no user preference
+                if (_darkModeState.value != resolvedTheme) { // ✅ Prevent duplicate emissions
+                    _darkModeState.value = resolvedTheme
+                }
+            }
+        }
     }
 
     fun toggleDarkMode(enabled: Boolean?) {
         viewModelScope.launch {
-            UserPreferences.saveDarkMode(getApplication(), enabled) // ✅ No context leak
+            UserPreferences.saveDarkMode(getApplication(), enabled)
         }
     }
 }

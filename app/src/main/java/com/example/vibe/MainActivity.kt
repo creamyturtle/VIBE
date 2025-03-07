@@ -22,11 +22,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vibe.ui.VibeApp
@@ -37,30 +41,38 @@ import com.example.vibe.ui.viewmodel.SettingsViewModel
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-
         val startDestination = intent?.getStringExtra("NAV_DESTINATION") ?: "home_screen/all"
-
 
         super.onCreate(savedInstanceState)
         setContent {
             val settingsViewModel: SettingsViewModel = viewModel()
+            val systemDarkTheme = isSystemInDarkTheme() // ✅ Get system dark mode setting
+            val isDarkMode = settingsViewModel.darkModeState.collectAsState().value
 
-            // ✅ Detect system dark mode in a @Composable function
-            val systemDarkTheme = isSystemInDarkTheme()
+            // ✅ Pass systemDarkTheme to ViewModel ONCE
+            LaunchedEffect(systemDarkTheme) {
+                settingsViewModel.resolveDarkMode(systemDarkTheme)
+            }
 
-            // ✅ Fetch user-selected or system theme from ViewModel
-            val isDarkMode by settingsViewModel.getDarkModeState(systemDarkTheme).collectAsState()
-
-            VibeTheme(darkTheme = isDarkMode) {
-                Surface(
+            if (isDarkMode == null) {
+                // ✅ Show splash screen only while loading theme
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    contentAlignment = Alignment.Center
                 ) {
-                    VibeApp(settingsViewModel, isDarkMode, startDestination)
+                    CircularProgressIndicator()
+                }
+            } else {
+                // ✅ Set theme ONCE when DataStore is ready
+                VibeTheme(darkTheme = isDarkMode) {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        VibeApp(settingsViewModel, isDarkMode, startDestination)
+                    }
                 }
             }
         }
     }
-
-
 }
