@@ -437,19 +437,10 @@ fun EventCreationForm(
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(checked = isAlcoholProvided.value, onCheckedChange = { isAlcoholProvided.value = it })
-                Text(text = stringResource(R.string.alcohol_provided), modifier = Modifier.padding(start = 8.dp))
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = isPetFriendly.value, onCheckedChange = { isPetFriendly.value = it })
                 Text(text = stringResource(R.string.pet_friendly), modifier = Modifier.padding(start = 8.dp))
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(checked = isSmokingAllowed.value, onCheckedChange = { isSmokingAllowed.value = it })
-                Text(text = stringResource(R.string.smoking_allowed), modifier = Modifier.padding(start = 8.dp))
-            }
         }
 
         Spacer(Modifier.height(2.dp))
@@ -535,9 +526,7 @@ fun EventCreationForm(
                     videourl = videoUrl.value, // Keep typed URL if no upload
                     isfreeparking = if (isFreeParking.value) "1" else "0",
                     iswifi = if (isWifi.value) "1" else "0",
-                    isalcoholprov = if (isAlcoholProvided.value) "1" else "0",
                     ispetfriendly = if (isPetFriendly.value) "1" else "0",
-                    issmokingallow = if (isSmokingAllowed.value) "1" else "0",
                     hostid = userId?.toString() ?: "0",
                     latitude = 0.0,
                     longitude = 0.0

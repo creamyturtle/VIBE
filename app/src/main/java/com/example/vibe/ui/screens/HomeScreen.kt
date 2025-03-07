@@ -72,6 +72,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.model.getPartyTypeText
 import com.example.vibe.ui.components.SearchBar
 import com.example.vibe.ui.components.ShimmerEventCard
 import com.example.vibe.ui.components.ShimmerSearchBar
@@ -363,14 +364,14 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
                         .align(Alignment.TopStart)
                         .padding(20.dp, 20.dp, 16.dp, 16.dp)
                         .background(
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(16.dp)
                         )
                         .padding(horizontal = 12.dp, vertical = 6.dp) // Padding inside the bubble
                 ) {
                     Text(
-                        text = event.partyMod, // The bubble text
-                        color = Color.Black, // Text color
+                        text = getPartyTypeText(event.partytype), // The bubble text
+                        color = MaterialTheme.colorScheme.onSurface, // Text color
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold
                     )

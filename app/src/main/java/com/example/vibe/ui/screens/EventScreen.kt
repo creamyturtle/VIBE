@@ -57,6 +57,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -66,6 +67,7 @@ import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.data.UserPreferences
 import com.example.vibe.model.Event
+import com.example.vibe.model.getPartyTypeText
 import com.example.vibe.ui.components.HostInfoCard
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -268,7 +270,7 @@ fun EventDetailsScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = event.partyMod,
+                text = getPartyTypeText(event.partytype),
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
                 fontSize = 20.sp,
@@ -292,12 +294,12 @@ fun EventDetailsScreen(
 
 
             Text(
-                text = "Offerings",
+                text = stringResource(R.string.attractions),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 20.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(32.dp, 0.dp, 16.dp, 8.dp)
+                    .padding(32.dp, 0.dp, 16.dp, 16.dp)
             )
 
             Box(
@@ -305,7 +307,7 @@ fun EventDetailsScreen(
                     .fillMaxWidth()
                     .padding(24.dp, 0.dp, 60.dp, 0.dp)
                     .background(Color.Transparent)
-                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
                     .padding(16.dp)
             ) {
                 Column {
@@ -376,28 +378,11 @@ fun EventDetailsScreen(
             Text(
                 text = "Amenities / Rules",
                 fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(32.dp, 0.dp, 16.dp, 8.dp)
+                    .padding(32.dp, 0.dp, 16.dp, 16.dp)
             )
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Policy,
-                    contentDescription = "Policy Icon",
-                    tint = Color.Blue,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = event.properCaseRules,
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.secondaryContainer
-                )
-            }
 
 
             Row(
@@ -407,12 +392,12 @@ fun EventDetailsScreen(
                 Icon(
                     imageVector = Icons.Default.LocalParking,
                     contentDescription = "Parking Icon",
-                    tint = Color.Blue,
+                    tint = Color.Gray,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (event.isfreeparking == "0") "No Free Parking" else "Free Parking",
+                    text = if (event.isfreeparking == "0") "No Free Parking" else stringResource(R.string.free_parking),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
@@ -425,34 +410,17 @@ fun EventDetailsScreen(
                 Icon(
                     imageVector = Icons.Default.Wifi,
                     contentDescription = "Wifi Icon",
-                    tint = Color.Blue,
+                    tint = Color.Gray,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (event.iswifi == "0") "No Wifi Available" else "Free Wifi",
+                    text = if (event.iswifi == "0") "No Wifi Available" else stringResource(R.string.wifi),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Liquor,
-                    contentDescription = "Liquor Icon",
-                    tint = Color.Blue,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = if (event.isalcoholprov == "0") "Bring Your Own Alcohol" else "Alcohol Provided",
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.secondaryContainer
-                )
-            }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -461,16 +429,45 @@ fun EventDetailsScreen(
                 Icon(
                     imageVector = Icons.Default.Pets,
                     contentDescription = "Pets Icon",
-                    tint = Color.Blue,
+                    tint = Color.Gray,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (event.ispetfriendly == "0") "No Pets Allowed" else "Pets Allowed",
+                    text = if (event.ispetfriendly == "0") "No Pets Allowed" else stringResource(R.string.pet_friendly),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
             }
+
+
+
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(24.dp, 8.dp, 24.dp, 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Policy,
+                    contentDescription = "Policy Icon",
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = event.properCaseRules,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                )
+            }
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -479,14 +476,14 @@ fun EventDetailsScreen(
 
 
                 Icon(
-                    imageVector = if (event.issmokingallow == "0") Icons.Default.SmokeFree else Icons.Default.SmokingRooms,
-                    contentDescription = "Smoking Icon",
-                    tint = Color.Blue,
+                    imageVector = Icons.Default.MusicNote,
+                    contentDescription = "Music Icon",
+                    tint = Color.Gray,
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (event.issmokingallow == "0") "Smoking Not Allowed" else "Smoking Allowed",
+                    text = "Music Type: ${event.properCaseMusic}",
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
@@ -497,39 +494,6 @@ fun EventDetailsScreen(
 
 
             Spacer(modifier = Modifier.height(32.dp))
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
-                thickness = 1.dp,
-                color = Color.LightGray
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(16.dp)
-            ) {
-
-
-                Icon(
-                    imageVector = Icons.Default.MusicNote,
-                    contentDescription = "Music Icon",
-                    tint = Color.Blue,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Music Type: ${event.properCaseMusic}",
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.secondaryContainer
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             HorizontalDivider(
                 modifier = Modifier

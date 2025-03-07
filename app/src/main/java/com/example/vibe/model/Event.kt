@@ -18,6 +18,9 @@ package com.example.vibe.model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.example.vibe.R
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
@@ -48,9 +51,7 @@ data class Event(
     val musictype: String? = "No Specific Music Genre",
     val isfreeparking: String? = "0",
     val iswifi: String? = "0",
-    val isalcoholprov: String? = "0",
     val ispetfriendly: String? = "0",
-    val issmokingallow: String? = "0",
     val hostid: String? = null,
     val latitude: Double,
     val longitude: Double,
@@ -67,7 +68,7 @@ data class Event(
 
     val properCaseMusic: String
         get() {
-            val safeRules = musictype?.takeIf { it.isNotBlank() } ?: "No Special Amenities Offered"
+            val safeRules = musictype?.takeIf { it.isNotBlank() } ?: "[ No Music Type Specified ]"
             return safeRules.split(" ").joinToString(" ") { word ->
                 word.lowercase().replaceFirstChar { it.uppercaseChar() }
             }
@@ -75,7 +76,7 @@ data class Event(
 
     val properCaseRules: String
         get() {
-            val safeRules = rules?.takeIf { it.isNotBlank() } ?: "No Special Amenities Offered"
+            val safeRules = rules?.takeIf { it.isNotBlank() } ?: "[ No Rules Specified ]"
             return safeRules.split(" ").joinToString(" ") { word ->
                 word.lowercase().replaceFirstChar { it.uppercaseChar() }
             }
@@ -83,7 +84,7 @@ data class Event(
 
     val properCaseOffer1: String
         get() {
-            val safeRules = offerings1?.takeIf { it.isNotBlank() } ?: "No Special Amenities Offered"
+            val safeRules = offerings1?.takeIf { it.isNotBlank() } ?: "[ Not Specified by Host ]"
             return safeRules.split(" ").joinToString(" ") { word ->
                 word.lowercase().replaceFirstChar { it.uppercaseChar() }
             }
@@ -91,7 +92,7 @@ data class Event(
 
     val properCaseOffer2: String
         get() {
-            val safeRules = offerings2?.takeIf { it.isNotBlank() } ?: "No Special Amenities Offered"
+            val safeRules = offerings2?.takeIf { it.isNotBlank() } ?: "[ Not Specified by Host ]"
             return safeRules.split(" ").joinToString(" ") { word ->
                 word.lowercase().replaceFirstChar { it.uppercaseChar() }
             }
@@ -99,7 +100,7 @@ data class Event(
 
     val properCaseOffer3: String
         get() {
-            val safeRules = offerings3?.takeIf { it.isNotBlank() } ?: "No Extra Rule Specified by Host"
+            val safeRules = offerings3?.takeIf { it.isNotBlank() } ?: "[ Not Specified by Host ]"
             return safeRules.split(" ").joinToString(" ") { word ->
                 word.lowercase().replaceFirstChar { it.uppercaseChar() }
             }
@@ -120,6 +121,7 @@ data class Event(
             "House", "Pool", "Finca" -> "$partytype Party"
             else -> partytype
         }
+
 
     val formattedDate: String
         @RequiresApi(Build.VERSION_CODES.O)
@@ -156,4 +158,17 @@ data class Event(
         }
 
 
+}
+
+
+@Composable
+fun getPartyTypeText(partytype: String): String {
+    return stringResource(
+        when (partytype) {
+            "House" -> R.string.house_party
+            "Pool" -> R.string.pool_party
+            "Finca" -> R.string.finca_party
+            else -> R.string.activity
+        }
+    )
 }

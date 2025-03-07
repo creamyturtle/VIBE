@@ -226,7 +226,7 @@ fun RightSideDrawer(
                         stringResource(R.string.saved_events)
                     ) {
                         isOpen.value = false
-                        navController.navigate("saved_events")
+                        //navController.navigate("saved_events")
                     }
 
                     DrawerMenuItem(

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.model.getPartyTypeText
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -99,7 +100,7 @@ fun EventDetailsCard(event: Event, onClose: () -> Unit) {
                     Spacer(Modifier.height(8.dp))
 
                     Text(
-                        text = "🎉 ${event.partyMod}",
+                        text = "🎉 ${getPartyTypeText(event.partytype)}",
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.secondaryContainer,
                         style = TextStyle(
