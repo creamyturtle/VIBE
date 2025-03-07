@@ -82,7 +82,7 @@ fun PrivacyPolicyScreen(
             title = "2. How We Use Your Information",
             content = "We use the information we collect for the following purposes:\n" +
                     "\n" +
-                    "Account Registration and Management: We use your email address, first name, and Instagram username to create and manage your account.\n" +
+                    "Account Registration and Management: We use your email address, first name, and Instagram username to create and manage your account. Your facebook and whatsapp number are optional information you may add to your profile.\n" +
                     "\n" +
                     "Communications: We may use your email address to communicate important updates or notifications regarding your account and our services.\n" +
                     "\n" +
@@ -93,7 +93,9 @@ fun PrivacyPolicyScreen(
             title = "3. Data Security",
             content = "Your personal data is stored on our server using 256 bit encryption. Thus even our site admins do not have access to your personal information. Authentication is handled using tokens so as to never transfer your raw user information. All connections are made via an https secure sockets layer certificate. We take every reasonable precaution to protect your data. However, no method of transmission over the Internet or method of electronic storage is 100% secure, and we cannot guarantee absolute security.\n" +
                     "\n" +
-                    "The VIBE app may ask you for permission to access your photos or videos, for the explicit purpose of uploading them to create an event hosted by you. This is a one time permission, and the app does not maintain access to your photos or videos while in use. These are optional features, and you may participate without granting access to this data on your phone."
+                    "The VIBE app may ask you for permission to access your photos or videos, for the explicit purpose of uploading them to create an event hosted by you. This is a one time permission, and the app does not maintain access to your photos or videos. These are optional features, and you may participate without granting access to this data on your phone.\n" +
+                    "\n" +
+                    "The VIBE app may ask you for permission to access your camera, for the purpose of scanning QR codes for users to enter an event. This can be a one time permission, and the app does not maintain access to your camera while not in use. This is an optional feature, only needed if you wish to host events yourself."
         )
 
         ContentCard(

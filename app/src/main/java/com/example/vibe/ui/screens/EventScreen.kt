@@ -397,7 +397,7 @@ fun EventDetailsScreen(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (event.isfreeparking == "0") "No Free Parking" else stringResource(R.string.free_parking),
+                    text = if (event.isfreeparking == "0") stringResource(R.string.no_free_parking) else stringResource(R.string.free_parking),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
@@ -415,7 +415,7 @@ fun EventDetailsScreen(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (event.iswifi == "0") "No Wifi Available" else stringResource(R.string.wifi),
+                    text = if (event.iswifi == "0") stringResource(R.string.no_wifi) else stringResource(R.string.wifi),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
@@ -434,7 +434,7 @@ fun EventDetailsScreen(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (event.ispetfriendly == "0") "No Pets Allowed" else stringResource(R.string.pet_friendly),
+                    text = if (event.ispetfriendly == "0") stringResource(R.string.no_pets_allowed) else stringResource(R.string.pet_friendly),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
@@ -483,10 +483,16 @@ fun EventDetailsScreen(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "Music Type: ${event.properCaseMusic}",
+                    text = stringResource(R.string.music_type),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
+                Text(
+                    text = ": ${event.properCaseMusic}",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                )
+
             }
 
 
@@ -512,7 +518,7 @@ fun EventDetailsScreen(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 Text(
-                    text = "Event Video",
+                    text = stringResource(R.string.event_video),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -545,7 +551,7 @@ fun EventDetailsScreen(
 
 
             Text(
-                text = "General Location",
+                text = stringResource(R.string.general_location),
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -583,7 +589,7 @@ fun EventDetailsScreen(
 
 
             Text(
-                text = "(Exact Location will be revealed upon reservation acceptance)",
+                text = stringResource(R.string.exact_location_will_be_revealed_upon_reservation_acceptance),
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -594,7 +600,7 @@ fun EventDetailsScreen(
 
 
             Text(
-                text = "Hosted By",
+                text = stringResource(R.string.hosted_by),
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .fillMaxWidth()

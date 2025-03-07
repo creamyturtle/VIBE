@@ -86,15 +86,23 @@
     <string name="select_video">Video</string>
     <string name="free_parking">Parqueadero Gratuito</string>
     <string name="wifi">WiFi</string>
-    <string name="alcohol_provided">Alcohol Proporcionado</string>
     <string name="pet_friendly">Se Aceptan Mascotas</string>
-    <string name="smoking_allowed">Se Permite Fumar</string>
     <string name="i_agree_to_the_terms_conditions">Acepto los Términos y Condiciones</string>
     <string name="to_submit_an_event">Para publicar un evento, debes aceptar nuestros Términos y condiciones y Política de privacidad.</string>
     <string name="terms_cond_s">Términos</string>
     <string name="privacy">Privacidad</string>
     <string name="please_note_that">Tenga en cuenta que todos los eventos están sujetos a la aprobación de nuestros moderadores de VIBE. Su evento se publicará en un plazo de 24 horas. Esté atento a un correo electrónico de VIBE con el enlace de su evento o consulte su perfil para ver las actualizaciones.</string>
     <string name="restrictions">Restricciones</string>
+    <string name="no_free_parking">No Parqueadero Gratuito</string>
+    <string name="no_wifi">No WiFi</string>
+    <string name="no_pets_allowed">No Se Aceptan Mascotas</string>
+    <string name="event_video">Vídeo del Evento</string>
+    <string name="general_location">Ubicación General</string>
+    <string name="exact_location_will_be_revealed_upon_reservation_acceptance">(La ubicación exacta se revelará al aceptar la reserva)</string>
+    <string name="hosted_by">Organizado por</string>
+    <string name="request_entry_to_event">Solicitar entrada al evento</string>
+    <string name="bring_up_to_4_friends">Trae hasta 4 amigos</string>
+    <string name="reserve">Reservar</string>
 
 
 </resources>

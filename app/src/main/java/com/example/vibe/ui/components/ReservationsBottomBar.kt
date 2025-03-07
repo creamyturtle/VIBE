@@ -20,10 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vibe.R
 import com.example.vibe.model.Event
 
 
@@ -64,12 +66,12 @@ fun ReservationsBottomBar(
 
 
                     Text(
-                        text = "Request entry to event",
+                        text = stringResource(R.string.request_entry_to_event),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
 
-                    Text(text = "Bring up to 4 friends")
+                    Text(text = stringResource(R.string.bring_up_to_4_friends))
 
 
                 }
@@ -105,7 +107,7 @@ fun ReservationsBottomBar(
                     ) {
 
                         Text(
-                            text = "Reserve",
+                            text = stringResource(R.string.reserve),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold
                         )
