@@ -1,6 +1,5 @@
 package com.example.vibe.ui.screens
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
@@ -26,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,9 +42,10 @@ import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.EventDetailsCard
 import com.example.vibe.ui.viewmodel.EventsUiState
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -54,30 +53,28 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MapScreen(
     eventsUiState: EventsUiState,
-    geocodeAddress: suspend (Context, String) -> LatLng?,
     navController: NavController
 ) {
     val context = LocalContext.current
     var selectedEvent by remember { mutableStateOf<Event?>(null) }
 
-    val isDarkTheme = isSystemInDarkTheme() // ✅ Detect dark mode
+    val isDarkTheme = isSystemInDarkTheme()
     val mapProperties by remember {
         mutableStateOf(
             MapProperties(
                 mapStyleOptions = if (isDarkTheme) {
                     MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_night)
                 } else {
-                    null // Default Google Maps style
+                    null
                 }
             )
         )
     }
-
-
 
     when (eventsUiState) {
         is EventsUiState.Loading -> {
@@ -99,61 +96,62 @@ fun MapScreen(
         is EventsUiState.Success -> {
             val events = eventsUiState.events
 
-            // Cache for geocoded results
-            val geocodedLocations = remember { mutableStateMapOf<String, LatLng>() }
+            val cameraPositionState = rememberCameraPositionState()
 
-
-            // Get the initial camera position
-            val initialPosition = geocodedLocations.values.firstOrNull() ?: LatLng(6.2442, -75.5812)
-
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(initialPosition, 13f)
-            }
-
-            // Perform geocoding for all event locations
             LaunchedEffect(events) {
-                events.forEach { event ->
-                    if (event.location.isNotEmpty() && !geocodedLocations.containsKey(event.location)) {
-                        val coordinates = geocodeAddress(context, event.location) // Pass both Context and address
-                        coordinates?.let { geocodedLocations[event.location] = it }
+                if (events.isNotEmpty()) {
+                    if (events.size == 1) {
+                        // If only one event, set a reasonable zoom level (e.g., 13f)
+                        val singleEvent = events.first()
+                        cameraPositionState.move(
+                            CameraUpdateFactory.newLatLngZoom(LatLng(singleEvent.latitude, singleEvent.longitude), 13f)
+                        )
+                    } else {
+                        // Multiple events: Fit all markers within bounds
+                        val boundsBuilder = LatLngBounds.builder()
+                        events.forEach { event ->
+                            boundsBuilder.include(LatLng(event.latitude, event.longitude))
+                        }
+
+                        val bounds = boundsBuilder.build()
+                        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 200) // 100px padding
+                        cameraPositionState.move(cameraUpdate)
                     }
+                } else {
+                    // Default to Medellín if no events found
+                    cameraPositionState.move(
+                        CameraUpdateFactory.newLatLngZoom(LatLng(6.2442, -75.5812), 13f)
+                    )
                 }
             }
+
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 104.dp, bottom = 104.dp)
             ) {
-
-
                 Box(modifier = Modifier.fillMaxSize()) {
                     GoogleMap(
                         properties = mapProperties,
                         cameraPositionState = cameraPositionState,
-                        modifier = Modifier
-                            .fillMaxSize()
-
+                        modifier = Modifier.fillMaxSize()
                     ) {
-
                         events.forEach { event ->
-
-                            //val icon = bitmapDescriptorFromComposable { MarkerBubble(event.partyname) }
-                            val coordinates = geocodedLocations[event.location]
-
-                            coordinates?.let { location ->
+                            if (event.latitude != 0.0 && event.longitude != 0.0) { // Ensure valid coordinates
+                                val eventLocation = LatLng(event.latitude, event.longitude)
 
                                 val markerColor = when (event.partyMod) {
                                     "House Party" -> BitmapDescriptorFactory.HUE_BLUE
                                     "Pool Party" -> BitmapDescriptorFactory.HUE_AZURE
                                     "Finca Party" -> BitmapDescriptorFactory.HUE_VIOLET
-                                    else -> BitmapDescriptorFactory.HUE_RED // Default
+                                    else -> BitmapDescriptorFactory.HUE_RED
                                 }
 
                                 Marker(
-                                    state = MarkerState(position = location),
+                                    state = MarkerState(position = eventLocation),
                                     title = event.partyname,
-                                    icon = BitmapDescriptorFactory.defaultMarker(markerColor), // Set color dynamically
+                                    icon = BitmapDescriptorFactory.defaultMarker(markerColor),
                                     onClick = {
                                         selectedEvent = event
                                         true
@@ -162,11 +160,9 @@ fun MapScreen(
                             }
                         }
                     }
-
-
-
                 }
 
+                // ✅ Back Button (Unchanged)
                 IconButton(
                     onClick = { navController.navigateUp() },
                     modifier = Modifier
@@ -176,34 +172,21 @@ fun MapScreen(
                         .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
                         .size(32.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize() // Fill the `IconButton` area
-                            .padding(0.dp) // Adjust the internal padding here
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(20.dp)
-                        )
-                    }
-
-
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
 
-
-                // ✅ Show event details when a marker is clicked
+                // ✅ Event Details Popup (Unchanged)
                 selectedEvent?.let { event ->
-
                     var isPressed by remember { mutableStateOf(false) }
 
-                    // ✅ Animate scale effect
                     val scale by animateFloatAsState(
-                        targetValue = if (isPressed) 0.95f else 1f, // Shrink when pressed
-                        animationSpec = tween(durationMillis = 100) // Smooth quick animation
+                        targetValue = if (isPressed) 0.95f else 1f,
+                        animationSpec = tween(durationMillis = 100)
                     )
 
                     Box(
@@ -214,7 +197,7 @@ fun MapScreen(
                             .graphicsLayer(
                                 scaleX = scale,
                                 scaleY = scale
-                            ) // ✅ Apply scale effect to the Box too!
+                            )
                             .background(Color.White, shape = RoundedCornerShape(16.dp))
                             .shadow(10.dp, shape = RoundedCornerShape(16.dp))
                             .clip(RoundedCornerShape(16.dp))
@@ -222,9 +205,9 @@ fun MapScreen(
                                 detectTapGestures(
                                     onPress = {
                                         isPressed = true
-                                        tryAwaitRelease() // ✅ Wait for user to release
+                                        tryAwaitRelease()
                                         isPressed = false
-                                        navController.navigate("event_details/${event.id}") // ✅ Navigate AFTER release
+                                        navController.navigate("event_details/${event.id}")
                                     }
                                 )
                             }
@@ -235,11 +218,7 @@ fun MapScreen(
                         )
                     }
                 }
-
-
             }
-
-
         }
         else -> {
             Box(
@@ -250,7 +229,5 @@ fun MapScreen(
             }
         }
     }
-
-
 }
 

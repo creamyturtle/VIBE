@@ -69,6 +69,7 @@ import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.HostInfoCard
+import com.example.vibe.utils.geocodeAddress
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -726,24 +727,5 @@ fun CustomVideoPlayer(videoUrl: String?) {
 }
 
 
-suspend fun geocodeAddress(context: Context, address: String): LatLng? {
-    return withContext(Dispatchers.IO) {
-        try {
-            val geocoder = Geocoder(context, Locale.getDefault())
-
-            @Suppress("DEPRECATION") // ✅ Suppress the warning until Google provides a replacement
-            val results = geocoder.getFromLocationName(address, 1)
-
-            if (!results.isNullOrEmpty()) {
-                LatLng(results[0].latitude, results[0].longitude)
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            Log.e("Geocoder", "Error geocoding address: ${e.message}")
-            null
-        }
-    }
-}
 
 

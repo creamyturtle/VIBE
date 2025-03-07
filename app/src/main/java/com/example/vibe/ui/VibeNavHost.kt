@@ -39,7 +39,6 @@ import com.example.vibe.ui.screens.ReservationScreen
 import com.example.vibe.ui.screens.SignupScreen
 import com.example.vibe.ui.screens.TermsAndConditionsScreen
 import com.example.vibe.ui.screens.UserProfileScreen
-import com.example.vibe.ui.screens.geocodeAddress
 import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
 import com.example.vibe.ui.viewmodel.CheckInViewModel
@@ -50,6 +49,7 @@ import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import com.example.vibe.utils.SessionManager
+import com.example.vibe.utils.geocodeAddress
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -121,17 +121,20 @@ fun VibeNavHost(
 
 
             LaunchedEffect(filterType) {
-                if (filterType == "all") {
-                    eventsViewModel.getEvents() // Fetch all events
+                if (eventsViewModel.lastSearchQuery.isNotEmpty()) {
+                    eventsViewModel.getByLocation(eventsViewModel.lastSearchQuery, filterType)
                 } else {
-                    eventsViewModel.getEventsByType(filterType) // Fetch filtered events
+                    if (filterType == "all") {
+                        eventsViewModel.getEvents()
+                    } else {
+                        eventsViewModel.getEventsByType(filterType)
+                    }
                 }
             }
 
+
             MapScreen(
                 eventsUiState = eventsViewModel.eventsUiState,
-                geocodeAddress = { context, address -> geocodeAddress(context, address) },
-                //retryAction = eventsViewModel::getEvents,
                 navController = navController
             )
         }
@@ -264,8 +267,9 @@ fun VibeNavHost(
 
         composable(route = "calendar") { backStackEntry ->
 
-            val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
+            //val filterType = backStackEntry.arguments?.getString("filterType") ?: "all"
 
+            /*
             LaunchedEffect(filterType) {
                 if (filterType != eventsViewModel.lastFilter) {
                     if (filterType == "all") {
@@ -276,6 +280,8 @@ fun VibeNavHost(
                     }
                 }
             }
+
+             */
 
             when (val state = eventsViewModel.eventsUiState) {
                 is EventsUiState.Success -> {
