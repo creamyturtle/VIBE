@@ -29,9 +29,15 @@ class UserViewModel(
         viewModelScope.launch {
             userRepository.getUserFlow().collect { user ->
                 _userData.postValue(user)
+
+                // ✅ If there's no cached data, fetch from the API
+                if (user == null) {
+                    fetchUserData()
+                }
             }
         }
     }
+
 
     fun fetchUserData() {
         viewModelScope.launch {

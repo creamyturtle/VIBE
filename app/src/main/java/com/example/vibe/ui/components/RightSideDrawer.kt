@@ -102,13 +102,14 @@ fun RightSideDrawer(
 
 
 
-    //val selectedLanguage by languageViewModel.language
-
     val user by userViewModel.userData.observeAsState()
 
-    LaunchedEffect(Unit) {
-        userViewModel.fetchUserData() // Fetch user data on screen launch
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn) {
+            userViewModel.fetchUserData() // ✅ Fetch user data when logged in
+        }
     }
+
 
 
 
