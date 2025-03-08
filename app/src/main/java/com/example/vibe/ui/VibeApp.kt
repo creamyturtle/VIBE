@@ -34,7 +34,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.data.DefaultAppContainer
-import com.example.vibe.data.LanguageViewModelFactory
 import com.example.vibe.data.UserViewModelFactory
 import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.RightSideDrawer

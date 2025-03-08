@@ -79,7 +79,6 @@ import com.example.vibe.ui.components.ShimmerSearchBar
 import com.example.vibe.ui.components.shimmerEffect
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
-import com.example.vibe.ui.viewmodel.LanguageViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
