@@ -92,8 +92,7 @@ fun HomeScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onEventClick: (String) -> Unit,
     navController: NavController,
-    eventsViewModel: EventsViewModel,
-    languageViewModel: LanguageViewModel
+    eventsViewModel: EventsViewModel
 ) {
 
 

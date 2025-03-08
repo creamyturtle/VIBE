@@ -13,6 +13,7 @@ interface TranslationApi {
     @GET("get_translation.php")
     suspend fun getTranslation(
         @Query("text") text: String,
-        @Query("target_lang") targetLang: String
+        @Query("target_lang") targetLang: String,
+        @Query("key") apiKey: String = secretToken
     ): Response<TranslationResponse>
 }

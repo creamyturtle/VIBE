@@ -107,8 +107,7 @@ fun VibeNavHost(
                 retryAction = eventsViewModel::getEvents,
                 onEventClick = { eventId -> navController.navigate("event_details/$eventId") },
                 navController = navController,
-                eventsViewModel = eventsViewModel,
-                languageViewModel = languageViewModel
+                eventsViewModel = eventsViewModel
             )
         }
 

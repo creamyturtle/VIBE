@@ -38,22 +38,23 @@ class LanguageViewModel(private val translationApi: TranslationApi, private val 
     //auto translator via cached db or google translate
 
     suspend fun fetchTranslation(text: String): String {
-        val targetLang = _language.value.lowercase(Locale.ROOT) // Use selected language
+        val targetLang = _language.value.lowercase(Locale.ROOT) // ✅ Ensure lowercase ("EN" → "en")
         return withContext(Dispatchers.IO) {
             try {
                 val response = translationApi.getTranslation(text, targetLang)
                 if (response.isSuccessful) {
-                    response.body()?.translated_text ?: text // Return translation or fallback
+                    response.body()?.translated_text ?: text // ✅ Return translation or fallback
                 } else {
                     Log.e("Translation", "API Error: ${response.errorBody()?.string()}")
-                    text // Fallback
+                    text // ❌ Fallback to original text if API call fails
                 }
             } catch (e: Exception) {
                 Log.e("Translation", "Exception: ${e.message}")
-                text // Fallback
+                text // ❌ Fallback to original text on failure
             }
         }
     }
+
 
     suspend fun getTranslatedEvent(event: Event): Event {
         val translatedDescription = fetchTranslation(event.description)
