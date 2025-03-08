@@ -290,7 +290,7 @@ fun HostedCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-
+            /*
             Button(
                 onClick = onCancelReservation,
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
@@ -299,6 +299,8 @@ fun HostedCard(
             ) {
                 Text("Cancel Event", color = Color.White)
             }
+
+             */
         }
     }
 }

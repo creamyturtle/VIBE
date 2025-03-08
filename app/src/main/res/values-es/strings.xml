@@ -103,6 +103,25 @@
     <string name="request_entry_to_event">Solicitar entrada al evento</string>
     <string name="bring_up_to_4_friends">Trae hasta 4 amigos</string>
     <string name="reserve">Reservar</string>
+    <string name="view_profile">Ver Perfil</string>
+    <string name="events_hosted">Eventos Organizados</string>
+    <string name="reservations_pending">Reservas Pendientes</string>
+    <string name="guests_to_check_in">Registrar Invitados</string>
+    <string name="view_events_attending">Eventos a los que Asistirá</string>
+    <string name="manage_hosted_events">Gestión de Eventos Organizados</string>
+    <string name="approve_reservations">Aprobar Reservaciones</string>
+    <string name="check_in_guests">Registre a tus Invitados</string>
+    <string name="edit_profile">Editar Perfil</string>
+    <string name="contact_vibe_support">VIBE Servicio al Cliente</string>
+    <string name="email_us">Contacto</string>
+    <string name="use_the_gmail_app">Utilice Gmail App</string>
+    <string name="home_base">Hogar</string>
+    <string name="send_us_a_message">Envíanos un mensaje</string>
+    <string name="your_name">Tu Nombre</string>
+    <string name="your_email">Tu Correo Electrónico</string>
+    <string name="subject">Sujeto</string>
+    <string name="message">Mensaje</string>
+    <string name="send_message">Enviar Mensaje</string>
 
 
 </resources>

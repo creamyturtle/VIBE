@@ -123,7 +123,11 @@ fun ControlPanelScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(0.dp, 0.dp, 32.dp, 88.dp)
-                .border(width = 2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(12.dp))
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(12.dp)
+                )
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -201,7 +205,7 @@ fun ProfileSection(
                 modifier = Modifier
                     .clickable { navController.navigate("user_profile") })
             Text(
-                text = "View Profile",
+                text = stringResource(R.string.view_profile),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier
@@ -221,9 +225,9 @@ fun DashboardSection() {
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        DashboardCard("Events Attending", "5")
-        DashboardCard("Events Hosting", "2")
-        DashboardCard("Pending Approvals", "3")
+        DashboardCard(stringResource(R.string.events_hosted), "5")
+        DashboardCard(stringResource(R.string.reservations_pending), "2")
+        DashboardCard(stringResource(R.string.guests_to_check_in), "3")
     }
 }
 
@@ -255,31 +259,31 @@ fun ActionButtonsGrid(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        ListButton(icon = Icons.Outlined.Event, text = "View Events Attending") { navController.navigate("events_attending")}
+        ListButton(icon = Icons.Outlined.Event, text = stringResource(R.string.view_events_attending)) { navController.navigate("events_attending")}
         HorizontalDivider(
             modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.surfaceVariant
         )
-        ListButton(icon = Icons.Outlined.DisplaySettings, text = "Manage Hosted Events") { navController.navigate("manage_hosted")}
+        ListButton(icon = Icons.Outlined.DisplaySettings, text = stringResource(R.string.manage_hosted_events)) { navController.navigate("manage_hosted")}
         HorizontalDivider(
             modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.surfaceVariant
         )
-        ListButton(icon = Icons.Outlined.ThumbUp, text = "Approve Reservations") { navController.navigate("approve_reservations")}
+        ListButton(icon = Icons.Outlined.ThumbUp, text = stringResource(R.string.approve_reservations)) { navController.navigate("approve_reservations")}
         HorizontalDivider(
             modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.surfaceVariant
         )
-        ListButton(icon = Icons.Outlined.Checklist, text = "Check-in Guests") { navController.navigate("check_in")}
+        ListButton(icon = Icons.Outlined.Checklist, text = stringResource(R.string.check_in_guests)) { navController.navigate("check_in")}
         HorizontalDivider(
             modifier = Modifier.padding(horizontal = 16.dp),
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.surfaceVariant
         )
-        ListButton(icon = Icons.Outlined.PersonOutline, text = "Edit Profile") { navController.navigate("events_attending")}
+        ListButton(icon = Icons.Outlined.PersonOutline, text = stringResource(R.string.edit_profile)) { navController.navigate("events_attending")}
     }
 }
 

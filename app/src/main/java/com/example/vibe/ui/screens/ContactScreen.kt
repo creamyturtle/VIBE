@@ -37,11 +37,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.ContactViewModel
 
 
@@ -62,7 +64,7 @@ fun ContactScreen(
         Spacer(Modifier.height(132.dp))
 
         Text(
-            text = "Contact VIBE Support",
+            text = stringResource(R.string.contact_vibe_support),
             textAlign = TextAlign.Center,
             fontSize = 28.sp
         )
@@ -99,14 +101,14 @@ fun ContactInfoSection() {
             )
             ContactInfoItem(
                 icon = Icons.Outlined.Email,
-                title = "Email Us",
-                content = "Use the Gmail App",
+                title = stringResource(R.string.email_us),
+                content = stringResource(R.string.use_the_gmail_app),
                 link = "mailto:vibemedellin2025@vibesocial.org",
                 modifier = Modifier.weight(1f)
             )
             ContactInfoItem(
                 icon = Icons.Outlined.LocationOn,
-                title = "Home Base",
+                title = stringResource(R.string.home_base),
                 content = "Medellín, Colombia",
                 modifier = Modifier.weight(1f)
             )
@@ -152,7 +154,9 @@ fun ContactFormSection(
     context: Context
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Send us a message", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+
+        Text(text = stringResource(R.string.send_us_a_message), fontSize = 22.sp, fontWeight = FontWeight.Bold)
+
         Spacer(modifier = Modifier.height(8.dp))
 
         var name by remember { mutableStateOf("") }
@@ -165,30 +169,31 @@ fun ContactFormSection(
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Your Name") },
+            label = { Text(stringResource(R.string.your_name)) },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Your Email") },
+            label = { Text(stringResource(R.string.your_email)) },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = subject,
             onValueChange = { subject = it },
-            label = { Text("Subject") },
+            label = { Text(stringResource(R.string.subject)) },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = message,
             onValueChange = { message = it },
-            label = { Text("Message") },
+            label = { Text(stringResource(R.string.message)) },
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .height(140.dp),
             maxLines = 4
         )
@@ -203,7 +208,7 @@ fun ContactFormSection(
                 .height(50.dp)
                 .padding(horizontal = 16.dp)
         ) {
-            Text("Send Message")
+            Text(stringResource(R.string.send_message))
         }
 
         response?.let {
