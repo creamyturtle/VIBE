@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -111,7 +112,9 @@ fun UserProfileContent(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         //horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -123,7 +126,11 @@ fun UserProfileContent(
             modifier = Modifier
                 .padding(8.dp, 40.dp, 0.dp, 0.dp)
                 .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = CircleShape
+                )
                 .size(32.dp)
         ) {
             Icon(
@@ -164,16 +171,34 @@ fun UserProfileContent(
 
         // ✅ User Details (Styled with Cards)
         Card(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.elevatedCardElevation(4.dp),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
-                InfoRow(Icons.Default.CalendarToday, "Joined", user.formattedCreatedAt)
-                InfoRow(Icons.Default.Cake, "Age", "${user.age}")
-                InfoRow(Icons.Default.Person, "Gender", user.gender)
-                InfoRow(Icons.Default.Info, "Bio", user.bio ?: "No bio available")
+                InfoRow(
+                    Icons.Default.CalendarToday,
+                    stringResource(R.string.joined),
+                    user.formattedCreatedAt
+                )
+                InfoRow(
+                    Icons.Default.Cake,
+                    stringResource(R.string.age2),
+                    "${user.age}"
+                )
+                InfoRow(
+                    Icons.Default.Person,
+                    stringResource(R.string.gender2),
+                    user.gender
+                )
+                InfoRow(
+                    Icons.Default.Info,
+                    stringResource(R.string.bio),
+                    user.bio ?: stringResource(R.string.no_bio_available)
+                )
             }
         }
 
@@ -181,13 +206,16 @@ fun UserProfileContent(
 
         // ✅ Social Media Links (with Icons)
         Text(
-            text = "Connect with ${user.name}",
+            text = stringResource(R.string.connect_with, user.name),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = 16.dp) // ✅ Adds 16.dp padding on both left & right
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
+
         Spacer(modifier = Modifier.height(0.dp))
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)) {
             if (!user.facebook.isNullOrEmpty()) {
                 SocialMediaButton("Facebook : ${user.facebook}", R.drawable.facebook, "https://www.facebook.com/${user.facebook}", Modifier.fillMaxWidth())
             }

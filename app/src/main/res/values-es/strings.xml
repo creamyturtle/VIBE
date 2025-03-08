@@ -138,6 +138,12 @@
     <string name="to_request_entry_to_the_event">Para solicitar la entrada al evento, se compartirán algunos de tus datos personales con el anfitrión, incluidos tu nombre, edad, sexo y perfil de Instagram. El anfitrión utilizará esta información para tomar una decisión sobre si acepta o rechaza tu confirmación de asistencia.</string>
     <string name="by_clicking_here">Al hacer clic aquí, acepta que su información se envíe al anfitrión de este evento.</string>
     <string name="confirm_submit">Confirmar y Enviar</string>
+    <string name="joined">Unido</string>
+    <string name="bio">Bio</string>
+    <string name="no_bio_available">No hay biografía disponible</string>
+    <string name="connect_with">Conectar con %s</string>
+    <string name="age2">Edad</string>
+    <string name="gender2">Género</string>
 
 
 </resources>
