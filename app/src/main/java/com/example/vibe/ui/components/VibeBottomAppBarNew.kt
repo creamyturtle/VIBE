@@ -163,7 +163,7 @@ fun VibeBottomAppBarNew(
                             "login",
                             currentRoute,
                             Icons.Default.Person,
-                            "Log In"
+                            stringResource(R.string.log_in)
                         )
                     }
                 }

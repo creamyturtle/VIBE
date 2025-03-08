@@ -63,6 +63,8 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.ui.res.stringResource
+import com.example.vibe.R
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -84,7 +86,8 @@ fun EventCalendarScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(
-                rememberScrollState())
+                rememberScrollState()
+            )
             .padding(horizontal = 16.dp), // ✅ Add padding for better spacing
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -126,7 +129,7 @@ fun EventCalendarScreen(
             )
         }
 
-        Text(text = "Swipe right or left to change month")
+        Text(text = stringResource(R.string.swipe_right_or_left_to_change_month))
 
         Spacer(Modifier.height(32.dp))
 
@@ -203,7 +206,9 @@ fun MonthCalendar(
     ) {
         // ✅ Weekday Labels
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat").forEach {
@@ -225,7 +230,10 @@ fun MonthCalendar(
                 Row(Modifier.fillMaxWidth()) {
                     for (day in 1..7) {
                         if ((week == 0 && day < firstDayOfMonth) || currentDay > daysInMonth) {
-                            Box(modifier = Modifier.weight(1f).aspectRatio(1f).border(1.dp, Color.LightGray))
+                            Box(modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .border(1.dp, Color.LightGray))
                         } else {
                             val date = month.atDay(currentDay)
                             val hasEvent = events.any { it.date == date.toString() }
@@ -283,7 +291,7 @@ fun EventSelectionPopup(
             Column {
 
                 Text(
-                    text = "Events for",
+                    text = stringResource(R.string.events_for),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp // ✅ Smaller text
@@ -345,7 +353,7 @@ fun EventSelectionPopup(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Close")
+                Text(stringResource(R.string.close))
             }
         },
         properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),

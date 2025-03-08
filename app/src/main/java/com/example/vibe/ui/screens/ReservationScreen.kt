@@ -267,7 +267,7 @@ fun PleaseLogin(
 
 
         Text(
-            text = "Returning User",
+            text = stringResource(R.string.returning_user),
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
             color = MaterialTheme.colorScheme.onBackground
@@ -276,7 +276,7 @@ fun PleaseLogin(
         Spacer(Modifier.height(32.dp))
 
         StyledButton(
-            text = "Login",
+            text = stringResource(R.string.login),
             isLoading = authViewModel.isLoading,
             onClick = {
                 navController.navigate("login")
@@ -291,7 +291,7 @@ fun PleaseLogin(
         Spacer(Modifier.height(32.dp))
 
         Text(
-            text = "New User",
+            text = stringResource(R.string.new_user),
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal,
             color = MaterialTheme.colorScheme.onBackground
@@ -300,7 +300,7 @@ fun PleaseLogin(
         Spacer(Modifier.height(32.dp))
 
         StyledButton(
-            text = "Sign Up",
+            text = stringResource(R.string.sign_up),
             isLoading = authViewModel.isLoading,
             onClick = {
                 navController.navigate("signup")

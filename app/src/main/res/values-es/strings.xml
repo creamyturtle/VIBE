@@ -144,6 +144,21 @@
     <string name="connect_with">Conectar con %s</string>
     <string name="age2">Edad</string>
     <string name="gender2">Género</string>
-
+    <string name="swipe_right_or_left_to_change_month">Desliza a la derecha o la izquierda para cambiar el mes.</string>
+    <string name="events_for">Eventos para</string>
+    <string name="close">Cerrar</string>
+    <string name="log_in_to_your_vibe_account">Inicie sesión en su cuenta VIBE</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="new_to_vibe">¿Eres nuevo en VIBE?</string>
+    <string name="sign_up">Registrarse</string>
+    <string name="log_in">Acceso</string>
+    <string name="create_your_vibe_account">Crea tu cuenta VIBE</string>
+    <string name="name2">Nombre</string>
+    <string name="your_password_must_be">Su contraseña debe tener al menos 8 caracteres y debe contener letras, números y caracteres especiales.</string>
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Femenina</string>
+    <string name="returning_user">Usuario que Regresa</string>
+    <string name="new_user">Nuevo Usuario</string>
 
 </resources>

@@ -25,8 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.vibe.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +38,12 @@ fun GenderDropdown(
     onOptionSelected: (String) -> Unit,
     label: String
 ) {
-    val options = listOf("Male", "Female")
+    // ✅ Map of English values to localized strings
+    val genderOptions = mapOf(
+        "Male" to stringResource(R.string.gender_male),
+        "Female" to stringResource(R.string.gender_female)
+    )
+
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -44,7 +51,7 @@ fun GenderDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = selectedOption,
+            value = genderOptions[selectedOption] ?: selectedOption, // ✅ Show localized value
             onValueChange = {},
             readOnly = true,
             label = { Text(label, color = Color.Black) },
@@ -67,7 +74,7 @@ fun GenderDropdown(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true) // ✅ Properly aligns dropdown to the text field
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true)
         )
 
         ExposedDropdownMenu(
@@ -77,20 +84,21 @@ fun GenderDropdown(
                 .background(Color.White)
                 .exposedDropdownSize()
         ) {
-            options.forEach { option ->
+            genderOptions.forEach { (key, localizedValue) ->
                 DropdownMenuItem(
                     text = {
-                        Text(option, color = Color.Black, fontSize = 16.sp)
+                        Text(localizedValue, color = Color.Black, fontSize = 16.sp)
                     },
                     onClick = {
-                        onOptionSelected(option)
+                        onOptionSelected(key) // ✅ Store "Male" or "Female" in ViewModel
                         expanded = false
                     },
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), // ✅ Less vertical space
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         }
     }
 }
+
 

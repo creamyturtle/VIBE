@@ -19,10 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vibe.R
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
 import com.example.vibe.ui.components.StyledTextField
@@ -63,7 +65,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Log in to your VIBE account",
+            text = stringResource(R.string.log_in_to_your_vibe_account),
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal
         )
@@ -73,7 +75,7 @@ fun LoginScreen(
         StyledTextField(
             value = authViewModel.email, // ✅ Use ViewModel state
             onValueChange = { authViewModel.updateEmail(it) }, // ✅ Update ViewModel
-            label = "Email"
+            label = stringResource(R.string.email)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -81,7 +83,7 @@ fun LoginScreen(
         StyledTextField(
             value = authViewModel.password,
             onValueChange = { authViewModel.updatePassword(it) },
-            label = "Password",
+            label = stringResource(R.string.password),
             isPassword = true
         )
 
@@ -93,7 +95,7 @@ fun LoginScreen(
         }
 
         StyledButton(
-            text = "Login",
+            text = stringResource(R.string.login),
             isLoading = authViewModel.isLoading,
             onClick = {
                 authViewModel.login {
@@ -112,7 +114,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "New to VIBE?",
+            text = stringResource(R.string.new_to_vibe),
             fontSize = 24.sp,
             fontWeight = FontWeight.Normal
         )
@@ -120,7 +122,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         StyledButton(
-            text = "Sign up",
+            text = stringResource(R.string.sign_up),
             onClick = {
                 navController.navigate("signup") {
                     popUpTo("login") { inclusive = false }
