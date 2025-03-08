@@ -261,11 +261,12 @@ fun EventDetailsScreen(
                     )
 
                     Text(
-                        text = "${event.openslots} Open Slots",
+                        text = "${event.openslots} ${stringResource(R.string.open_slots)}",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.secondaryContainer,
                         modifier = Modifier.padding(bottom = 4.dp) // Space below the text
                     )
+
 
                     Text(
                         text = "${event.formattedDate} @ ${event.formattedTime}",
