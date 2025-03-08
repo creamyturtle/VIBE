@@ -1081,47 +1081,47 @@ fun validateFields(
     isChecked: Boolean // ✅ Add this parameter
 ): Boolean {
     if (partyName.isBlank()) {
-        Toast.makeText(context, "Event Name is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Event Name is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (partyType.isBlank()) {
-        Toast.makeText(context, "Category is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Category is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (description.isBlank()) {
-        Toast.makeText(context, "Event Description is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Event Description is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (location.isBlank()) {
-        Toast.makeText(context, "General Location is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "General Location is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (date.isBlank()) {
-        Toast.makeText(context, "Date is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Date is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (time.isBlank()) {
-        Toast.makeText(context, "Time is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Time is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (totalSlots.isBlank()) {
-        Toast.makeText(context, "Total Guests is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Total Guests is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (musicType.isBlank()) {
-        Toast.makeText(context, "Music Type is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Music Type is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (locationLong.isBlank()) {
-        Toast.makeText(context, "Complete Address is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Complete Address is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (hostInstagram.isBlank()) {
-        Toast.makeText(context, "Instagram Username is required", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Instagram Username is required", Toast.LENGTH_LONG).show()
         return false
     }
     if (!isChecked) { // ✅ Ensure checkbox is checked before submission
-        Toast.makeText(context, "You must agree to the Terms & Conditions", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "You must agree to the Terms & Conditions", Toast.LENGTH_LONG).show()
         return false
     }
 

@@ -77,7 +77,7 @@ class AuthViewModel(
 
         // ✅ Show Toast message on the main thread
         viewModelScope.launch(Dispatchers.Main) {
-            Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Logged out successfully", Toast.LENGTH_LONG).show()
         }
     }
 

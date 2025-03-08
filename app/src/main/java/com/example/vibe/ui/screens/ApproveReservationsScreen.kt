@@ -67,7 +67,7 @@ fun ApproveReservationsScreen(
     // ✅ Show Toast when approval is successful
     LaunchedEffect(approveReservationsViewModel.successMessage) {
         approveReservationsViewModel.successMessage?.let { message ->
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             approveReservationsViewModel.clearSuccessMessage() // Clear message after showing
         }
     }
