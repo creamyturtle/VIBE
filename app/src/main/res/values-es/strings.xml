@@ -123,6 +123,21 @@
     <string name="message">Mensaje</string>
     <string name="send_message">Enviar Mensaje</string>
     <string name="open_slots">Cupos Disponibles</string>
+    <string name="open_slots2">Cupos</string>
+    <string name="guest_details">Detalles del Invitado</string>
+    <string name="name">Nombre:</string>
+    <string name="age">Edad:</string>
+    <string name="gender">Género:</string>
+    <string name="additional_guests_add_up_to_4">Invitados adicionales (hasta 4)</string>
+    <string name="guest_1">Invitado #1</string>
+    <string name="guest_2">Invitado #2</string>
+    <string name="guest_3">Invitado #3</string>
+    <string name="guest_4">Invitado #4</string>
+    <string name="bringing_any_items_optional">¿Traerás algún artículo? (opcional)</string>
+    <string name="agreement">Acuerdo</string>
+    <string name="to_request_entry_to_the_event">Para solicitar la entrada al evento, se compartirán algunos de tus datos personales con el anfitrión, incluidos tu nombre, edad, sexo y perfil de Instagram. El anfitrión utilizará esta información para tomar una decisión sobre si acepta o rechaza tu confirmación de asistencia.</string>
+    <string name="by_clicking_here">Al hacer clic aquí, acepta que su información se envíe al anfitrión de este evento.</string>
+    <string name="confirm_submit">Confirmar y Enviar</string>
 
 
 </resources>

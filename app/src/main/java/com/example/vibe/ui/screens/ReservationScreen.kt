@@ -52,6 +52,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -60,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.vibe.R
 import com.example.vibe.model.Event
 import com.example.vibe.ui.components.OrDivider
 import com.example.vibe.ui.components.StyledButton
@@ -399,14 +401,15 @@ fun EventSummaryCard(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             buildAnnotatedString {
-                                append("Open Slots:  ")
-                                withStyle(SpanStyle(color = Color(0xFFFE1943), fontWeight = FontWeight.Bold)) { // Green for number
-                                    append(openSlots)
+                                append(stringResource(R.string.open_slots2) + ": ") // ✅ Load from string resource and add ": "
+                                withStyle(SpanStyle(color = Color(0xFFFE1943), fontWeight = FontWeight.Bold)) {
+                                    append(openSlots) // ✅ Keep openSlots styled
                                 }
                             },
                             fontSize = 14.sp,
                             color = Color.Black
                         )
+
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -468,7 +471,7 @@ fun GuestDetailsCard(
             modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Guest Details", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.guest_details), fontSize = 20.sp, fontWeight = FontWeight.Bold)
             HorizontalDivider()
 
             Row {
@@ -476,17 +479,17 @@ fun GuestDetailsCard(
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)){
 
                     Text(
-                        text = "Name:",
+                        text = stringResource(R.string.name),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "Age:",
+                        text = stringResource(R.string.age),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "Gender:",
+                        text = stringResource(R.string.gender),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -546,7 +549,7 @@ fun AdditionalGuestsSection(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "Additional Guests (add up to 4)",
+                text = stringResource(R.string.additional_guests_add_up_to_4),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -556,31 +559,31 @@ fun AdditionalGuestsSection(
             StyledTextField(
                 value = guest1,
                 onValueChange = onGuest1Change,
-                label = "Guest #1"
+                label = stringResource(R.string.guest_1)
             )
 
             StyledTextField(
                 value = guest2,
                 onValueChange = onGuest2Change,
-                label = "Guest #2"
+                label = stringResource(R.string.guest_2)
             )
 
             StyledTextField(
                 value = guest3,
                 onValueChange = onGuest3Change,
-                label = "Guest #3"
+                label = stringResource(R.string.guest_3)
             )
 
             StyledTextField(
                 value = guest4,
                 onValueChange = onGuest4Change,
-                label = "Guest #4"
+                label = stringResource(R.string.guest_4)
             )
 
             StyledTextField(
                 value = bringingItems,
                 onValueChange = onBringingChange,
-                label = "Bringing Any Items? (Optional)"
+                label = stringResource(R.string.bringing_any_items_optional)
             )
         }
     }
@@ -602,17 +605,17 @@ fun AgreementSection(onSubmit: () -> Unit) {
             modifier = Modifier.padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Agreement", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.agreement), fontSize = 20.sp, fontWeight = FontWeight.Bold)
             HorizontalDivider()
 
             Text(
-                "To request entry to the event, some of your personal data will be shared with the host. This includes your name, age, gender, and Instagram profile. The host will use this info to make a decision about whether to accept or deny your RSVP.",
+                stringResource(R.string.to_request_entry_to_the_event),
                 fontSize = 14.sp
             )
 
             Spacer(Modifier.height(8.dp))
 
-            Text("By clicking here, you agree to have your information sent to the Host of this event.", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.by_clicking_here), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
 
             Spacer(Modifier.height(8.dp))
 
@@ -631,7 +634,7 @@ fun AgreementSection(onSubmit: () -> Unit) {
                 )
             ) {
                 Text(
-                    text = "Confirm & Submit",
+                    text = stringResource(R.string.confirm_submit),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal
                 )
