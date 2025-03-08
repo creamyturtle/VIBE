@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vibe.R
 import com.example.vibe.data.AuthRepository
 import com.example.vibe.utils.SessionManager
 import kotlinx.coroutines.Dispatchers
@@ -77,7 +78,8 @@ class AuthViewModel(
 
         // ✅ Show Toast message on the main thread
         viewModelScope.launch(Dispatchers.Main) {
-            Toast.makeText(context, "Logged out successfully", Toast.LENGTH_LONG).show()
+            Toast.makeText(context,
+                context.getString(R.string.logged_out_successfully), Toast.LENGTH_LONG).show()
         }
     }
 

@@ -160,5 +160,6 @@
     <string name="gender_female">Femenina</string>
     <string name="returning_user">Usuario que Regresa</string>
     <string name="new_user">Nuevo Usuario</string>
+    <string name="logged_out_successfully">Se desconectó exitosamente</string>
 
 </resources>
