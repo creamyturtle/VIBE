@@ -237,6 +237,7 @@ fun DashboardCard(title: String, count: String) {
     Surface(
         modifier = Modifier
             .width(108.dp)
+            .height(108.dp)
             .clip(RoundedCornerShape(12.dp)),
         color = MaterialTheme.colorScheme.surfaceVariant
     ) {
