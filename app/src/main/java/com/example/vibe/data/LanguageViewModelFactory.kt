@@ -6,12 +6,13 @@ import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.utils.SessionManager
 
 class LanguageViewModelFactory(
+    private val translationApi: TranslationApi,
     private val sessionManager: SessionManager
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LanguageViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return LanguageViewModel(sessionManager) as T
+            return LanguageViewModel(translationApi, sessionManager) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

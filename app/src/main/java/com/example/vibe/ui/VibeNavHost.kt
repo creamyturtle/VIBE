@@ -45,10 +45,12 @@ import com.example.vibe.ui.viewmodel.CheckInViewModel
 import com.example.vibe.ui.viewmodel.ContactViewModel
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.example.vibe.ui.viewmodel.QRViewModel
 import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
-import com.example.vibe.utils.SessionManager
+
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -62,7 +64,8 @@ fun VibeNavHost(
     userViewModel: UserViewModel,
     context: Context,
     appContainer: AppContainer,
-    startDestination: String
+    startDestination: String,
+    languageViewModel: LanguageViewModel
 ) {
 
     NavHost(
@@ -104,7 +107,8 @@ fun VibeNavHost(
                 retryAction = eventsViewModel::getEvents,
                 onEventClick = { eventId -> navController.navigate("event_details/$eventId") },
                 navController = navController,
-                eventsViewModel = eventsViewModel
+                eventsViewModel = eventsViewModel,
+                languageViewModel = languageViewModel
             )
         }
 
@@ -154,7 +158,8 @@ fun VibeNavHost(
                 contentPadding = innerPadding,
                 event = event,
                 onBack = { navController.navigateUp() },
-                context = context
+                context = context,
+                languageViewModel = languageViewModel
             )
 
         }

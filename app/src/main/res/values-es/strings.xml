@@ -122,6 +122,7 @@
     <string name="subject">Sujeto</string>
     <string name="message">Mensaje</string>
     <string name="send_message">Enviar Mensaje</string>
+    <string name="open_slots">Cupos Disponibles</string>
 
 
 </resources>

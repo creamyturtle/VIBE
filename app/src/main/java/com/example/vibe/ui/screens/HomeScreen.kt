@@ -79,6 +79,7 @@ import com.example.vibe.ui.components.ShimmerSearchBar
 import com.example.vibe.ui.components.shimmerEffect
 import com.example.vibe.ui.viewmodel.EventsUiState
 import com.example.vibe.ui.viewmodel.EventsViewModel
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -91,7 +92,8 @@ fun HomeScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onEventClick: (String) -> Unit,
     navController: NavController,
-    eventsViewModel: EventsViewModel
+    eventsViewModel: EventsViewModel,
+    languageViewModel: LanguageViewModel
 ) {
 
 
@@ -449,11 +451,12 @@ fun EventCard(event: Event, onClick: () -> Unit, modifier: Modifier = Modifier) 
             )
 
             Text(
-                text = "${event.openslots} Open Slots",
+                text = "${event.openslots} ${stringResource(R.string.open_slots)}",
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
                 color = Color.Gray
             )
+
 
             Text(
                 text = event.location,

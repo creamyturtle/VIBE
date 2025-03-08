@@ -39,14 +39,9 @@ import com.example.vibe.data.UserViewModelFactory
 import com.example.vibe.ui.components.BottomBar
 import com.example.vibe.ui.components.RightSideDrawer
 import com.example.vibe.ui.components.TopBar
-import com.example.vibe.ui.viewmodel.ApproveReservationsViewModel
 import com.example.vibe.ui.viewmodel.AuthViewModel
-import com.example.vibe.ui.viewmodel.CheckInViewModel
-import com.example.vibe.ui.viewmodel.ContactViewModel
 import com.example.vibe.ui.viewmodel.EventsViewModel
 import com.example.vibe.ui.viewmodel.LanguageViewModel
-import com.example.vibe.ui.viewmodel.QRViewModel
-import com.example.vibe.ui.viewmodel.RSVPViewModel
 import com.example.vibe.ui.viewmodel.SettingsViewModel
 import com.example.vibe.ui.viewmodel.UserViewModel
 import java.util.Locale
@@ -86,7 +81,9 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
     val isDrawerOpen = remember { mutableStateOf(false) }
 
 
-    val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(appContainer.sessionManager))
+
+    val languageViewModel: LanguageViewModel = viewModel(factory = appContainer.languageViewModelFactory)
+
 
     val savedLanguage = appContainer.sessionManager.getLanguage().uppercase(Locale.ROOT)
 
@@ -145,7 +142,8 @@ fun VibeApp(settingsViewModel: SettingsViewModel, isDarkMode: Boolean, startDest
                 userViewModel = userViewModel,
                 context = context,
                 appContainer = appContainer,
-                startDestination = startDestination
+                startDestination = startDestination,
+                languageViewModel = languageViewModel
             )
 
 

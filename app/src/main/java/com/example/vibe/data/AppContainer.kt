@@ -46,6 +46,8 @@ interface AppContainer {
     val rsvpApiService: RSVPApiService
     val qrCodeApi: QRCodeApi
     val contactApi: ContactApi
+    val translationApi: TranslationApi
+    val languageViewModelFactory: LanguageViewModelFactory
 }
 
 
@@ -129,6 +131,13 @@ class DefaultAppContainer(context: Context) : AppContainer {
         retrofit.create(ContactApi::class.java)
     }
 
+    override val translationApi: TranslationApi by lazy {
+        retrofit.create(TranslationApi::class.java)
+    }
+
+    override val languageViewModelFactory: LanguageViewModelFactory by lazy {
+        LanguageViewModelFactory(translationApi, sessionManager)
+    }
 
 
 }

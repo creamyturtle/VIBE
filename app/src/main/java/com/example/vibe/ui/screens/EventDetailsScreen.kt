@@ -47,6 +47,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,6 +67,7 @@ import com.example.vibe.data.UserPreferences
 import com.example.vibe.model.Event
 import com.example.vibe.model.getPartyTypeText
 import com.example.vibe.ui.components.HostInfoCard
+import com.example.vibe.ui.viewmodel.LanguageViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -74,6 +76,7 @@ import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -82,8 +85,19 @@ fun EventDetailsScreen(
     contentPadding: PaddingValues,
     event: Event?,
     onBack: () -> Unit,
-    context: Context
+    context: Context,
+    languageViewModel: LanguageViewModel
 ) {
+
+    var translatedEvent by remember { mutableStateOf(event) }
+
+    // ✅ Fetch translated event asynchronously
+    LaunchedEffect(event, languageViewModel.language.collectAsState().value) {
+        event?.let {
+            translatedEvent = languageViewModel.getTranslatedEvent(it)
+        }
+    }
+
 
     val cameraPositionState = remember { mutableStateOf<CameraPositionState?>(null) }
 
@@ -279,7 +293,7 @@ fun EventDetailsScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = event.description,
+                text = translatedEvent?.description ?: event.description,
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -320,7 +334,7 @@ fun EventDetailsScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = event.properCaseOffer1,
+                            text = translatedEvent?.offerings1 ?: event.properCaseOffer1,
                             fontSize = 18.sp,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -340,7 +354,7 @@ fun EventDetailsScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = event.properCaseOffer2,
+                            text = translatedEvent?.offerings2 ?: event.properCaseOffer2,
                             fontSize = 18.sp,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -360,7 +374,7 @@ fun EventDetailsScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = event.properCaseOffer3,
+                            text = translatedEvent?.offerings3 ?: event.properCaseOffer3,
                             fontSize = 18.sp,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -456,7 +470,7 @@ fun EventDetailsScreen(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = event.properCaseRules,
+                    text = translatedEvent?.rules ?: event.properCaseRules,
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 )
