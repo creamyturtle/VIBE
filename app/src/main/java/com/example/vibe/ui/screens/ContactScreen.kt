@@ -214,7 +214,8 @@ fun ContactFormSection(
         response?.let {
             if (it.success) {
                 LaunchedEffect(it) {
-                    Toast.makeText(context, "Email sent successfully!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,
+                        context.getString(R.string.email_sent_successfully), Toast.LENGTH_LONG).show()
                     navController.navigate("home_screen/all") // Navigate to home if successful
                 }
             }
@@ -259,7 +260,8 @@ fun openWhatsApp(context: Context, link: String) {
     try {
         context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "WhatsApp is not installed!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context,
+            context.getString(R.string.whatsapp_is_not_installed), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -268,6 +270,6 @@ fun openBrowser(context: Context, url: String) {
     try {
         context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "No web browser found!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.no_web_browser_found), Toast.LENGTH_SHORT).show()
     }
 }

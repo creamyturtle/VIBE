@@ -92,6 +92,7 @@ fun EventDetailsScreen(
     // ✅ Fetch translated event asynchronously
     LaunchedEffect(event, languageViewModel.language.collectAsState().value) {
         event?.let {
+            translatedEvent = null
             translatedEvent = languageViewModel.getTranslatedEvent(it)
         }
     }
@@ -386,7 +387,7 @@ fun EventDetailsScreen(
 
 
             Text(
-                text = "Amenities / Rules",
+                text = stringResource(R.string.amenities_rules),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 20.sp,
                 modifier = Modifier

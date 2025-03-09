@@ -161,5 +161,9 @@
     <string name="returning_user">Usuario que Regresa</string>
     <string name="new_user">Nuevo Usuario</string>
     <string name="logged_out_successfully">Se desconectó exitosamente</string>
+    <string name="amenities_rules">Servicios / Normas</string>
+    <string name="email_sent_successfully">¡Correo enviado exitosamente!</string>
+    <string name="whatsapp_is_not_installed">¡WhatsApp no ​​está instalado!</string>
+    <string name="no_web_browser_found">¡No se encontró ningún navegador web!</string>
 
 </resources>
