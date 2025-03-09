@@ -21,7 +21,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.vibe.R
 import com.example.vibe.ui.components.ContentCard
 
 
@@ -47,7 +49,11 @@ fun AboutUsScreen(
                 modifier = Modifier
                     .padding(8.dp, 40.dp, 0.dp, 0.dp)
                     .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = CircleShape
+                    )
                     .size(32.dp)
             ) {
                 Icon(
@@ -59,43 +65,43 @@ fun AboutUsScreen(
             }
 
             ContentCard(
-                title = "Welcome to VIBE Social",
-                content = "VIBE is a unique new concept that connects partygoers and hosts in your city who want to get together and have a great time. We host only private events that are free to enter as a guest. No businesses or commercial promotions allowed.\n" +
+                title = stringResource(R.string.welcome_to_vibe_social),
+                content = stringResource(R.string.vibe_is_a_unique_new_concept) +
                         "\n" +
-                        "This platform was designed to create unique experiences and allow people to meet each other in a more intimate setting, without having to be concerned about paying cover charges or going to a place where it's difficult to meet people."
+                        stringResource(R.string.this_platform_was_designed)
 
             )
 
             ContentCard(
-                title = "Our Mission",
-                content = "Our Mission Is Simple: Make Finding Parties Easier.\n\n" +
-                        "By connecting willing hosts with eager partygoers, we provide a new way to enjoy nightlife in Medellin. Enjoy a more intimate experience where you can truly get to know other people.\n" +
+                title = stringResource(R.string.our_mission),
+                content = stringResource(R.string.our_mission_is_simple_make_finding_parties_easier) +
+                        stringResource(R.string.by_connecting_willing_hosts_with) +
                         "\n" +
-                        "No more waiting in lines, paying cover, and trying to meet new people in a distant corporate setting. With VIBE you can go to people's private homes or events and meet them on a more personal level."
+                        stringResource(R.string.no_more_waiting)
 
             )
 
             ContentCard(
-                title = "A Unique New Experience",
-                content = "The VIBE platform is open to anybody age 18+. We make registration simple so you can quickly find a party and have a great night out.\n\n" + "The onus is on party hosts and their potential guests to learn about each other and see if they want to party together. It's almost like Tinder in a way, but in a more open group-based environment. \n\nOur hope is to help people make new friends and connect them in a new fun and interesting way."
+                title = stringResource(R.string.a_unique_new_experience),
+                content = stringResource(R.string.the_vibe_platform_is_open_to) + stringResource(R.string.the_onus_is_on_party_hosts)
 
             )
 
             ContentCard(
-                title = "Secure Platform",
-                content = "Utilizing Instagram, we allow hosts and guests to communicate to understand each other better before deciding to accept a reservation. Party with confidence."
+                title = stringResource(R.string.secure_platform),
+                content = stringResource(R.string.utilizing_instagram)
 
             )
 
             ContentCard(
-                title = "Completely Free",
-                content = "There are no charges on the VIBE platform, neither for hosts nor guests to participate. We don't charge any subscription fees and everything is totally free to enjoy."
+                title = stringResource(R.string.completely_free),
+                content = stringResource(R.string.there_are_no_charges)
 
             )
 
             ContentCard(
-                title = "More Information",
-                content = "For more information, please check out our Frequently Asked Questions page.\n\n" + "Also, check out our Terms of Service and Privacy Policy pages."
+                title = stringResource(R.string.more_information),
+                content = stringResource(R.string.for_more_information_please) + stringResource(R.string.also_check_out_our_terms)
 
             )
 

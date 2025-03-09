@@ -250,7 +250,7 @@ fun RightSideDrawer(
                     }
                     if (submenuExpanded) {
                         DrawerSubMenuItem(
-                            text = stringResource(R.string.about),
+                            text = stringResource(R.string.about2),
                             onClick = {
                                 submenuExpanded = false; isOpen.value =
                                 false; navController.navigate("about_us")

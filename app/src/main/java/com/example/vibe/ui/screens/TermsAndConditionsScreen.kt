@@ -22,7 +22,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.vibe.R
 import com.example.vibe.ui.components.ContentCard
 
 
@@ -48,7 +50,11 @@ fun TermsAndConditionsScreen(
             modifier = Modifier
                 .padding(8.dp, 40.dp, 0.dp, 0.dp)
                 .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = CircleShape
+                )
                 .size(32.dp)
         ) {
             Icon(
@@ -60,59 +66,59 @@ fun TermsAndConditionsScreen(
         }
 
         ContentCard(
-            title = "VIBE Terms and Conditions",
-            content = "Welcome to VIBE! These Terms & Conditions (\"Terms\") govern your access to and use of our website (the \"Service\"). By using our Service, you agree to comply with these Terms. If you do not agree to these Terms, please do not use our Service."
+            title = stringResource(R.string.vibe_terms_and_conditions),
+            content = stringResource(R.string.welcome_to_vibe_these_terms)
         )
 
         ContentCard(
-            title = "1. User Accounts",
-            content = "To access certain features of our Service, you must create an account. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account."
+            title = stringResource(R.string._1_user_accounts),
+            content = stringResource(R.string.to_access_certain_features)
         )
 
         ContentCard(
-            title = "2. User Conduct",
-            content = "We use the information we collect for the following purposes:\n" +
+            title = stringResource(R.string._2_user_conduct),
+            content = stringResource(R.string.we_use_the_information_we_collect) +
                     "\n" +
-                    "Account Registration and Management: We use your email address, first name, and Instagram username to create and manage your account.\n" +
+                    stringResource(R.string.account_registration_and_management) +
                     "\n" +
-                    "Communications: We may use your email address to communicate important updates or notifications regarding your account and our services.\n" +
+                    stringResource(R.string.communications_we_may_use) +
                     "\n" +
-                    "Improving Our Service: We may use aggregated and anonymized information to improve our Service."
+                    stringResource(R.string.improving_our_service)
         )
 
         ContentCard(
-            title = "3. User Content",
-            content = "By submitting content (e.g., photos, descriptions, reviews) on our platform, you grant us a non-exclusive, worldwide, royalty-free license to use, modify, and display your content on our Service. You represent and warrant that you own or have the rights to submit the content you post."
+            title = stringResource(R.string._3_user_content),
+            content = stringResource(R.string.by_submitting_content)
         )
 
         ContentCard(
-            title = "4. Privacy",
-            content = "By using the Service, you consent to the collection and use of information as described in our Privacy Policy."
+            title = stringResource(R.string._4_privacy),
+            content = stringResource(R.string.by_using_the_service)
         )
 
         ContentCard(
-            title = "5. Limitation of Liability",
-            content = "To the fullest extent permitted by law, VIBE and its affiliates will not be liable for any damages, including but not limited to indirect, incidental, or consequential damages, arising out of your use of the Service or any content therein."
+            title = stringResource(R.string._5_limitation_of_liability),
+            content = stringResource(R.string.to_the_fullest_extent_permitted)
         )
 
         ContentCard(
-            title = "6. Disclaimer",
-            content = "Our Service is provided \"as is\" without warranties of any kind, either express or implied. We do not warrant that the Service will be error-free or uninterrupted, nor do we guarantee the accuracy or reliability of any information on the Service."
+            title = stringResource(R.string._6_disclaimer),
+            content = stringResource(R.string.our_service_is_provided)
         )
 
         ContentCard(
-            title = "7. Termination",
-            content = "We reserve the right to suspend or terminate your account and access to the Service at our sole discretion, without prior notice, for conduct that violates these Terms or is otherwise harmful to the Service or other users."
+            title = stringResource(R.string._7_termination),
+            content = stringResource(R.string.we_reserve_the_right)
         )
 
         ContentCard(
-            title = "8. Governing Law",
-            content = "These Terms are governed by and construed in accordance with the laws of Colombia, without regard to its conflict of law principles."
+            title = stringResource(R.string._8_governing_law),
+            content = stringResource(R.string.these_terms_are_governed_by)
         )
 
         ContentCard(
-            title = "9. Changes to These Terms",
-            content = "We may update these Terms from time to time. We will notify you of any significant changes by posting the new Terms on this page. Your continued use of the Service after any such changes constitutes your acceptance of the new Terms."
+            title = stringResource(R.string._9_changes_to_these_terms),
+            content = stringResource(R.string.we_may_update_these_terms)
         )
 
 
