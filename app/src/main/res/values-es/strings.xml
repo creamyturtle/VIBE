@@ -297,5 +297,19 @@
     <string name="our_service_may_include">Nuestro Servicio puede incluir enlaces a sitios web o servicios de terceros, como plataformas de redes sociales. No somos responsables de las prácticas de privacidad ni del contenido de estos terceros.</string>
     <string name="depending_on_your_jurisdiction">Dependiendo de su jurisdicción, usted puede tener derechos con respecto a su información personal, incluido el derecho a acceder a ella, actualizarla o eliminarla. Comuníquese con nosotros si tiene alguna solicitud con respecto a su información.</string>
     <string name="we_may_update">Es posible que actualicemos nuestra Política de privacidad de vez en cuando. Le notificaremos cualquier cambio significativo publicando la nueva Política de privacidad en esta página. Su uso continuo de nuestro Servicio constituye su aceptación de cualquier cambio.</string>
+    <string name="events_attending">Eventos a los que Asistirá</string>
+    <string name="no_events_found">No se encontraron eventos</string>
+    <string name="address">Dirección:</string>
+    <string name="bringing">Trayendo:</string>
+    <string name="add_guests">Invitados Adicionales:</string>
+    <string name="people_attending">Personas Asistentes:</string>
+    <string name="open_slots3">Cupos Disponibles:</string>
+    <string name="rsvp_status">Estado de Reserva:</string>
+    <string name="view_qr_code">Ver Código QR</string>
+    <string name="cancel_reservation">Cancelar Reserva</string>
+    <string name="events_you_re_hosting">Eventos que Organizas</string>
+    <string name="location">Ubicación:</string>
+    <string name="event_type">Tipo de Evento:</string>
+    <string name="total_slots">Total de Cupos:</string>
 
 </resources>

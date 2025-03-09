@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -95,7 +96,11 @@ fun EventsAttendingScreen(
                 modifier = Modifier
                     .padding(24.dp, 8.dp, 16.dp, 8.dp)
                     .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = CircleShape
+                    )
                     .size(32.dp)
             ) {
                 Icon(
@@ -107,7 +112,7 @@ fun EventsAttendingScreen(
             }
 
             Text(
-                text = "Events Attending",
+                text = stringResource(R.string.events_attending),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -130,7 +135,7 @@ fun EventsAttendingScreen(
                 if (events.isEmpty()) {
 
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No events found.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.no_events_found), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 } else {
                     LazyColumn(
@@ -222,7 +227,7 @@ fun EventCard(
             Text(text = event.partyname, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
             Text(text = "${event.formattedDate} @ ${event.formattedTime}", color = MaterialTheme.colorScheme.secondaryContainer)
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(32.dp))
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
@@ -237,13 +242,17 @@ fun EventCard(
                     error = painterResource(R.drawable.defaultimg)
                 )
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(32.dp))
 
-                Text(text = "Address:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                Text(text = stringResource(R.string.address), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                 Spacer(Modifier.height(4.dp))
 
 
-                OpenInMaps(event.locationlong)
+                if (event.rsvpapproved == 1) {
+                    OpenInMaps(event.locationlong)
+                } else {
+                    OpenInMaps(event.location)
+                }
 
 
                 Spacer(Modifier.height(32.dp))
@@ -252,7 +261,7 @@ fun EventCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Bringing:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text(text = stringResource(R.string.bringing), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(text = event.bringing.takeIf { it.isNotBlank() } ?: "Nothing")
                 }
 
@@ -262,17 +271,17 @@ fun EventCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Add. Guests:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text(text = stringResource(R.string.add_guests), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(text = "${event.guestCount}")
                 }
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(32.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "People Attending:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text(text = stringResource(R.string.people_attending), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(text = "${event.totalslots - event.openslots}")
                 }
 
@@ -282,7 +291,7 @@ fun EventCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Open Slots:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text(text = stringResource(R.string.open_slots3), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(text = event.openslots.toString())
                 }
 
@@ -292,7 +301,7 @@ fun EventCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "RSVP Status:", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text(text = stringResource(R.string.rsvp_status), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
                     Text(
                         text = if (event.rsvpapproved == 1) "Approved" else "Pending",
                         color = if (event.rsvpapproved == 1) Color.Green else MaterialTheme.colorScheme.primary
@@ -309,7 +318,7 @@ fun EventCard(
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3F51B5)),
                     shape = RoundedCornerShape(12.dp)
                 ) {
-                    Text("View QR Code", color = Color.White)
+                    Text(stringResource(R.string.view_qr_code), color = Color.White)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -322,7 +331,7 @@ fun EventCard(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Cancel Reservation", color = Color.White)
+                Text(stringResource(R.string.cancel_reservation), color = Color.White)
             }
         }
     }
@@ -367,7 +376,9 @@ fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
         },
         text = {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (!qrcodeData.isNullOrEmpty()) {
@@ -397,7 +408,9 @@ fun QRCodeDialog(qrcodeData: String?, onDismiss: () -> Unit) {
         confirmButton = {
             Button(
                 onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text("Close", color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)

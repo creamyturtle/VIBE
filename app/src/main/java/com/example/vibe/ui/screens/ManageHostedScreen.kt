@@ -40,12 +40,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.vibe.R
 import com.example.vibe.model.Event
+import com.example.vibe.model.getPartyTypeText
 import com.example.vibe.ui.viewmodel.EventsUiState
 import kotlinx.coroutines.launch
 
@@ -77,7 +79,11 @@ fun ManageHostedScreen(
                 modifier = Modifier
                     .padding(24.dp, 8.dp, 16.dp, 8.dp)
                     .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = CircleShape
+                    )
                     .size(32.dp)
             ) {
                 Icon(
@@ -89,7 +95,7 @@ fun ManageHostedScreen(
             }
 
             Text(
-                text = "Events You're Hosting",
+                text = stringResource(R.string.events_you_re_hosting),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -176,7 +182,7 @@ fun HostedCard(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
@@ -209,7 +215,7 @@ fun HostedCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Location:", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.location), fontWeight = FontWeight.Bold)
                     Text(text = event.location)
                 }
 
@@ -219,9 +225,9 @@ fun HostedCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Event Type:", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.event_type), fontWeight = FontWeight.Bold)
                     Text(
-                        text = event.partytype,
+                        text = getPartyTypeText(event.partytype),
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -232,7 +238,7 @@ fun HostedCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "People Attending:", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.people_attending), fontWeight = FontWeight.Bold)
                     Text(text = "${event.totalslots.toInt() - event.openslots.toInt()}")
                 }
 
@@ -244,7 +250,7 @@ fun HostedCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Open Slots:", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.open_slots3), fontWeight = FontWeight.Bold)
                     Text(text = event.openslots)
                 }
 
@@ -254,7 +260,7 @@ fun HostedCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Total Slots:", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.total_slots), fontWeight = FontWeight.Bold)
                     Text(text = event.totalslots)
                 }
 
@@ -269,11 +275,13 @@ fun HostedCard(
 
             Button(
                 onClick = { navController.navigate("approve_reservations")},
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03DAC5)),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Approve Reservations", color = Color.White)
+                Text(stringResource(R.string.approve_reservations), color = Color.White)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -281,11 +289,13 @@ fun HostedCard(
 
             Button(
                 onClick = { navController.navigate("check_in")},
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3F51B5)),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Check-In Guests", color = Color.White)
+                Text(stringResource(R.string.check_in_guests), color = Color.White)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
