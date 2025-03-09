@@ -22,7 +22,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.vibe.R
 import com.example.vibe.ui.components.ContentCard
 import com.example.vibe.ui.components.SectionTitle
 
@@ -49,7 +51,11 @@ fun FAQScreen(
             modifier = Modifier
                 .padding(8.dp, 40.dp, 0.dp, 0.dp)
                 .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = CircleShape
+                )
                 .size(32.dp)
         ) {
             Icon(
@@ -62,10 +68,10 @@ fun FAQScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        SectionTitle(title = "Frequently Asked Questions")
+        SectionTitle(title = stringResource(R.string.frequently_asked_questions))
 
         ContentCard(
-            title = "What is VIBE Social?",
+            title = stringResource(R.string.what_is_vibe_social),
             content = "VIBE is an awesome new place where you can find cool parties and events in your city. It was designed around the idea of connecting people on a more intimate level than your typical bar scene or nightclub. \n\nAll of the events you see on this page are private events, hosted by regular people. Businesses and commercial entities are not allowed to participate. Everything is completely FREE, and we require very little personal information to join VIBE."
         )
 

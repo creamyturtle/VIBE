@@ -75,6 +75,7 @@ import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.rememberCameraPositionState
+import androidx.core.net.toUri
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -657,7 +658,9 @@ fun CustomVideoPlayer(videoUrl: String?) {
         AndroidView(
             factory = { context ->
                 VideoView(context).apply {
-                    setVideoURI(Uri.parse(videoUrl))
+                    if (videoUrl != null) {
+                        setVideoURI(videoUrl.toUri())
+                    }
                 }
             },
             modifier = Modifier.matchParentSize(),

@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vibe.R
 import com.example.vibe.ui.viewmodel.ContactViewModel
+import androidx.core.net.toUri
 
 
 @Composable
@@ -118,11 +119,12 @@ fun ContactInfoSection() {
 
 @Composable
 fun ContactInfoItem(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
     content: String,
-    link: String? = null,
-    modifier: Modifier = Modifier
+    link: String? = null
+
 ) {
     val context = LocalContext.current
 
@@ -232,7 +234,7 @@ fun ContactFormSection(
 
 fun sendEmail(context: Context, email: String, subject: String, message: String) {
     val intent = Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.parse("mailto:") // Ensures only email apps handle this
+        data = "mailto:".toUri() // Ensures only email apps handle this
         putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
         putExtra(Intent.EXTRA_SUBJECT, subject)
         putExtra(Intent.EXTRA_TEXT, message)
@@ -255,7 +257,7 @@ fun handleLinkClick(context: Context, link: String) {
 }
 
 fun openWhatsApp(context: Context, link: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+    val intent = Intent(Intent.ACTION_VIEW, link.toUri())
     intent.setPackage("com.whatsapp") // Ensures it opens WhatsApp directly
     try {
         context.startActivity(intent)
@@ -266,7 +268,7 @@ fun openWhatsApp(context: Context, link: String) {
 }
 
 fun openBrowser(context: Context, url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     try {
         context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
