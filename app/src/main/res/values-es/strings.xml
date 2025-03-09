@@ -187,7 +187,7 @@
     <string name="dashboard_access">Acceso al Panel de Control</string>
     <string name="account_issues">Problemas con la Cuenta</string>
     <string name="trouble_registering">¿Problemas para Registrarse?</string>
-    <string name="trouble_logging_in">Trouble Logging In?</string>
+    <string name="trouble_logging_in">¿Problemas para Iniciar Sesión?</string>
     <string name="profile_changes">Cambios de Perfil</string>
     <string name="event_changes">Cambios en los Eventos</string>
     <string name="other_issues">Otros Asuntos</string>
