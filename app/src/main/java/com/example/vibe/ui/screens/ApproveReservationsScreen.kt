@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -83,7 +84,11 @@ fun ApproveReservationsScreen(
                 modifier = Modifier
                     .padding(24.dp, 8.dp, 16.dp, 8.dp)
                     .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = CircleShape
+                    )
                     .size(32.dp)
             ) {
                 Icon(
@@ -95,7 +100,7 @@ fun ApproveReservationsScreen(
             }
 
             Text(
-                text = "Pending Reservations",
+                text = stringResource(R.string.pending_reservations),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -117,7 +122,7 @@ fun ApproveReservationsScreen(
             }
             rsvpList.isEmpty() -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No pending RSVPs found.")
+                    Text(stringResource(R.string.no_pending_rsvps_found))
                 }
             }
             else -> {
@@ -148,19 +153,19 @@ fun ApproveReservationsScreen(
     if (showConfirmDialog && selectedRSVP != null) {
         AlertDialog(
             onDismissRequest = { showConfirmDialog = false },
-            title = { Text("Approve RSVP") },
-            text = { Text("Are you sure you want to approve this RSVP for ${selectedRSVP!!.name}?", fontSize = 16.sp) },
+            title = { Text(stringResource(R.string.approve_rsvp)) },
+            text = { Text(text = stringResource(R.string.approve_rsvp, selectedRSVP!!.name), fontSize = 16.sp) },
             confirmButton = {
                 TextButton(onClick = {
                     showConfirmDialog = false
                     approveReservationsViewModel.approveRSVP(selectedRSVP!!)
                 }) {
-                    Text("Approve", color = MaterialTheme.colorScheme.primary)
+                    Text(stringResource(R.string.approve), color = MaterialTheme.colorScheme.primary)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             },
             containerColor = MaterialTheme.colorScheme.surface
@@ -204,15 +209,15 @@ fun RSVPCard(
                 Column {
 
 
-                    Text(text = "Guest: ${rsvpItem.name}", fontSize = 16.sp)
+                    Text(text = stringResource(R.string.guest, rsvpItem.name), fontSize = 16.sp)
                     Spacer(Modifier.height(8.dp))
-                    Text(text = "Age: ${rsvpItem.age} | Gender: ${rsvpItem.gender}", fontSize = 16.sp)
+                    Text(text = stringResource(R.string.age_gender, rsvpItem.age, rsvpItem.gender), fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text(text = "Additional Guests:")
+                    Text(text = stringResource(R.string.additional_guests))
 
                     if (rsvpItem.addguest1.isNullOrEmpty()) {
-                        Text(text = "None")
+                        Text(text = stringResource(R.string.none))
                     } else {
                         Text(text = "${rsvpItem.addguest1}")
                         Text(text = "${rsvpItem.addguest2}")
@@ -257,10 +262,10 @@ fun RSVPCard(
             ) {
 
                 Column {
-                    Text(text = "Bringing:", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.bringing2), fontWeight = FontWeight.Bold)
 
                     if (rsvpItem.bringing.isNullOrEmpty()) {
-                        Text(text = "Nothing")
+                        Text(text = stringResource(R.string.nothing))
                     }
 
                     Text(text = "${rsvpItem.bringing}")
@@ -275,7 +280,7 @@ fun RSVPCard(
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text("Approve", color = Color.White)
+                    Text(stringResource(R.string.approve), color = Color.White)
                 }
             }
         }

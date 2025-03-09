@@ -311,5 +311,18 @@
     <string name="location">Ubicación:</string>
     <string name="event_type">Tipo de Evento:</string>
     <string name="total_slots">Total de Cupos:</string>
+    <string name="pending_reservations">Reservas Pendientes</string>
+    <string name="no_pending_rsvps_found">No se encontraron reservas pendientes.</string>
+    <string name="approve_rsvp">Aprobar Reserva</string>
+    <string name="approve_rsvp2">¿Estás seguro de que quieres aprobar este RSVP para %s?</string>
+    <string name="approve">Aprobar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="nothing">Nada</string>
+    <string name="none">Ninguno</string>
+    <string name="additional_guests">Invitados Adicionales:</string>
+    <string name="guest">Nombre: %1$s</string>
+    <string name="age_gender">Edad: %1$s | Género: %2$s</string>
+    <string name="bringing2">Trayendo:</string>
+
 
 </resources>
