@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -26,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,15 +39,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.vibe.R
-import com.example.vibe.ui.components.GenderDropdown
 import com.example.vibe.ui.viewmodel.UserViewModel
-
 
 
 @Composable
@@ -94,9 +89,7 @@ fun EditProfileScreen(
             it.photourl.startsWith("http") -> it.photourl
             else -> baseUrl + it.photourl
         }
-    } ?: "https://www.vibesocial.org/images/team5.jpg" // Fallback if `user` is null
-
-
+    } ?: "https://www.vibesocial.org/images/team5.jpg"
 
     Column(
         modifier = Modifier
@@ -158,28 +151,48 @@ fun EditProfileScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Name Field
-        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
+        // Name Field (READ-ONLY)
+        OutlinedTextField(
+            value = name,
+            onValueChange = {},
+            label = { Text("Name") },
+            readOnly = true,
+            colors = TextFieldDefaults.colors(
+                disabledTextColor = Color.Gray,
+                disabledContainerColor = Color.LightGray
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Age Field
+        // Age Field (READ-ONLY)
         OutlinedTextField(
             value = age,
-            onValueChange = { age = it.filter { char -> char.isDigit() } },
+            onValueChange = {},
             label = { Text("Age") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            readOnly = true,
+            colors = TextFieldDefaults.colors(
+                disabledTextColor = Color.Gray,
+                disabledContainerColor = Color.LightGray
+            ),
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Gender Dropdown
-        GenderDropdown(
-            selectedOption = gender,
-            onOptionSelected = { gender = it },
-            label = stringResource(R.string.gender) // ✅ Pass the label
+        // Gender Field (DISPLAY TEXT INSTEAD OF DROPDOWN)
+        OutlinedTextField(
+            value = gender,
+            onValueChange = {},
+            label = { Text("Gender") },
+            readOnly = true,
+            colors = TextFieldDefaults.colors(
+                disabledTextColor = Color.Gray,
+                disabledContainerColor = Color.LightGray
+            ),
+            modifier = Modifier.fillMaxWidth()
         )
-
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -229,3 +242,4 @@ fun EditProfileScreen(
         Spacer(Modifier.height(220.dp))
     }
 }
+
