@@ -17,7 +17,7 @@ class UserViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
             val userRepository = UserRepository(context, userApi) // ✅ Create Repository
-            return UserViewModel(userRepository, sessionManager) as T
+            return UserViewModel(userRepository, userApi, sessionManager) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

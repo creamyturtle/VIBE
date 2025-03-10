@@ -284,7 +284,7 @@ fun ActionButtonsGrid(navController: NavController) {
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.surfaceVariant
         )
-        ListButton(icon = Icons.Outlined.PersonOutline, text = stringResource(R.string.edit_profile)) { navController.navigate("events_attending")}
+        ListButton(icon = Icons.Outlined.PersonOutline, text = stringResource(R.string.edit_profile)) { navController.navigate("edit_profile")}
     }
 }
 

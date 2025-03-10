@@ -23,6 +23,7 @@ import com.example.vibe.ui.screens.ApproveReservationsScreen
 import com.example.vibe.ui.screens.CheckInScreen
 import com.example.vibe.ui.screens.ContactScreen
 import com.example.vibe.ui.screens.ControlPanelScreen
+import com.example.vibe.ui.screens.EditProfileScreen
 import com.example.vibe.ui.screens.ErrorScreen
 import com.example.vibe.ui.screens.EventCalendarScreen
 import com.example.vibe.ui.screens.EventCreationForm
@@ -403,6 +404,17 @@ fun VibeNavHost(
             ContactScreen(
                 navController = navController,
                 contactViewModel = contactViewModel
+            )
+
+        }
+
+
+        composable(route = "edit_profile") {
+
+            EditProfileScreen(
+                userViewModel = userViewModel,
+                navController = navController,
+                onBack = { navController.navigateUp() }
             )
 
         }

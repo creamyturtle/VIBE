@@ -1107,11 +1107,13 @@ fun validateFields(
         return false
     }
     if (totalSlots.isBlank()) {
-        Toast.makeText(context, "Total Guests is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context,
+            context.getString(R.string.total_guests_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (musicType.isBlank()) {
-        Toast.makeText(context, "Music Type is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context,
+            context.getString(R.string.music_type_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (locationLong.isBlank()) {

@@ -338,6 +338,8 @@
     <string name="general_location_is_required">Se requiere ubicación general</string>
     <string name="date_is_required">La fecha es obligatoria</string>
     <string name="time_is_required">El tiempo es obligatorio</string>
+    <string name="total_guests_is_required">Se requiere el número total de invitados</string>
+    <string name="music_type_is_required">El tipo de música es obligatorio</string>
 
 
 </resources>
