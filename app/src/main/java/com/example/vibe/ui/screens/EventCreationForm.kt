@@ -133,7 +133,6 @@ fun EventCreationForm(
     context: Context
 ) {
     val partyName = remember { mutableStateOf("") }
-    //val partyType = remember { mutableStateOf("House Party") }
     val description = remember { mutableStateOf("") }
     val location = remember { mutableStateOf("") }
     val date = remember { mutableStateOf("") }
@@ -151,9 +150,8 @@ fun EventCreationForm(
 
     val isFreeParking = remember { mutableStateOf(false) }
     val isWifi = remember { mutableStateOf(false) }
-    val isAlcoholProvided = remember { mutableStateOf(false) }
     val isPetFriendly = remember { mutableStateOf(false) }
-    val isSmokingAllowed = remember { mutableStateOf(false) }
+
 
     val userId by userViewModel.userId.observeAsState()
 
@@ -540,7 +538,8 @@ fun EventCreationForm(
                     selectedVideo = selectedVideo.value,
                     onSuccess = {
                         progressMessage.value = "Event submitted successfully!"
-                        Toast.makeText(context, "Event submitted successfully!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context,
+                            context.getString(R.string.event_submitted_successfully), Toast.LENGTH_LONG).show()
                         navController.popBackStack()
                     },
                     onError = { errorMessage ->
@@ -1081,27 +1080,30 @@ fun validateFields(
     isChecked: Boolean // ✅ Add this parameter
 ): Boolean {
     if (partyName.isBlank()) {
-        Toast.makeText(context, "Event Name is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context,
+            context.getString(R.string.event_name_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (partyType.isBlank()) {
-        Toast.makeText(context, "Category is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, context.getString(R.string.category_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (description.isBlank()) {
-        Toast.makeText(context, "Event Description is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context,
+            context.getString(R.string.event_description_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (location.isBlank()) {
-        Toast.makeText(context, "General Location is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context,
+            context.getString(R.string.general_location_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (date.isBlank()) {
-        Toast.makeText(context, "Date is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, context.getString(R.string.date_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (time.isBlank()) {
-        Toast.makeText(context, "Time is required", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, context.getString(R.string.time_is_required), Toast.LENGTH_LONG).show()
         return false
     }
     if (totalSlots.isBlank()) {

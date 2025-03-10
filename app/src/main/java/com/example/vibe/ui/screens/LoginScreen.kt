@@ -99,7 +99,8 @@ fun LoginScreen(
             isLoading = authViewModel.isLoading,
             onClick = {
                 authViewModel.login {
-                    Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show() // ✅ Show toast
+                    Toast.makeText(context,
+                        context.getString(R.string.login_successful), Toast.LENGTH_LONG).show() // ✅ Show toast
                     navController.navigate("home_screen/all") { // ✅ Navigate
                         popUpTo("login") { inclusive = false }
                     }

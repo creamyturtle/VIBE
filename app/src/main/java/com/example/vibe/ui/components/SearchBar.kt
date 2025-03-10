@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.vibe.R
 
 
 @Composable
@@ -36,7 +38,7 @@ fun SearchBar(
         TextField(
             value = query,
             onValueChange = onQueryChange,
-            placeholder = { Text("Search by location...") },
+            placeholder = { Text(stringResource(R.string.search_by_location)) },
             singleLine = true,
             leadingIcon = {
                 Icon(

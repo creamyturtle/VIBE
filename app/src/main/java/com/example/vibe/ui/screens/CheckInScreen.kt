@@ -49,10 +49,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.vibe.R
 import com.example.vibe.network.RSVPItem
 import com.example.vibe.ui.viewmodel.CheckInViewModel
 import com.example.vibe.ui.viewmodel.QRViewModel
@@ -113,7 +115,11 @@ fun CheckInScreen(
                 modifier = Modifier
                     .padding(24.dp, 8.dp, 16.dp, 8.dp)
                     .background(color = MaterialTheme.colorScheme.surface, shape = CircleShape)
-                    .border(width = 1.dp, color = MaterialTheme.colorScheme.outline, shape = CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = CircleShape
+                    )
                     .size(32.dp)
             ) {
                 Icon(
@@ -125,7 +131,7 @@ fun CheckInScreen(
             }
 
             Text(
-                text = "Check-In Guests",
+                text = stringResource(R.string.check_in_guests),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -147,7 +153,7 @@ fun CheckInScreen(
             }
             rsvpList.isEmpty() -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No guests to check in.")
+                    Text(stringResource(R.string.no_guests_to_check_in))
                 }
             }
             else -> {
@@ -228,16 +234,16 @@ fun CheckInCard(
                     Text(text = rsvpItem.name, style = MaterialTheme.typography.titleMedium, fontSize = 24.sp)
                     Spacer(Modifier.height(16.dp))
 
-                    Text(text = "Age: ${rsvpItem.age} | Gender: ${rsvpItem.gender}", fontSize = 16.sp)
+                    Text(text = stringResource(R.string.age_gender2, rsvpItem.age, rsvpItem.gender), fontSize = 16.sp)
                     Spacer(Modifier.height(16.dp))
 
 
 
-                    Text(text = "Add. Guests:  ${rsvpItem.guestCount}", fontSize = 16.sp)
+                    Text(text = stringResource(R.string.add_guests2, rsvpItem.guestCount), fontSize = 16.sp)
 
                     Spacer(Modifier.height(8.dp))
 
-                    Text(text = "Bringing:  ${rsvpItem.bringing}", fontSize = 16.sp)
+                    Text(text = "${rsvpItem.bringing}", fontSize = 16.sp)
 
                     Spacer(Modifier.height(24.dp))
 
@@ -278,7 +284,7 @@ fun CheckInCard(
                         horizontalArrangement = Arrangement.End
                     ) {
                         if (isCheckedIn) {
-                            Text("Checked-In ✅", color = Color.Green, fontSize = 18.sp)
+                            Text(stringResource(R.string.checked_in), color = Color.Green, fontSize = 18.sp)
                         } else {
                             Button(
                                 onClick = onScanClick,
@@ -286,7 +292,7 @@ fun CheckInCard(
                                 shape = RoundedCornerShape(8.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("Scan QR Code", color = Color.White)
+                                Text(stringResource(R.string.scan_qr_code), color = Color.White)
                             }
                         }
                     }
@@ -361,7 +367,7 @@ fun QRScannerScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Scan your guest's QR code",
+                text = stringResource(R.string.scan_your_guest_s_qr_code),
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,

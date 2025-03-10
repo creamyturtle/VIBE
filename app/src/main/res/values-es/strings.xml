@@ -323,6 +323,21 @@
     <string name="guest">Nombre: %1$s</string>
     <string name="age_gender">Edad: %1$s | Género: %2$s</string>
     <string name="bringing2">Trayendo:</string>
+    <string name="no_guests_to_check_in">No hay invitados para registrarse</string>
+    <string name="age_gender2">Edad: %1$s | Género: %2$s</string>
+    <string name="add_guests2">Add. Invitados:  %1$s</string>
+    <string name="checked_in">Registrado ✅</string>
+    <string name="scan_qr_code">Escanear QR</string>
+    <string name="scan_your_guest_s_qr_code">Escanee QR de su Invitado</string>
+    <string name="search_by_location">Buscar por ubicación…</string>
+    <string name="login_successful">Inicio de sesión exitoso!</string>
+    <string name="event_submitted_successfully">¡Evento enviado exitosamente!</string>
+    <string name="event_name_is_required">El nombre del evento es obligatorio</string>
+    <string name="category_is_required">La categoría es obligatoria</string>
+    <string name="event_description_is_required">Se requiere descripción del evento</string>
+    <string name="general_location_is_required">Se requiere ubicación general</string>
+    <string name="date_is_required">La fecha es obligatoria</string>
+    <string name="time_is_required">El tiempo es obligatorio</string>
 
 
 </resources>
